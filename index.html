@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Избушка — Команда «Баба Яга»</title>
-    <!-- Подключаем библиотеку Google Model-Viewer для 3D и AR -->
+    <!-- Библиотека Google Model-Viewer для работы 3D и AR -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
         * {
@@ -48,6 +48,7 @@
             max-width: 900px;
             padding: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
         }
 
         model-viewer {
@@ -68,10 +69,11 @@
             font-size: 1rem;
             cursor: pointer;
             position: absolute;
-            bottom: 16px;
-            right: 16px;
+            bottom: 36px;
+            right: 36px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             transition: background-color 0.2s;
+            z-index: 10;
         }
 
         .ar-button:hover {
