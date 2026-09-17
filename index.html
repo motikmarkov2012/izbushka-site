@@ -125,6 +125,10 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .card-team:hover {
@@ -153,6 +157,7 @@
             color: var(--subtext-color);
             font-size: 0.85rem;
             line-height: 1.3;
+            margin-bottom: 12px;
         }
 
         .accordion-container {
@@ -347,7 +352,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
             padding: 10px 0;
         }
 
@@ -371,12 +375,12 @@
             background-color: var(--bg-color);
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            padding: 16px;
+            padding: 20px;
             color: var(--text-color);
-            text-align: center;
+            text-align: left;
             width: 100%;
-            line-height: 1.6;
-            font-size: 1.05rem;
+            line-height: 1.8;
+            font-size: 0.98rem;
         }
     </style>
 </head>
@@ -400,16 +404,19 @@
                 <img src="matvey.jpg" alt="Марков Матвей" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ММ'">
                 <h3 id="matvey-name">Марков Матвей</h3>
                 <p class="role" id="matvey-role">Капитан команды, главный конструктор и электрик проекта</p>
+                <span class="btn-view btn-more-text">Подробнее</span>
             </div>
             <div class="card-team" onclick="openMember('lida')">
                 <img src="lida.jpg" alt="Токарева Лида" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ТЛ'">
                 <h3 id="lida-name">Токарева Лида</h3>
                 <p class="role" id="lida-role">Главный программист</p>
+                <span class="btn-view btn-more-text">Подробнее</span>
             </div>
             <div class="card-team" onclick="openMember('alisa')">
                 <img src="alisa.jpg" alt="Маркова Алиса" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=МА'">
                 <h3 id="alisa-name">Маркова Алиса</h3>
                 <p class="role" id="alisa-role">Конструктор ног Избушки</p>
+                <span class="btn-view btn-more-text">Подробнее</span>
             </div>
         </div>
 
@@ -566,6 +573,7 @@
                 backText: "Назад к меню",
                 arText: "Посмотреть в AR",
                 btnView: "Открыть 3D / AR",
+                btnMore: "Подробнее",
                 cardSub: "3D-модель и интерактивный просмотр в AR",
                 btnResetCam: "Сбросить камеру",
                 btnRotateOn: "Автовращение: Вкл",
@@ -575,12 +583,36 @@
                 
                 matveyName: "Марков Матвей",
                 matveyRole: "Капитан команды, главный конструктор и электрик проекта",
-                
+                matveyDesc: `• <strong>Роль:</strong> Капитан команды, главный конструктор и электрик проекта.<br>
+                • <strong>Проектирование:</strong> Разработка 3D-модели корпуса Избушки и опорного каркаса в САПР SolidWorks.<br>
+                • <strong>Изготовление:</strong> Подготовка файлов и лазерная резка деталей из фанеры на ЧПУ станке в RDWorks.<br>
+                • <strong>Сборка:</strong> Проектирование и точностное соединение узлов конструкций «в шип» и «ласточкин хвост».<br>
+                • <strong>Электроника:</strong> Разработка электрической схемы, разводка силовых линий питания и сборка компонентов.<br>
+                • <strong>Пайка:</strong> Пайка соединительных плат, драйверов моторов и цепей питания всех механизмов.<br>
+                • <strong>Тестирование:</strong> Комплексная проверка надежности аппаратной части и механики роботов.<br>
+                • <strong>Презентация:</strong> Подготовка технического плаката, документации и представление проекта перед жюри.`,
+
                 lidaName: "Токарева Лида",
                 lidaRole: "Главный программист",
-                
+                lidaDesc: `• <strong>Роль:</strong> Главный программист робототехнического комплекса.<br>
+                • <strong>Алгоритмизация:</strong> Разработка сценария и алгоритмов автономного взаимодействия всех роботов.<br>
+                • <strong>Программирование C/C++:</strong> Написание управляющих программ для микроконтроллеров в RobotC и Arduino IDE.<br>
+                • <strong>Компьютерное зрение:</strong> Настройка и алгоритмическая интеграция камеры PixyMon для распознавания объектов.<br>
+                • <strong>Синхронизация:</strong> Программирование точностной синхронизации действий роботов с сюжетом сказки.<br>
+                • <strong>Датчики:</strong> Настройка работы ультразвуковых сенсоров расстояния и концевых выключателей.<br>
+                • <strong>Отладка:</strong> Пошаговое тестирование логики поведения персонажей и защита от сбоев.<br>
+                • <strong>Сценическая логика:</strong> Корректировка таймингов и команд управления в реальном времени шоу.`,
+
                 alisaName: "Маркова Алиса",
                 alisaRole: "Конструктор ног Избушки",
+                alisaDesc: `• <strong>Роль:</strong> Конструктор механизма движения Избушки на курьих ножках.<br>
+                • <strong>3D-моделирование:</strong> Разработка биомеханических моделей ног и суставов в SolidWorks.<br>
+                • <strong>3D-печать:</strong> Подготовка моделей в Orca Slicer и Bambu Studio, подбор прочного пластика.<br>
+                • <strong>Механика:</strong> Расчет шарнирно-рычажного механизма и передаточных отношений сервоприводов.<br>
+                • <strong>Сборка:</strong> Точная сборка опорных лап и кинематических связей для уверенного шага.<br>
+                • <strong>Центр тяжести:</strong> Балансировка конструкции Избушки для предотвращения опрокидывания.<br>
+                • <strong>Испытания:</strong> Нагрузочное тестирование подвижных ног и оптимизация углов поворота.<br>
+                • <strong>Декорирование:</strong> Художественная обработка и стилизация внешнего вида курьих ножек.`,
 
                 accAnnTitle: "Аннотация",
                 accAnnText: "Вдохновлённая популярным персонажем русских народных сказок Бабой Ягой, наша команда создала проект по мотивам сказок о ней. Целью проекта стало создание театрального роботизированного шоу, в котором принимают участие автономные роботы и их создатели, в качестве актеров. Для этого были спроектированы и изготовлены роботы, Березка Кошка Собака, Избушка и ноги избушки.",
@@ -628,6 +660,7 @@
                 backText: "Back to Menu",
                 arText: "View in AR",
                 btnView: "Open 3D / AR",
+                btnMore: "Details",
                 cardSub: "3D Model & Interactive AR View",
                 btnResetCam: "Reset Camera",
                 btnRotateOn: "Auto-rotate: ON",
@@ -637,12 +670,36 @@
 
                 matveyName: "Matvey Markov",
                 matveyRole: "Team Captain, Lead Hardware Designer & Electrical Engineer",
+                matveyDesc: `• <strong>Role:</strong> Team Captain, Lead Hardware Designer, and Project Electrician.<br>
+                • <strong>3D CAD:</strong> Designed the main frame and body of the Hut in SolidWorks.<br>
+                • <strong>Fabrication:</strong> Prepared files and laser-cut plywood structural components via RDWorks.<br>
+                • <strong>Assembly:</strong> Engineered dovetail and mortise-tenon joints for frame stability.<br>
+                • <strong>Electronics:</strong> Designed electrical circuits and high-current power distribution lines.<br>
+                • <strong>Soldering:</strong> Hand-soldered custom PCBs, motor drivers, and power wiring.<br>
+                • <strong>Testing:</strong> Conducted stress testing and mechanical reliability checks of the hardware.<br>
+                • <strong>Presentation:</strong> Created poster layouts, documentation, and presented technical work.`,
 
                 lidaName: "Lida Tokareva",
                 lidaRole: "Lead Software Engineer",
+                lidaDesc: `• <strong>Role:</strong> Lead Software Engineer of the robotic system.<br>
+                • <strong>Algorithms:</strong> Designed autonomous interaction logic for all theatrical robots.<br>
+                • <strong>Programming:</strong> Developed control firmware using RobotC and Arduino IDE.<br>
+                • <strong>Computer Vision:</strong> Configured PixyMon vision sensor for object tracking and color detection.<br>
+                • <strong>Synchronization:</strong> Timed robotic routines precisely with the theatrical script.<br>
+                • <strong>Sensors:</strong> Calibrated ultrasonic distance sensors and limit switches.<br>
+                • <strong>Debugging:</strong> Handled step-by-step code testing and error recovery procedures.<br>
+                • <strong>Stage Support:</strong> Fine-tuned live timing parameters during performance rehearsals.`,
 
                 alisaName: "Alisa Markova",
                 alisaRole: "Hut Legs Mechanical Designer",
+                alisaDesc: `• <strong>Role:</strong> Mechanical Designer of the walking mechanism of the Hut.<br>
+                • <strong>3D Modeling:</strong> Designed biomechanical leg links and joint mounts in SolidWorks.<br>
+                • <strong>3D Printing:</strong> Prepared models in Orca Slicer & Bambu Studio using high-strength filaments.<br>
+                • <strong>Kinematics:</strong> Calculated linkage ratios and servo torque requirements.<br>
+                • <strong>Assembly:</strong> Assembled leg joints ensuring structural rigidity during motion.<br>
+                • <strong>Balance:</strong> Optimized the overall center of mass to prevent tipping over while walking.<br>
+                • <strong>Testing:</strong> Evaluated gait dynamics and reduced mechanical backlash.<br>
+                • <strong>Styling:</strong> Artistic decoration and finishing of the chicken leg models.`,
 
                 accAnnTitle: "Abstract",
                 accAnnText: "Inspired by the famous character of Russian folk tales Baba Yaga, our team created a project based on her fairy tales. The goal was to build a theatrical robotic show where autonomous robots and their creators act together on stage. For this purpose, robots including Birch Tree, Cat, Dog, Hut, and Hut's legs were designed and built.",
@@ -690,6 +747,7 @@
                 backText: "返回菜单",
                 arText: "在AR中查看",
                 btnView: "打开 3D / AR",
+                btnMore: "查看详情",
                 cardSub: "3D模型与增强现实 (AR) 互动展示",
                 btnResetCam: "重置视角",
                 btnRotateOn: "自动旋转: 开启",
@@ -699,12 +757,36 @@
 
                 matveyName: "Markov Matvey",
                 matveyRole: "队长、首席机械设计师及电气工程师",
+                matveyDesc: `• <strong>职责:</strong> 团队队长、首席机械设计师及电气工程师。<br>
+                • <strong>3D CAD建模:</strong> 在 SolidWorks 中设计小屋主体结构与支撑框架。<br>
+                • <strong>数控加工:</strong> 在 RDWorks 中准备切割文件并使用激光切割胶合板。<br>
+                • <strong>结构组装:</strong> 设计并精密组装燕尾榫和直角榫结构。<br>
+                • <strong>电路设计:</strong> 规划电路图、绘制电源供电线缆与控制线路。<br>
+                • <strong>电气焊接:</strong> 手工焊接定制PCB板、电机驱动器及电源模块。<br>
+                • <strong>测试与调试:</strong> 负责硬件结构强度测试与机械可靠性验证。<br>
+                • <strong>项目展示:</strong> 制作展板、撰写技术文档并在答辩中阐述项目。`,
 
                 lidaName: "Tokareva Lida",
                 lidaRole: "首席软件工程师",
+                lidaDesc: `• <strong>职责:</strong> 机器人系统首席软件工程师。<br>
+                • <strong>算法设计:</strong> 设计所有机器人舞台自主协同演出的核心逻辑。<br>
+                • <strong>嵌入式编程:</strong> 在 RobotC 和 Arduino IDE 中编写控制器底层代码。<br>
+                • <strong>计算机视觉:</strong> 配置 PixyMon 视觉传感器以识别特定颜色与目标物体。<br>
+                • <strong>同步控制:</strong> 精确控制机器人动作与剧情脚本的时间同步。<br>
+                • <strong>传感器应用:</strong> 调试超声波测距传感器和限位开关。<br>
+                • <strong>程序调试:</strong> 开展逐行代码测试与异常故障恢复设计。<br>
+                • <strong>舞台演练:</strong> 在彩排中实时优化机器人动作节拍与响应速度。`,
 
                 alisaName: "Markova Alisa",
                 alisaRole: "小屋腿部结构设计师",
+                alisaDesc: `• <strong>职责:</strong> 鸡脚小屋行走机构机械设计师。<br>
+                • <strong>3D 建模:</strong> 在 SolidWorks 中设计仿生腿部连杆与关节结构。<br>
+                • <strong>3D 打印:</strong> 使用 Orca Slicer 与 Bambu Studio 配置高强度打印切片。<br>
+                • <strong>机构学计算:</strong> 计算连杆传动比及舵机扭矩需求。<br>
+                • <strong>机械组装:</strong> 组装腿部关节，确保运动过程中的结构刚度。<br>
+                • <strong>重心平衡:</strong> 优化整体重心分布，防止行走过程倾覆。<br>
+                • <strong>步态测试:</strong> 分析腿部步态运动学，减少机械间隙。<br>
+                • <strong>外观美化:</strong> 对鸡脚腿部进行艺术加工与美化装饰。`,
 
                 accAnnTitle: "项目摘要",
                 accAnnText: "受俄罗斯著名民间故事人物“雅加婆婆”的启发，我们团队制作了一个基于该童话故事的机器表演项目。项目的目标是打造一场剧场式的机器人表演 show，由自主机器人和它们的创作者共同担任演员。为此，我们设计并制造了桦树、猫、狗、鸡脚小屋以及小屋腿部等多个机器人。",
@@ -772,6 +854,7 @@
             document.querySelectorAll('.back-text').forEach(el => el.innerText = t.backText);
             document.getElementById('ar-btn-text').innerText = t.arText;
             document.querySelectorAll('.btn-view-text').forEach(el => el.innerText = t.btnView);
+            document.querySelectorAll('.btn-more-text').forEach(el => el.innerText = t.btnMore);
             document.querySelectorAll('.card-sub').forEach(el => el.innerText = t.cardSub);
 
             document.getElementById('matvey-name').innerText = t.matveyName;
@@ -836,15 +919,15 @@
             if (id === 'matvey') {
                 photo.src = 'matvey.jpg';
                 name.innerText = t.matveyName;
-                desc.innerText = t.matveyRole;
+                desc.innerHTML = t.matveyDesc;
             } else if (id === 'lida') {
                 photo.src = 'lida.jpg';
                 name.innerText = t.lidaName;
-                desc.innerText = t.lidaRole;
+                desc.innerHTML = t.lidaDesc;
             } else if (id === 'alisa') {
                 photo.src = 'alisa.jpg';
                 name.innerText = t.alisaName;
-                desc.innerText = t.alisaRole;
+                desc.innerHTML = t.alisaDesc;
             }
 
             mainView.style.display = 'none';
