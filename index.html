@@ -125,10 +125,6 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
             cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
         }
 
         .card-team:hover {
@@ -157,23 +153,6 @@
             color: var(--subtext-color);
             font-size: 0.85rem;
             line-height: 1.3;
-            margin-bottom: 12px;
-        }
-
-        .btn-more {
-            background-color: transparent;
-            color: var(--header-color);
-            border: 1px solid var(--header-color);
-            border-radius: 6px;
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            transition: background-color 0.2s, color 0.2s;
-        }
-
-        .card-team:hover .btn-more {
-            background-color: var(--header-color);
-            color: #ffffff;
         }
 
         .accordion-container {
@@ -385,35 +364,19 @@
         .member-profile h2 {
             color: var(--header-color);
             font-size: 1.6rem;
-            margin-bottom: 6px;
-        }
-
-        .member-profile .profile-role {
-            color: var(--accent-green);
-            font-weight: bold;
-            font-size: 1rem;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .member-description {
             background-color: var(--bg-color);
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            padding: 20px;
+            padding: 16px;
             color: var(--text-color);
-            text-align: left;
+            text-align: center;
             width: 100%;
             line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        .member-description ul {
-            margin-left: 20px;
-            margin-top: 8px;
-        }
-
-        .member-description li {
-            margin-bottom: 6px;
+            font-size: 1.05rem;
         }
     </style>
 </head>
@@ -434,28 +397,19 @@
         <h2 class="section-title" id="sec-team">Команда проекта</h2>
         <div class="grid-container">
             <div class="card-team" onclick="openMember('matvey')">
-                <div>
-                    <img src="matvey.jpg" alt="Марков Матвей" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ММ'">
-                    <h3 id="matvey-name">Марков Матвей</h3>
-                    <p class="role" id="matvey-role">Капитан команды, главный конструктор и электрик проекта</p>
-                </div>
-                <span class="btn-more btn-more-text">Подробнее →</span>
+                <img src="matvey.jpg" alt="Марков Матвей" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ММ'">
+                <h3 id="matvey-name">Марков Матвей</h3>
+                <p class="role" id="matvey-role">Капитан команды, главный конструктор и электрик проекта</p>
             </div>
             <div class="card-team" onclick="openMember('lida')">
-                <div>
-                    <img src="lida.jpg" alt="Токарева Лида" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ТЛ'">
-                    <h3 id="lida-name">Токарева Лида</h3>
-                    <p class="role" id="lida-role">Главный программист</p>
-                </div>
-                <span class="btn-more btn-more-text">Подробнее →</span>
+                <img src="lida.jpg" alt="Токарева Лида" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ТЛ'">
+                <h3 id="lida-name">Токарева Лида</h3>
+                <p class="role" id="lida-role">Главный программист</p>
             </div>
             <div class="card-team" onclick="openMember('alisa')">
-                <div>
-                    <img src="alisa.jpg" alt="Маркова Алиса" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=МА'">
-                    <h3 id="alisa-name">Маркова Алиса</h3>
-                    <p class="role" id="alisa-role">Конструктор ног Избушки</p>
-                </div>
-                <span class="btn-more btn-more-text">Подробнее →</span>
+                <img src="alisa.jpg" alt="Маркова Алиса" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=МА'">
+                <h3 id="alisa-name">Маркова Алиса</h3>
+                <p class="role" id="alisa-role">Конструктор ног Избушки</p>
             </div>
         </div>
 
@@ -472,30 +426,506 @@
             </div>
 
             <button class="accordion-btn" onclick="toggleAccordion('story')">
-                <span id="acc-story-title">Сюжет</span> <span>▼</span>
+                <span id="acc-story-title">Сюжет сказки</span> <span>▼</span>
             </button>
             <div id="story" class="accordion-content">
                 <span id="acc-story-text">
-                    Небольшая театральная постановка разворачивается в дремучем лесу вокруг сказочной избушки на курьих ножках. Автономные и управляемые роботы воссоздают атмосферу классического фольклора: Избушка поворачивается, робот «Кошка-Собака» выполняет ролевые сценарии взаимодействия, а «Берёзка» создаёт интерактивный природный фон спектакля.
+                    В нашем выступлении мы рассказываем русскую народную сказку про девочку Машеньку, которую мачеха отправляет в лес к Бабе Яге за иголкой и ниткой. По дороге Машенька встречает сказочных персонажей, кошку собаку, берёзку и избушку на курьих ножках. Девочка ласкова и добра к ним угощает кошку рыбой, даёт собаке кость и украшает берёзку алой ленточкой. Когда девочка оказывается у избушки, Баба Яга собирается съесть девочку. Машенька убегает от нее по лесу, а сказочные персонажи помогают ей спастись.<br><br>
+                    Благодаря доброте Машеньки все герои объединяются помогают ей благополучно вернуться домой.<br>
+                    <strong>Главная мораль нашей сказки, делай добро — добро вернется!</strong>
                 </span>
             </div>
 
-            <button class="accordion-btn" onclick="toggleAccordion('desc')">
-                <span id="acc-desc-title">Описание конструкций</span> <span>▼</span>
+            <button class="accordion-btn" onclick="toggleAccordion('tech')">
+                <span id="acc-tech-title">Проектирование и изготовление</span> <span>▼</span>
             </button>
-            <div id="desc" class="accordion-content">
-                <Да, понял задачу! Сделаем интерфейс понятным и добавим контент.
+            <div id="tech" class="accordion-content">
+                <span id="acc-tech-text">
+                    Конструкции роботов были разработаны в САПР SolidWorks.<br>
+                    Детали для 3D-печати подготавливались в программе Orca Slicer.<br><br>
+                    <strong>Технологии изготовления:</strong>
+                    <ul>
+                        <li>Лазерная резка фанеры</li>
+                        <li>Печать на 3D-принтерах</li>
+                        <li>Сборка конструкций с использованием соединений шип-паз, прямой и ласточкин хвост</li>
+                        <li>Пайка электрической схемы</li>
+                    </ul>
+                </span>
+            </div>
 
-**1. Кнопка / Визуальный триггер для перехода**
-Чтобы пользователь сразу понимал, что плашка кликабельна:
-* **Иконка стрелки:** Добавим справа на плашке иконку перехода (`→` или `chevron-right`). Это классический паттерн для списков.
-* **Стиль кнопки:** Оформим саму плашку (или имя) с явно выраженным кнопкоподобным видом — например, добавим при ховере легкую тень, изменение фона или кнопку-ссылку типа **«Подробнее» / «Профиль»**.
-* **Курсор:** Обязательно подсветим `cursor: pointer;`, чтобы при наведении сразу было видно взаимодействие.
+            <button class="accordion-btn" onclick="toggleAccordion('soft')">
+                <span id="acc-soft-title">Программное обеспечение</span> <span>▼</span>
+            </button>
+            <div id="soft" class="accordion-content">
+                <span id="acc-soft-text">
+                    <strong>Используемые программные инструменты:</strong>
+                    <ul>
+                        <li><strong>RobotC</strong> — программирование роботов</li>
+                        <li><strong>Spike</strong> — программирование робота березки</li>
+                        <li><strong>Arduino IDE</strong> — программирования избушки и березки</li>
+                        <li><strong>SolidWorks</strong> — проектирование конструкций</li>
+                        <li><strong>Orca Slicer, Bambu Studio</strong> — подготовка моделей для 3D-печати</li>
+                        <li><strong>RDWorks</strong> — управление лазерным станком с ЧПУ</li>
+                        <li><strong>PixyMon</strong> — программирование камеры</li>
+                    </ul>
+                </span>
+            </div>
 
-**2. Информационный блок (по ~10 строчек на человека)**
-На странице или в модальном окне конкретного человека выведем краткую «выжимку» с плаката:
-* **Основной анфас/роль** (1-2 строки)
-* **Ключевые факты / Достижения** (4-5 строк списком)
-* **Интересная цитата или тезис с плаката** (2-3 строки)
+        </div>
 
-Передавай имеющиеся тексты/макеты с плаката — сверстаем и аккуратно прикрутим переход!
+        <h2 class="section-title" id="sec-models">Модели и Конструкции</h2>
+        <div class="grid-container" style="margin-bottom: 30px;">
+            <div class="card-project" onclick="openModel('izbushka')">
+                <h3 id="card-izb-title">Избушка</h3>
+                <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                <span class="btn-view btn-view-text">Открыть 3D / AR</span>
+            </div>
+            <div class="card-project" onclick="openModel('catdog')">
+                <h3 id="card-cat-title">Кошка и Собака</h3>
+                <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                <span class="btn-view btn-view-text">Открыть 3D / AR</span>
+            </div>
+            <div class="card-project" onclick="openModel('birch')">
+                <h3 id="card-ber-title">Берёза</h3>
+                <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                <span class="btn-view btn-view-text">Открыть 3D / AR</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Страница выбранного участника -->
+    <div id="member-container" class="viewer-container">
+        <button class="btn-back" onclick="closeMember()">← <span class="back-text">Назад к меню</span></button>
+        <div class="member-profile">
+            <img id="member-photo" src="" alt="" onerror="this.src='https://via.placeholder.com/120/161b22/58a6ff?text=Участник'">
+            <h2 id="member-name">Имя Участника</h2>
+            <div id="member-desc" class="member-description">
+                Описание участника...
+            </div>
+        </div>
+    </div>
+
+    <!-- Просмотрщик 3D моделей -->
+    <div id="viewer-container" class="viewer-container">
+        <button class="btn-back" onclick="closeModel()">← <span class="back-text">Назад к меню</span></button>
+        <h2 id="model-title" style="color: var(--header-color); margin-bottom: 12px;">Модель</h2>
+        
+        <div class="model-wrapper">
+            <model-viewer 
+                id="model-display"
+                src="" 
+                ios-src=""
+                alt="3D модель" 
+                ar 
+                ar-modes="webxr scene-viewer quick-look" 
+                ar-scale="auto"
+                camera-controls 
+                touch-action="none"
+                interaction-prompt="auto"
+                auto-rotate 
+                shadow-intensity="1.5"
+                shadow-softness="0.8">
+                
+                <button slot="ar-button" class="ar-button" id="ar-btn-text">
+                    Посмотреть в AR
+                </button>
+            </model-viewer>
+        </div>
+
+        <div class="model-controls">
+            <button class="btn-3d" onclick="resetModelCamera()" id="btn-reset-cam">Сбросить камеру</button>
+            <button class="btn-3d" onclick="toggleAutoRotate()" id="btn-toggle-rotate">Автовращение: Вкл</button>
+            <button class="btn-3d" onclick="toggleFullscreen()" id="btn-fullscreen">На полный экран</button>
+        </div>
+        <p class="hint-3d" id="hint-3d">🖱️ Вращение: Зажмите ЛКМ | Зумирование: Колёсико | Панорама: Зажмите ПКМ</p>
+    </div>
+
+    <script>
+        const langOrder = ['ru', 'en', 'cn'];
+        let currentLangIndex = 0;
+        let currentLang = 'ru';
+
+        let currentMemberId = null;
+        let currentModelId = null;
+
+        const modelAssets = {
+            izbushka: { gltf: 'izbushka.gltf', usdz: 'izbushka.usdz' },
+            catdog: { gltf: 'catdog.gltf', usdz: 'catdog.usdz' },
+            birch: { gltf: 'birch.gltf', usdz: 'birch.usdz' }
+        };
+
+        const translations = {
+            ru: {
+                langCode: "RU",
+                titleTeam: "Команда «Баба Яга»",
+                titleSchool: "Президентский физико-математический лицей №239, г. Санкт-Петербург",
+                secTeam: "Команда проекта",
+                secAbout: "О проекте",
+                secModels: "Модели и Конструкции",
+                backText: "Назад к меню",
+                arText: "Посмотреть в AR",
+                btnView: "Открыть 3D / AR",
+                cardSub: "3D-модель и интерактивный просмотр в AR",
+                btnResetCam: "Сбросить камеру",
+                btnRotateOn: "Автовращение: Вкл",
+                btnRotateOff: "Автовращение: Выкл",
+                btnFullscreen: "На полный экран",
+                hint3D: "🖱️ Вращение: Зажмите ЛКМ | Зумирование: Колёсико | Панорама: Зажмите ПКМ",
+                
+                matveyName: "Марков Матвей",
+                matveyRole: "Капитан команды, главный конструктор и электрик проекта",
+                
+                lidaName: "Токарева Лида",
+                lidaRole: "Главный программист",
+                
+                alisaName: "Маркова Алиса",
+                alisaRole: "Конструктор ног Избушки",
+
+                accAnnTitle: "Аннотация",
+                accAnnText: "Вдохновлённая популярным персонажем русских народных сказок Бабой Ягой, наша команда создала проект по мотивам сказок о ней. Целью проекта стало создание театрального роботизированного шоу, в котором принимают участие автономные роботы и их создатели, в качестве актеров. Для этого были спроектированы и изготовлены роботы, Березка Кошка Собака, Избушка и ноги избушки.",
+
+                accStoryTitle: "Сюжет сказки",
+                accStoryText: `В нашем выступлении мы рассказываем русскую народную сказку про девочку Машеньку, которую мачеха отправляет в лес к Бабе Яге за иголкой и ниткой. По дороге Машенька встречает сказочных персонажей, кошку собаку, берёзку и избушку на курьих ножках. Девочка ласкова и добра к ним угощает кошку рыбой, даёт собаке кость и украшает берёзку алой ленточкой. Когда девочка оказывается у избушки, Баба Яга собирается съесть девочку. Машенька убегает от нее по лесу, а сказочные персонажи помогают ей спастись.<br><br>
+                Благодаря доброте Машеньки все герои объединяются помогают ей благополучно вернуться домой.<br>
+                <strong>Главная мораль нашей сказки, делай добро — добро вернется!</strong>`,
+
+                accTechTitle: "Проектирование и изготовление",
+                accTechText: `Конструкции роботов были разработаны в САПР SolidWorks.<br>
+                Детали для 3D-печати подготавливались в программе Orca Slicer.<br><br>
+                <strong>Технологии изготовления:</strong>
+                <ul>
+                    <li>Лазерная резка фанеры</li>
+                    <li>Печать на 3D-принтерах</li>
+                    <li>Сборка конструкций с использованием соединений шип-паз, прямой и ласточкин хвост</li>
+                    <li>Пайка электрической схемы</li>
+                </ul>`,
+
+                accSoftTitle: "Программное обеспечение",
+                accSoftText: `<strong>Используемые программные инструменты:</strong>
+                <ul>
+                    <li><strong>RobotC</strong> — программирование роботов</li>
+                    <li><strong>Spike</strong> — программирование робота березки</li>
+                    <li><strong>Arduino IDE</strong> — программирования избушки и березки</li>
+                    <li><strong>SolidWorks</strong> — проектирование конструкций</li>
+                    <li><strong>Orca Slicer, Bambu Studio</strong> — подготовка моделей для 3D-печати</li>
+                    <li><strong>RDWorks</strong> — управление лазерным станком с ЧПУ</li>
+                    <li><strong>PixyMon</strong> — программирование камеры</li>
+                </ul>`,
+
+                izbTitle: "Избушка",
+                izbFullTitle: "Избушка на курьих ножках",
+                catTitle: "Кошка и Собака",
+                berTitle: "Берёза"
+            },
+            en: {
+                langCode: "EN",
+                titleTeam: "Team Baba Yaga",
+                titleSchool: "Presidential Physics and Mathematics Lyceum №239, St. Petersburg",
+                secTeam: "Project Team",
+                secAbout: "About Project",
+                secModels: "3D Models & Hardware",
+                backText: "Back to Menu",
+                arText: "View in AR",
+                btnView: "Open 3D / AR",
+                cardSub: "3D Model & Interactive AR View",
+                btnResetCam: "Reset Camera",
+                btnRotateOn: "Auto-rotate: ON",
+                btnRotateOff: "Auto-rotate: OFF",
+                btnFullscreen: "Fullscreen Mode",
+                hint3D: "🖱️ Rotate: Hold Left Click | Zoom: Scroll | Pan: Hold Right Click",
+
+                matveyName: "Matvey Markov",
+                matveyRole: "Team Captain, Lead Hardware Designer & Electrical Engineer",
+
+                lidaName: "Lida Tokareva",
+                lidaRole: "Lead Software Engineer",
+
+                alisaName: "Alisa Markova",
+                alisaRole: "Hut Legs Mechanical Designer",
+
+                accAnnTitle: "Abstract",
+                accAnnText: "Inspired by the famous character of Russian folk tales Baba Yaga, our team created a project based on her fairy tales. The goal was to build a theatrical robotic show where autonomous robots and their creators act together on stage. For this purpose, robots including Birch Tree, Cat, Dog, Hut, and Hut's legs were designed and built.",
+
+                accStoryTitle: "Storyline",
+                accStoryText: `In our performance, we present a traditional fairy tale about a girl named Mashenka, sent into the forest by her stepmother to Baba Yaga's place for a needle and thread. On her way, Mashenka encounters fairy-tale characters: Cat, Dog, Birch Tree, and the Hut on Chicken Legs. Being kind-hearted, Mashenka feeds Cat a fish, gives Dog a bone, and decorates Birch Tree with a ribbon. When Mashenka reaches the hut, Baba Yaga tries to capture her. Mashenka flees through the forest, and the characters step in to save her.<br><br>
+                Thanks to Mashenka's kindness, all characters unite to help her return home safely.<br>
+                <strong>The main moral: Do good, and good will come back to you!</strong>`,
+
+                accTechTitle: "Design & Fabrication",
+                accTechText: `Robot structures were designed using SolidWorks CAD.<br>
+                3D printing files were prepared in Orca Slicer.<br><br>
+                <strong>Manufacturing Technologies:</strong>
+                <ul>
+                    <li>Laser-cut plywood</li>
+                    <li>3D Printing</li>
+                    <li>Joint-based structural assembly (Mortise-tenon, Straight, Dovetail)</li>
+                    <li>PCB & Circuit Soldering</li>
+                </ul>`,
+
+                accSoftTitle: "Software",
+                accSoftText: `<strong>Software Tools Used:</strong>
+                <ul>
+                    <li><strong>RobotC</strong> — Robot programming</li>
+                    <li><strong>Spike</strong> — Birch tree robot programming</li>
+                    <li><strong>Arduino IDE</strong> — Hut & Birch control code</li>
+                    <li><strong>SolidWorks</strong> — 3D Mechanical CAD Design</li>
+                    <li><strong>Orca Slicer, Bambu Studio</strong> — 3D Print Slicing</li>
+                    <li><strong>RDWorks</strong> — CNC Laser Cutter Control</li>
+                    <li><strong>PixyMon</strong> — Vision Sensor Setup</li>
+                </ul>`,
+
+                izbTitle: "Hut",
+                izbFullTitle: "Hut on Chicken Legs",
+                catTitle: "Cat & Dog",
+                berTitle: "Birch Tree"
+            },
+            cn: {
+                langCode: "中文",
+                titleTeam: "«Baba Yaga» (雅加婆婆) 团队",
+                titleSchool: "圣彼得堡第239总统物理数学中学",
+                secTeam: "项目团队",
+                secAbout: "关于项目",
+                secModels: "3D模型与机械结构",
+                backText: "返回菜单",
+                arText: "在AR中查看",
+                btnView: "打开 3D / AR",
+                cardSub: "3D模型与增强现实 (AR) 互动展示",
+                btnResetCam: "重置视角",
+                btnRotateOn: "自动旋转: 开启",
+                btnRotateOff: "自动旋转: 关闭",
+                btnFullscreen: "全屏查看",
+                hint3D: "🖱️ 旋转: 按住左键 | 缩放: 滚轮 | 移动: 按住右键",
+
+                matveyName: "Markov Matvey",
+                matveyRole: "队长、首席机械设计师及电气工程师",
+
+                lidaName: "Tokareva Lida",
+                lidaRole: "首席软件工程师",
+
+                alisaName: "Markova Alisa",
+                alisaRole: "小屋腿部结构设计师",
+
+                accAnnTitle: "项目摘要",
+                accAnnText: "受俄罗斯著名民间故事人物“雅加婆婆”的启发，我们团队制作了一个基于该童话故事的机器表演项目。项目的目标是打造一场剧场式的机器人表演 show，由自主机器人和它们的创作者共同担任演员。为此，我们设计并制造了桦树、猫、狗、鸡脚小屋以及小屋腿部等多个机器人。",
+
+                accStoryTitle: "童话故事情节",
+                accStoryText: `在我们的表演中，讲述了一个经典的俄罗斯民间故事：小女孩玛申卡被继母派往森林里的雅加婆婆家借针线。在路上，玛申卡遇到了各种神奇的角色：猫、狗、桦树和鸡脚小屋。善良的玛申卡给猫喂了鱼，给了狗骨头，还给桦树系上了红丝带。当玛申卡到达小屋时，雅加婆婆想要吃掉她。玛申卡在森林里逃跑，而这些受过她关照的角色纷纷出手相助。<br><br>
+                由于玛申卡的善良，所有角色团结一致，帮助她平安返回家中。<br>
+                <strong>故事的核心寓意：行善积德，善有善报！</strong>`,
+
+                accTechTitle: "设计与制造",
+                accTechText: `机器人结构均在 SolidWorks CAD 软件中设计完成。<br>
+                3D 打印零件在 Orca Slicer 中进行切片准备。<br><br>
+                <strong>制造工艺：</strong>
+                <ul>
+                    <li>胶合板激光切割</li>
+                    <li>3D 打印技术</li>
+                    <li>采用榫卯结构、直角榫及燕尾榫进行机械组装</li>
+                    <li>电路焊接与电气组装</li>
+                </ul>`,
+
+                accSoftTitle: "软件与编程",
+                accSoftText: `<strong>使用的软件工具：</strong>
+                <ul>
+                    <li><strong>RobotC</strong> — 机器人控制编程</li>
+                    <li><strong>Spike</strong> — 桦树机器人编程</li>
+                    <li><strong>Arduino IDE</strong> — 小屋与桦树主控编程</li>
+                    <li><strong>SolidWorks</strong> — 3D 机械结构设计</li>
+                    <li><strong>Orca Slicer, Bambu Studio</strong> — 3D 打印切片软件</li>
+                    <li><strong>RDWorks</strong> — 数控激光切割机控制</li>
+                    <li><strong>PixyMon</strong> — 视觉传感器配置</li>
+                </ul>`,
+
+                izbTitle: "鸡脚小屋",
+                izbFullTitle: "鸡脚上的小屋 (Hut on Chicken Legs)",
+                catTitle: "猫与狗",
+                berTitle: "桦树"
+            }
+        };
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('theme-toggle');
+            if (body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme');
+                themeBtn.innerText = '☀️';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeBtn.innerText = '🌙';
+            }
+        }
+
+        function toggleLanguage() {
+            currentLangIndex = (currentLangIndex + 1) % langOrder.length;
+            currentLang = langOrder[currentLangIndex];
+            
+            const t = translations[currentLang];
+            document.getElementById('lang-toggle').innerText = t.langCode;
+
+            document.getElementById('title-team').innerText = t.titleTeam;
+            document.getElementById('title-school').innerText = t.titleSchool;
+            document.getElementById('sec-team').innerText = t.secTeam;
+            document.getElementById('sec-about').innerText = t.secAbout;
+            document.getElementById('sec-models').innerText = t.secModels;
+
+            document.querySelectorAll('.back-text').forEach(el => el.innerText = t.backText);
+            document.getElementById('ar-btn-text').innerText = t.arText;
+            document.querySelectorAll('.btn-view-text').forEach(el => el.innerText = t.btnView);
+            document.querySelectorAll('.card-sub').forEach(el => el.innerText = t.cardSub);
+
+            document.getElementById('matvey-name').innerText = t.matveyName;
+            document.getElementById('matvey-role').innerText = t.matveyRole;
+            document.getElementById('lida-name').innerText = t.lidaName;
+            document.getElementById('lida-role').innerText = t.lidaRole;
+            document.getElementById('alisa-name').innerText = t.alisaName;
+            document.getElementById('alisa-role').innerText = t.alisaRole;
+
+            document.getElementById('acc-ann-title').innerText = t.accAnnTitle;
+            document.getElementById('acc-ann-text').innerHTML = t.accAnnText;
+            document.getElementById('acc-story-title').innerText = t.accStoryTitle;
+            document.getElementById('acc-story-text').innerHTML = t.accStoryText;
+            document.getElementById('acc-tech-title').innerText = t.accTechTitle;
+            document.getElementById('acc-tech-text').innerHTML = t.accTechText;
+            document.getElementById('acc-soft-title').innerText = t.accSoftTitle;
+            document.getElementById('acc-soft-text').innerHTML = t.accSoftText;
+
+            document.getElementById('card-izb-title').innerText = t.izbTitle;
+            document.getElementById('card-cat-title').innerText = t.catTitle;
+            document.getElementById('card-ber-title').innerText = t.berTitle;
+
+            document.getElementById('btn-reset-cam').innerText = t.btnResetCam;
+            document.getElementById('btn-fullscreen').innerText = t.btnFullscreen;
+            document.getElementById('hint-3d').innerText = t.hint3D;
+
+            const viewer = document.getElementById('model-display');
+            const rotateBtn = document.getElementById('btn-toggle-rotate');
+            if (viewer.hasAttribute('auto-rotate')) {
+                rotateBtn.innerText = t.btnRotateOn;
+            } else {
+                rotateBtn.innerText = t.btnRotateOff;
+            }
+
+            if (currentMemberId) {
+                openMember(currentMemberId);
+            }
+            if (currentModelId) {
+                openModel(currentModelId);
+            }
+        }
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        function openMember(id) {
+            currentMemberId = id;
+            const t = translations[currentLang];
+            const memberContainer = document.getElementById('member-container');
+            const mainView = document.getElementById('main-view');
+            
+            const photo = document.getElementById('member-photo');
+            const name = document.getElementById('member-name');
+            const desc = document.getElementById('member-desc');
+
+            if (id === 'matvey') {
+                photo.src = 'matvey.jpg';
+                name.innerText = t.matveyName;
+                desc.innerText = t.matveyRole;
+            } else if (id === 'lida') {
+                photo.src = 'lida.jpg';
+                name.innerText = t.lidaName;
+                desc.innerText = t.lidaRole;
+            } else if (id === 'alisa') {
+                photo.src = 'alisa.jpg';
+                name.innerText = t.alisaName;
+                desc.innerText = t.alisaRole;
+            }
+
+            mainView.style.display = 'none';
+            memberContainer.classList.add('active');
+        }
+
+        function closeMember() {
+            currentMemberId = null;
+            document.getElementById('member-container').classList.remove('active');
+            document.getElementById('main-view').style.display = 'block';
+        }
+
+        function openModel(id) {
+            currentModelId = id;
+            const t = translations[currentLang];
+            const viewerContainer = document.getElementById('viewer-container');
+            const mainView = document.getElementById('main-view');
+            const viewer = document.getElementById('model-display');
+            const title = document.getElementById('model-title');
+
+            if (id === 'izbushka') {
+                title.innerText = t.izbFullTitle || t.izbTitle;
+            } else if (id === 'catdog') {
+                title.innerText = t.catTitle;
+            } else if (id === 'birch') {
+                title.innerText = t.berTitle;
+            }
+
+            if (modelAssets[id]) {
+                viewer.setAttribute('src', modelAssets[id].gltf);
+                viewer.setAttribute('ios-src', modelAssets[id].usdz);
+            }
+
+            mainView.style.display = 'none';
+            viewerContainer.classList.add('active');
+        }
+
+        function closeModel() {
+            currentModelId = null;
+            document.getElementById('viewer-container').classList.remove('active');
+            document.getElementById('main-view').style.display = 'block';
+            
+            const viewer = document.getElementById('model-display');
+            viewer.removeAttribute('src');
+            viewer.removeAttribute('ios-src');
+        }
+
+        function resetModelCamera() {
+            const viewer = document.getElementById('model-display');
+            viewer.cameraOrbit = 'auto auto auto';
+            viewer.cameraTarget = 'auto auto auto';
+        }
+
+        function toggleAutoRotate() {
+            const viewer = document.getElementById('model-display');
+            const btn = document.getElementById('btn-toggle-rotate');
+            const t = translations[currentLang];
+
+            if (viewer.hasAttribute('auto-rotate')) {
+                viewer.removeAttribute('auto-rotate');
+                btn.innerText = t.btnRotateOff;
+            } else {
+                viewer.setAttribute('auto-rotate', '');
+                btn.innerText = t.btnRotateOn;
+            }
+        }
+
+        function toggleFullscreen() {
+            const container = document.getElementById('viewer-container');
+            if (!document.fullscreenElement) {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
