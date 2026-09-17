@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Команда «Баба Яга» — RoboCup OnStage</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
@@ -42,7 +42,7 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -53,17 +53,17 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding: calc(12px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(20px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+            padding: 16px;
             position: relative;
             overflow-x: hidden;
         }
 
         .controls-bar {
             position: absolute;
-            top: calc(15px + env(safe-area-inset-top));
-            right: calc(16px + env(safe-area-inset-right));
+            top: 16px;
+            right: 16px;
             display: flex;
-            gap: 10px;
+            gap: 8px;
             z-index: 200;
         }
 
@@ -77,38 +77,37 @@
             font-weight: bold;
             font-size: 0.85rem;
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-            user-select: none;
         }
 
-        .control-btn:active {
-            transform: scale(0.96);
+        .control-btn:hover {
+            border-color: var(--header-color);
         }
 
         header {
             text-align: center;
-            margin-bottom: 24px;
-            margin-top: 45px;
+            margin-bottom: 20px;
+            margin-top: 30px;
             width: 100%;
             max-width: 900px;
         }
 
         header h1 {
             color: var(--header-color);
-            font-size: clamp(1.5rem, 5vw, 2.2rem);
+            font-size: 1.8rem;
             margin-bottom: 6px;
-            line-height: 1.2;
         }
 
         header p {
             color: var(--subtext-color);
-            font-size: clamp(0.85rem, 3vw, 1rem);
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
 
         .section-title {
             width: 100%;
             max-width: 900px;
             color: var(--title-color);
-            font-size: clamp(1.1rem, 4vw, 1.3rem);
+            font-size: 1.2rem;
             margin: 20px 0 12px 0;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 6px;
@@ -116,32 +115,31 @@
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
             width: 100%;
             max-width: 900px;
         }
 
-        .card-team, .card-project {
+        .card-team {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 18px 16px;
+            padding: 16px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
             cursor: pointer;
-            user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .card-team:hover, .card-project:hover {
+        .card-team:hover, .card-team:active {
             transform: translateY(-2px);
             border-color: var(--header-color);
             background-color: var(--card-hover-bg);
-        }
-
-        .card-project:hover {
-            border-color: var(--btn-green);
         }
 
         .avatar {
@@ -164,6 +162,17 @@
             color: var(--subtext-color);
             font-size: 0.85rem;
             line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .btn-more {
+            background-color: transparent;
+            color: var(--header-color);
+            border: 1px solid var(--header-color);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
         }
 
         .accordion-container {
@@ -180,7 +189,7 @@
             color: var(--title-color);
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            padding: 14px 18px;
+            padding: 14px 16px;
             font-size: 0.95rem;
             font-weight: bold;
             text-align: left;
@@ -197,7 +206,7 @@
             border-radius: 10px;
             padding: 16px;
             color: var(--text-color);
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             line-height: 1.6;
         }
 
@@ -206,15 +215,25 @@
             margin-top: 8px;
         }
 
+        .card-project {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
         .card-project h3 {
             color: var(--accent-green);
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             margin-bottom: 6px;
         }
 
         .card-project p {
             color: var(--subtext-color);
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             margin-bottom: 12px;
         }
 
@@ -241,7 +260,7 @@
         }
 
         .active {
-            display: block !important;
+            display: block;
         }
 
         .btn-back {
@@ -249,78 +268,27 @@
             color: var(--text-color);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 10px 16px;
-            font-size: 0.9rem;
+            padding: 8px 16px;
+            font-size: 0.85rem;
             font-weight: bold;
             cursor: pointer;
             margin-bottom: 14px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
         }
 
-        /* 3D Контейнер и Спиннер Загрузки */
         .model-wrapper {
             position: relative;
             width: 100%;
             height: 60vh;
-            min-height: 350px;
-            max-height: 550px;
-            background-color: var(--viewer-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
+            max-height: 500px;
+            min-height: 300px;
         }
 
         model-viewer {
             width: 100%;
             height: 100%;
-            display: block;
+            background-color: var(--viewer-bg);
+            border-radius: 12px;
             touch-action: pan-y;
-            --poster-color: transparent;
-        }
-
-        .model-loader {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            color: var(--subtext-color);
-            font-size: 0.9rem;
-            pointer-events: none;
-        }
-
-        .spinner {
-            width: 36px;
-            height: 36px;
-            border: 4px solid var(--border-color);
-            border-top: 4px solid var(--header-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .model-error-msg {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: #f85149;
-            padding: 16px;
-            background: rgba(0,0,0,0.8);
-            border-radius: 8px;
-            width: 80%;
-            font-size: 0.9rem;
         }
 
         .model-controls {
@@ -337,7 +305,7 @@
             border: 1px solid var(--border-color);
             border-radius: 6px;
             padding: 8px 12px;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             font-weight: bold;
             cursor: pointer;
         }
@@ -354,15 +322,15 @@
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 10px 18px;
+            padding: 10px 16px;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
             position: absolute;
             bottom: 16px;
             right: 16px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            z-index: 10;
+            z-index: 100;
         }
 
         .member-profile {
@@ -374,18 +342,19 @@
         }
 
         .member-profile img {
-            width: 110px;
-            height: 110px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--header-color);
-            margin-bottom: 14px;
+            margin-bottom: 12px;
+            background-color: var(--border-color);
         }
 
         .member-profile h2 {
             color: var(--header-color);
             font-size: 1.4rem;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .member-description {
@@ -394,10 +363,16 @@
             border-radius: 10px;
             padding: 16px;
             color: var(--text-color);
-            text-align: center;
+            text-align: left;
             width: 100%;
-            line-height: 1.5;
-            font-size: 0.98rem;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.5rem; }
+            .section-title { font-size: 1.1rem; }
+            .controls-bar { top: 12px; right: 12px; }
         }
     </style>
 </head>
@@ -413,30 +388,39 @@
         <p id="title-school">Президентский физико-математический лицей №239, г. Санкт-Петербург</p>
     </header>
 
-    <!-- Главный экран -->
-    <main id="main-view" style="width: 100%; max-width: 900px;">
+    <div id="main-view" style="width: 100%; max-width: 900px;">
         
         <h2 class="section-title" id="sec-team">Команда проекта</h2>
         <div class="grid-container">
             <div class="card-team" onclick="openMember('matvey')">
-                <img src="matvey.jpg" alt="Марков Матвей" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ММ'">
-                <h3 id="matvey-name">Марков Матвей</h3>
-                <p class="role" id="matvey-role">Капитан команды, главный конструктор и электрик проекта</p>
+                <div>
+                    <img src="matvey.jpg" alt="Марков Матвей" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ММ'">
+                    <h3 id="matvey-name">Марков Матвей</h3>
+                    <p class="role" id="matvey-role">Капитан команды, главный конструктор и электрик проекта</p>
+                </div>
+                <span class="btn-more btn-more-text">Подробнее →</span>
             </div>
             <div class="card-team" onclick="openMember('lida')">
-                <img src="lida.jpg" alt="Токарева Лида" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ТЛ'">
-                <h3 id="lida-name">Токарева Лида</h3>
-                <p class="role" id="lida-role">Главный программист</p>
+                <div>
+                    <img src="lida.jpg" alt="Токарева Лида" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ТЛ'">
+                    <h3 id="lida-name">Токарева Лида</h3>
+                    <p class="role" id="lida-role">Главный программист</p>
+                </div>
+                <span class="btn-more btn-more-text">Подробнее →</span>
             </div>
             <div class="card-team" onclick="openMember('alisa')">
-                <img src="alisa.jpg" alt="Маркова Алиса" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=МА'">
-                <h3 id="alisa-name">Маркова Алиса</h3>
-                <p class="role" id="alisa-role">Конструктор ног Избушки</p>
+                <div>
+                    <img src="alisa.jpg" alt="Маркова Алиса" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=МА'">
+                    <h3 id="alisa-name">Маркова Алиса</h3>
+                    <p class="role" id="alisa-role">Конструктор ног Избушки</p>
+                </div>
+                <span class="btn-more btn-more-text">Подробнее →</span>
             </div>
         </div>
 
         <h2 class="section-title" id="sec-about">О проекте</h2>
         <div class="accordion-container">
+            
             <button class="accordion-btn" onclick="toggleAccordion('ann')">
                 <span id="acc-ann-title">Аннотация</span> <span>▼</span>
             </button>
@@ -491,6 +475,7 @@
                     </ul>
                 </span>
             </div>
+
         </div>
 
         <h2 class="section-title" id="sec-models">Модели и Конструкции</h2>
@@ -512,32 +497,26 @@
             </div>
         </div>
 
-    </main>
+    </div>
 
     <!-- Страница выбранного участника -->
     <div id="member-container" class="viewer-container">
-        <button class="btn-back" onclick="navigateBack()">← <span class="back-text">Назад к меню</span></button>
+        <button class="btn-back" onclick="goBack()">← <span class="back-text">Назад к меню</span></button>
         <div class="member-profile">
             <img id="member-photo" src="" alt="" onerror="this.src='https://via.placeholder.com/120/161b22/58a6ff?text=Участник'">
             <h2 id="member-name">Имя Участника</h2>
-            <div id="member-desc" class="member-description">Описание участника...</div>
+            <div id="member-desc" class="member-description">
+                Описание участника...
+            </div>
         </div>
     </div>
 
     <!-- Просмотрщик 3D моделей -->
     <div id="viewer-container" class="viewer-container">
-        <button class="btn-back" onclick="navigateBack()">← <span class="back-text">Назад к меню</span></button>
-        <h2 id="model-title" style="color: var(--header-color); margin-bottom: 12px; font-size: 1.2rem;">Модель</h2>
+        <button class="btn-back" onclick="goBack()">← <span class="back-text">Назад к меню</span></button>
+        <h2 id="model-title" style="color: var(--header-color); margin-bottom: 12px;">Модель</h2>
         
         <div class="model-wrapper">
-            <div id="model-loader" class="model-loader">
-                <div class="spinner"></div>
-                <span id="loading-text">Загрузка 3D-модели...</span>
-            </div>
-            <div id="model-error" class="model-error-msg">
-                ⚠️ Не удалось загрузить 3D-файл. Проверьте путь к файлу .gltf/.glb на сервере.
-            </div>
-
             <model-viewer 
                 id="model-display"
                 src="" 
@@ -550,10 +529,8 @@
                 touch-action="pan-y"
                 interaction-prompt="auto"
                 auto-rotate 
-                shadow-intensity="1"
-                shadow-softness="0.75"
-                exposure="1"
-                environment-image="neutral">
+                shadow-intensity="1.5"
+                shadow-softness="0.8">
                 
                 <button slot="ar-button" class="ar-button" id="ar-btn-text">
                     Посмотреть в AR
@@ -566,7 +543,7 @@
             <button class="btn-3d" onclick="toggleAutoRotate()" id="btn-toggle-rotate">Автовращение: Вкл</button>
             <button class="btn-3d" onclick="toggleFullscreen()" id="btn-fullscreen">На полный экран</button>
         </div>
-        <p class="hint-3d" id="hint-3d">🖱️ Вращение: Зажмите ЛКМ/Палец | Зумирование: Колёсико/Щипок</p>
+        <p class="hint-3d" id="hint-3d">🖱️ Вращение: Зажмите ЛКМ | Зумирование: Колёсико | Панорама: Зажмите ПКМ</p>
     </div>
 
     <script>
@@ -574,7 +551,7 @@
         let currentLangIndex = 0;
         let currentLang = 'ru';
 
-        let activeState = null; // 'member' или 'model'
+        let currentView = 'main'; // 'main', 'member', 'model'
         let currentMemberId = null;
         let currentModelId = null;
 
@@ -595,31 +572,58 @@
                 backText: "Назад к меню",
                 arText: "Посмотреть в AR",
                 btnView: "Открыть 3D / AR",
+                btnMoreText: "Подробнее →",
                 cardSub: "3D-модель и интерактивный просмотр в AR",
                 btnResetCam: "Сбросить камеру",
                 btnRotateOn: "Автовращение: Вкл",
                 btnRotateOff: "Автовращение: Выкл",
                 btnFullscreen: "На полный экран",
-                hint3D: "🖱️ Вращение: Зажмите ЛКМ/Палец | Зумирование: Колёсико/Щипок",
+                hint3D: "🖱️ Вращение: Пальцем/ЛКМ | Зумирование: Двумя пальцами/Колёсико",
+                
                 matveyName: "Марков Матвей",
                 matveyRole: "Капитан команды, главный конструктор и электрик проекта",
+                
                 lidaName: "Токарева Лида",
                 lidaRole: "Главный программист",
+                
                 alisaName: "Маркова Алиса",
                 alisaRole: "Конструктор ног Избушки",
+
                 accAnnTitle: "Аннотация",
                 accAnnText: "Вдохновлённая популярным персонажем русских народных сказок Бабой Ягой, наша команда создала проект по мотивам сказок о ней. Целью проекта стало создание театрального роботизированного шоу, в котором принимают участие автономные роботы и их создатели, в качестве актеров. Для этого были спроектированы и изготовлены роботы, Березка Кошка Собака, Избушка и ноги избушки.",
+
                 accStoryTitle: "Сюжет сказки",
-                accStoryText: `В нашем выступлении мы рассказываем русскую народную сказку про девочку Машеньку, которую мачеха отправляет в лес к Бабе Яге за иголкой и ниткой. По дороге Машенька встречает сказочных персонажей, кошку собаку, берёзку и избушку на курьих ножках. Девочка ласкова и добра к ним угощает кошку рыбой, даёт собаке кость и украшает берёзку алой ленточкой. Когда девочка оказывается у избушки, Баба Яга собирается съесть девочку. Машенька убегает от нее по лесу, а сказочные персонажи помогают ей спастись.<br><br>Благодаря доброте Машеньки все герои объединяются помогают ей благополучно вернуться домой.<br><strong>Главная мораль нашей сказки, делай добро — добро вернется!</strong>`,
+                accStoryText: `В нашем выступлении мы рассказываем русскую народную сказку про девочку Машеньку, которую мачеха отправляет в лес к Бабе Яге за иголкой и ниткой. По дороге Машенька встречает сказочных персонажей, кошку собаку, берёзку и избушку на курьих ножках. Девочка ласкова и добра к ним угощает кошку рыбой, даёт собаке кость и украшает берёзку алой ленточкой. Когда девочка оказывается у избушки, Баба Яга собирается съесть девочку. Машенька убегает от нее по лесу, а сказочные персонажи помогают ей спастись.<br><br>
+                Благодаря доброте Машеньки все герои объединяются помогают ей благополучно вернуться домой.<br>
+                <strong>Главная мораль нашей сказки, делай добро — добро вернется!</strong>`,
+
                 accTechTitle: "Проектирование и изготовление",
-                accTechText: `Конструкции роботов были разработаны в САПР SolidWorks.<br>Детали для 3D-печати подготавливались в программе Orca Slicer.<br><br><strong>Технологии изготовления:</strong><ul><li>Лазерная резка фанеры</li><li>Печать на 3D-принтерах</li><li>Сборка конструкций с использованием соединений шип-паз, прямой и ласточкин хвост</li><li>Пайка электрической схемы</li></ul>`,
+                accTechText: `Конструкции роботов были разработаны в САПР SolidWorks.<br>
+                Детали для 3D-печати подготавливались в программе Orca Slicer.<br><br>
+                <strong>Технологии изготовления:</strong>
+                <ul>
+                    <li>Лазерная резка фанеры</li>
+                    <li>Печать на 3D-принтерах</li>
+                    <li>Сборка конструкций с использованием соединений шип-паз, прямой и ласточкин хвост</li>
+                    <li>Пайка электрической схемы</li>
+                </ul>`,
+
                 accSoftTitle: "Программное обеспечение",
-                accSoftText: `<strong>Используемые программные инструменты:</strong><ul><li><strong>RobotC</strong> — программирование роботов</li><li><strong>Spike</strong> — программирование робота березки</li><li><strong>Arduino IDE</strong> — программирования избушки и березки</li><li><strong>SolidWorks</strong> — проектирование конструкций</li><li><strong>Orca Slicer, Bambu Studio</strong> — подготовка моделей для 3D-печати</li><li><strong>RDWorks</strong> — управление лазерным станком с ЧПУ</li><li><strong>PixyMon</strong> — программирование камеры</li></ul>`,
+                accSoftText: `<strong>Используемые программные инструменты:</strong>
+                <ul>
+                    <li><strong>RobotC</strong> — программирование роботов</li>
+                    <li><strong>Spike</strong> — программирование робота березки</li>
+                    <li><strong>Arduino IDE</strong> — программирования избушки и березки</li>
+                    <li><strong>SolidWorks</strong> — проектирование конструкций</li>
+                    <li><strong>Orca Slicer, Bambu Studio</strong> — подготовка моделей для 3D-печати</li>
+                    <li><strong>RDWorks</strong> — управление лазерным станком с ЧПУ</li>
+                    <li><strong>PixyMon</strong> — программирование камеры</li>
+                </ul>`,
+
                 izbTitle: "Избушка",
                 izbFullTitle: "Избушка на курьих ножках",
                 catTitle: "Кошка и Собака",
-                berTitle: "Берёза",
-                loadingText: "Загрузка 3D-модели..."
+                berTitle: "Берёза"
             },
             en: {
                 langCode: "EN",
@@ -631,31 +635,39 @@
                 backText: "Back to Menu",
                 arText: "View in AR",
                 btnView: "Open 3D / AR",
+                btnMoreText: "Details →",
                 cardSub: "3D Model & Interactive AR View",
                 btnResetCam: "Reset Camera",
                 btnRotateOn: "Auto-rotate: ON",
                 btnRotateOff: "Auto-rotate: OFF",
                 btnFullscreen: "Fullscreen Mode",
-                hint3D: "🖱️ Rotate: Drag / One Finger | Zoom: Scroll / Pinch",
+                hint3D: "🖱️ Rotate: Drag | Zoom: Pinch / Scroll",
+
                 matveyName: "Matvey Markov",
                 matveyRole: "Team Captain, Lead Hardware Designer & Electrical Engineer",
+
                 lidaName: "Lida Tokareva",
                 lidaRole: "Lead Software Engineer",
+
                 alisaName: "Alisa Markova",
                 alisaRole: "Hut Legs Mechanical Designer",
+
                 accAnnTitle: "Abstract",
-                accAnnText: "Inspired by the famous character of Russian folk tales Baba Yaga, our team created a project based on her fairy tales. The goal was to build a theatrical robotic show where autonomous robots and their creators act together on stage. For this purpose, robots including Birch Tree, Cat, Dog, Hut, and Hut's legs were designed and built.",
+                accAnnText: "Inspired by the famous character of Russian folk tales Baba Yaga, our team created a project based on her fairy tales. The goal was to build a theatrical robotic show where autonomous robots and their creators act together on stage.",
+
                 accStoryTitle: "Storyline",
-                accStoryText: `In our performance, we present a traditional fairy tale about a girl named Mashenka, sent into the forest by her stepmother to Baba Yaga's place for a needle and thread. On her way, Mashenka encounters fairy-tale characters: Cat, Dog, Birch Tree, and the Hut on Chicken Legs. Being kind-hearted, Mashenka feeds Cat a fish, gives Dog a bone, and decorates Birch Tree with a ribbon. When Mashenka reaches the hut, Baba Yaga tries to capture her. Mashenka flees through the forest, and the characters step in to save her.<br><br>Thanks to Mashenka's kindness, all characters unite to help her return home safely.<br><strong>The main moral: Do good, and good will come back to you!</strong>`,
+                accStoryText: `In our performance, we present a traditional fairy tale about a girl named Mashenka...`,
+
                 accTechTitle: "Design & Fabrication",
-                accTechText: `Robot structures were designed using SolidWorks CAD.<br>3D printing files were prepared in Orca Slicer.<br><br><strong>Manufacturing Technologies:</strong><ul><li>Laser-cut plywood</li><li>3D Printing</li><li>Joint-based structural assembly (Mortise-tenon, Straight, Dovetail)</li><li>PCB & Circuit Soldering</li></ul>`,
+                accTechText: `Robot structures were designed using SolidWorks CAD...`,
+
                 accSoftTitle: "Software",
-                accSoftText: `<strong>Software Tools Used:</strong><ul><li><strong>RobotC</strong> — Robot programming</li><li><strong>Spike</strong> — Birch tree robot programming</li><li><strong>Arduino IDE</strong> — Hut & Birch control code</li><li><strong>SolidWorks</strong> — 3D Mechanical CAD Design</li><li><strong>Orca Slicer, Bambu Studio</strong> — 3D Print Slicing</li><li><strong>RDWorks</strong> — CNC Laser Cutter Control</li><li><strong>PixyMon</strong> — Vision Sensor Setup</li></ul>`,
+                accSoftText: `<strong>Software Tools Used:</strong>...`,
+
                 izbTitle: "Hut",
                 izbFullTitle: "Hut on Chicken Legs",
                 catTitle: "Cat & Dog",
-                berTitle: "Birch Tree",
-                loadingText: "Loading 3D Model..."
+                berTitle: "Birch Tree"
             },
             cn: {
                 langCode: "中文",
@@ -667,53 +679,64 @@
                 backText: "返回菜单",
                 arText: "在AR中查看",
                 btnView: "打开 3D / AR",
+                btnMoreText: "详细信息 →",
                 cardSub: "3D模型与增强现实 (AR) 互动展示",
                 btnResetCam: "重置视角",
                 btnRotateOn: "自动旋转: 开启",
                 btnRotateOff: "自动旋转: 关闭",
                 btnFullscreen: "全屏查看",
-                hint3D: "🖱️ 旋转: 单指拖动 | 缩放: 双指缩放",
+                hint3D: "🖱️ 旋转: 拖动 | 缩放: 双指缩放",
+
                 matveyName: "Markov Matvey",
                 matveyRole: "队长、首席机械设计师及电气工程师",
+
                 lidaName: "Tokareva Lida",
                 lidaRole: "首席软件工程师",
+
                 alisaName: "Markova Alisa",
                 alisaRole: "小屋腿部结构设计师",
+
                 accAnnTitle: "项目摘要",
-                accAnnText: "受俄罗斯著名民间故事人物“雅加婆婆”的启发，我们团队制作了一个基于该童话故事的机器表演项目。项目的目标是打造一场剧场式的机器人表演 show，由自主机器人和它们的创作者共同担任演员。",
+                accAnnText: "受俄罗斯著名民间故事人物“雅加婆婆”的启发...",
+
                 accStoryTitle: "童话故事情节",
-                accStoryText: `在我们的表演中，讲述了一个经典的俄罗斯民间故事：小女孩玛申卡被继母派往森林里的雅加婆婆家借针线...<br><br><strong>故事的核心寓意：行善积德，善有善报！</strong>`,
+                accStoryText: `在我们的表演中...`,
+
                 accTechTitle: "设计与制造",
-                accTechText: `机器人结构均在 SolidWorks CAD 软件中设计完成...`,
+                accTechText: `机器人结构均在 SolidWorks...`,
+
                 accSoftTitle: "软件与编程",
-                accSoftText: `<strong>使用的软件工具： RobotC, Spike, Arduino IDE, SolidWorks, Orca Slicer, RDWorks, PixyMon</strong>`,
+                accSoftText: `<strong>使用的软件工具：</strong>...`,
+
                 izbTitle: "鸡脚小屋",
                 izbFullTitle: "鸡脚上的小屋",
                 catTitle: "猫与狗",
-                berTitle: "桦树",
-                loadingText: "正在加载 3D 模型..."
+                berTitle: "桦树"
             }
         };
 
-        // --- ОБРАБОТКА ИСТОРИИ И СИСТЕМНЫХ ЖЕСТОВ НАЗАД (iPhone / Samsung / Xiaomi) ---
-        window.addEventListener('popstate', (event) => {
-            // Если сработал жест "Назад" на телефоне
-            closeAllSubViews(false);
+        // --- ОБРАБОТКА КНОПОК И ЖЕСТОВ "НАЗАД" (SAMSUNG, IPHONE, XIAOMI) ---
+        window.addEventListener('popstate', function(event) {
+            if (currentView !== 'main') {
+                showMainViewUI();
+            }
         });
 
-        function pushSubState(stateType) {
-            activeState = stateType;
-            history.pushState({ view: stateType }, "");
+        function pushStateIfNeeded(viewName) {
+            if (currentView === 'main') {
+                history.pushState({ view: viewName }, '');
+            }
+            currentView = viewName;
         }
 
-        function navigateBack() {
-            if (activeState !== null) {
-                history.back(); // Вызывает событие popstate, вызывающее closeAllSubViews
+        function goBack() {
+            if (currentView !== 'main') {
+                history.back();
             }
         }
 
-        function closeAllSubViews(updateHistory = true) {
-            activeState = null;
+        function showMainViewUI() {
+            currentView = 'main';
             currentMemberId = null;
             currentModelId = null;
 
@@ -721,33 +744,71 @@
             document.getElementById('viewer-container').classList.remove('active');
             document.getElementById('main-view').style.display = 'block';
 
-            // Очищаем viewer во избежание утечек памяти
             const viewer = document.getElementById('model-display');
-            viewer.removeAttribute('src');
-            viewer.removeAttribute('ios-src');
-
-            if (updateHistory && history.state && history.state.view) {
-                history.back();
+            if (viewer) {
+                viewer.removeAttribute('src');
+                viewer.removeAttribute('ios-src');
             }
+            window.scrollTo(0, 0);
         }
 
-        // --- ИНИЦИАЛИЗАЦИЯ 3D VIEW-ЕРА И СОБЫТИЙ ЗАГРУЗКИ ---
-        document.addEventListener('DOMContentLoaded', () => {
+        function openMember(id) {
+            pushStateIfNeeded('member');
+            currentMemberId = id;
+            const t = translations[currentLang];
+            
+            const photo = document.getElementById('member-photo');
+            const name = document.getElementById('member-name');
+            const desc = document.getElementById('member-desc');
+
+            if (id === 'matvey') {
+                photo.src = 'matvey.jpg';
+                name.innerText = t.matveyName;
+                desc.innerText = t.matveyRole;
+            } else if (id === 'lida') {
+                photo.src = 'lida.jpg';
+                name.innerText = t.lidaName;
+                desc.innerText = t.lidaRole;
+            } else if (id === 'alisa') {
+                photo.src = 'alisa.jpg';
+                name.innerText = t.alisaName;
+                desc.innerText = t.alisaRole;
+            }
+
+            document.getElementById('main-view').style.display = 'none';
+            document.getElementById('member-container').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function openModel(id) {
+            pushStateIfNeeded('model');
+            currentModelId = id;
+            const t = translations[currentLang];
             const viewer = document.getElementById('model-display');
-            const loader = document.getElementById('model-loader');
-            const errorMsg = document.getElementById('model-error');
+            const title = document.getElementById('model-title');
 
-            viewer.addEventListener('load', () => {
-                loader.style.display = 'none';
-                errorMsg.style.display = 'none';
-            });
+            if (id === 'izbushka') {
+                title.innerText = t.izbFullTitle || t.izbTitle;
+            } else if (id === 'catdog') {
+                title.innerText = t.catTitle;
+            } else if (id === 'birch') {
+                title.innerText = t.berTitle;
+            }
 
-            viewer.addEventListener('error', (e) => {
-                loader.style.display = 'none';
-                errorMsg.style.display = 'block';
-                console.error("Ошибка загрузки 3D модели:", e);
-            });
-        });
+            if (modelAssets[id]) {
+                viewer.setAttribute('src', modelAssets[id].gltf);
+                viewer.setAttribute('ios-src', modelAssets[id].usdz);
+            }
+
+            document.getElementById('main-view').style.display = 'none';
+            document.getElementById('viewer-container').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+        }
 
         function toggleTheme() {
             const body = document.body;
@@ -775,6 +836,7 @@
             document.getElementById('sec-models').innerText = t.secModels;
 
             document.querySelectorAll('.back-text').forEach(el => el.innerText = t.backText);
+            document.querySelectorAll('.btn-more-text').forEach(el => el.innerText = t.btnMoreText);
             document.getElementById('ar-btn-text').innerText = t.arText;
             document.querySelectorAll('.btn-view-text').forEach(el => el.innerText = t.btnView);
             document.querySelectorAll('.card-sub').forEach(el => el.innerText = t.cardSub);
@@ -802,82 +864,9 @@
             document.getElementById('btn-reset-cam').innerText = t.btnResetCam;
             document.getElementById('btn-fullscreen').innerText = t.btnFullscreen;
             document.getElementById('hint-3d').innerText = t.hint3D;
-            document.getElementById('loading-text').innerText = t.loadingText;
 
-            const viewer = document.getElementById('model-display');
-            const rotateBtn = document.getElementById('btn-toggle-rotate');
-            rotateBtn.innerText = viewer.hasAttribute('auto-rotate') ? t.btnRotateOn : t.btnRotateOff;
-
-            if (currentMemberId) openMember(currentMemberId, false);
-            if (currentModelId) openModel(currentModelId, false);
-        }
-
-        function toggleAccordion(id) {
-            const content = document.getElementById(id);
-            content.style.display = (content.style.display === 'block') ? 'none' : 'block';
-        }
-
-        function openMember(id, pushHistory = true) {
-            currentMemberId = id;
-            const t = translations[currentLang];
-            const memberContainer = document.getElementById('member-container');
-            const mainView = document.getElementById('main-view');
-            
-            const photo = document.getElementById('member-photo');
-            const name = document.getElementById('member-name');
-            const desc = document.getElementById('member-desc');
-
-            if (id === 'matvey') {
-                photo.src = 'matvey.jpg';
-                name.innerText = t.matveyName;
-                desc.innerText = t.matveyRole;
-            } else if (id === 'lida') {
-                photo.src = 'lida.jpg';
-                name.innerText = t.lidaName;
-                desc.innerText = t.lidaRole;
-            } else if (id === 'alisa') {
-                photo.src = 'alisa.jpg';
-                name.innerText = t.alisaName;
-                desc.innerText = t.alisaRole;
-            }
-
-            mainView.style.display = 'none';
-            memberContainer.classList.add('active');
-
-            if (pushHistory) pushSubState('member');
-        }
-
-        function openModel(id, pushHistory = true) {
-            currentModelId = id;
-            const t = translations[currentLang];
-            const viewerContainer = document.getElementById('viewer-container');
-            const mainView = document.getElementById('main-view');
-            const viewer = document.getElementById('model-display');
-            const title = document.getElementById('model-title');
-            const loader = document.getElementById('model-loader');
-            const errorMsg = document.getElementById('model-error');
-
-            // Показываем индикатор загрузки, скрываем ошибки
-            loader.style.display = 'flex';
-            errorMsg.style.display = 'none';
-
-            if (id === 'izbushka') {
-                title.innerText = t.izbFullTitle || t.izbTitle;
-            } else if (id === 'catdog') {
-                title.innerText = t.catTitle;
-            } else if (id === 'birch') {
-                title.innerText = t.berTitle;
-            }
-
-            if (modelAssets[id]) {
-                viewer.setAttribute('src', modelAssets[id].gltf);
-                viewer.setAttribute('ios-src', modelAssets[id].usdz);
-            }
-
-            mainView.style.display = 'none';
-            viewerContainer.classList.add('active');
-
-            if (pushHistory) pushSubState('model');
+            if (currentMemberId) openMember(currentMemberId);
+            if (currentModelId) openModel(currentModelId);
         }
 
         function resetModelCamera() {
@@ -903,15 +892,10 @@
         function toggleFullscreen() {
             const container = document.getElementById('viewer-container');
             if (!document.fullscreenElement) {
-                if (container.requestFullscreen) {
-                    container.requestFullscreen();
-                } else if (container.webkitRequestFullscreen) {
-                    container.webkitRequestFullscreen();
-                }
+                if (container.requestFullscreen) container.requestFullscreen();
+                else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
             } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
+                if (document.exitFullscreen) document.exitFullscreen();
             }
         }
     </script>
