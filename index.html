@@ -555,10 +555,11 @@
         let currentMemberId = null;
         let currentModelId = null;
 
+        // ЗДЕСЬ ИСПРАВЛЕНЫ РАСШИРЕНИЯ НА .glb
         const modelAssets = {
-            izbushka: { gltf: 'izbushka.gltf', usdz: 'izbushka.usdz' },
-            catdog: { gltf: 'catdog.gltf', usdz: 'catdog.usdz' },
-            birch: { gltf: 'birch.gltf', usdz: 'birch.usdz' }
+            izbushka: { gltf: 'izbushka.glb', usdz: 'izbushka.usdz' },
+            catdog: { gltf: 'catdog.glb', usdz: 'catdog.usdz' },
+            birch: { gltf: 'birch.glb', usdz: 'birch.usdz' }
         };
 
         const translations = {
@@ -796,7 +797,7 @@
             }
 
             if (modelAssets[id]) {
-                viewer.setAttribute('src', modelAssets[id].gltf);
+                viewer.setAttribute('src', modelAssets[id].gltf); 
                 viewer.setAttribute('ios-src', modelAssets[id].usdz);
             }
 
