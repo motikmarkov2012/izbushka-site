@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Команда «Баба Яга» — RoboCup OnStage</title>
-    <!-- Библиотека Google Model-Viewer -->
+    <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
         * {
@@ -26,83 +26,130 @@
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
         }
 
         header h1 {
             color: #58a6ff;
-            font-size: 2.2rem;
-            margin-bottom: 8px;
+            font-size: 2rem;
+            margin-bottom: 6px;
         }
 
         header p {
             color: #8b949e;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
         }
 
         .section-title {
             width: 100%;
             max-width: 900px;
             color: #f0f6fc;
-            font-size: 1.4rem;
-            margin: 20px 0 12px 0;
+            font-size: 1.3rem;
+            margin: 24px 0 12px 0;
             border-bottom: 1px solid #30363d;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
         }
 
-        /* Сеть карточек */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
             width: 100%;
             max-width: 900px;
-            margin-bottom: 20px;
         }
 
-        /* Карточка участника */
         .card-team {
             background-color: #161b22;
             border: 1px solid #30363d;
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 16px;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             transition: transform 0.2s, border-color 0.2s;
         }
 
         .card-team:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             border-color: #58a6ff;
         }
 
         .avatar {
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #58a6ff;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             background-color: #21262d;
         }
 
         .card-team h3 {
             color: #58a6ff;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 4px;
         }
 
         .card-team .role {
             color: #8b949e;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            line-height: 1.3;
         }
 
-        /* Карточка проекта */
+        .accordion-container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .accordion-btn {
+            background-color: #161b22;
+            color: #f0f6fc;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .accordion-btn:hover {
+            background-color: #21262d;
+            border-color: #58a6ff;
+        }
+
+        .accordion-content {
+            display: none;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 16px 20px;
+            color: #c9d1d9;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .accordion-content ul {
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+
+        .accordion-content li {
+            margin-bottom: 6px;
+        }
+
         .card-project {
             background-color: #161b22;
             border: 1px solid #30363d;
-            border-radius: 16px;
-            padding: 24px;
+            border-radius: 12px;
+            padding: 20px;
             text-align: center;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -110,20 +157,20 @@
         }
 
         .card-project:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             border-color: #238636;
             background-color: #1c2129;
         }
 
         .card-project h3 {
             color: #7ee787;
-            font-size: 1.3rem;
-            margin-bottom: 8px;
+            font-size: 1.2rem;
+            margin-bottom: 6px;
         }
 
         .card-project p {
             color: #8b949e;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             margin-bottom: 12px;
         }
 
@@ -131,13 +178,12 @@
             display: inline-block;
             background-color: #238636;
             color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
+            padding: 6px 14px;
+            border-radius: 6px;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
-        /* Экраны просмотра моделей */
         .viewer-container {
             display: none;
             width: 100%;
@@ -159,12 +205,11 @@
             color: #c9d1d9;
             border: 1px solid #30363d;
             border-radius: 8px;
-            padding: 10px 18px;
-            font-size: 0.95rem;
+            padding: 8px 16px;
+            font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
-            margin-bottom: 16px;
-            transition: background-color 0.2s;
+            margin-bottom: 14px;
         }
 
         .btn-back:hover {
@@ -174,7 +219,7 @@
 
         model-viewer {
             width: 100%;
-            height: 480px;
+            height: 450px;
             background-color: #010409;
             border-radius: 12px;
             --poster-color: transparent;
@@ -185,15 +230,15 @@
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 12px 24px;
+            padding: 12px 20px;
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 0.95rem;
             cursor: pointer;
             position: absolute;
-            bottom: 36px;
-            right: 36px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            z-index: 10;
+            bottom: 30px;
+            right: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            z-index: 100;
         }
     </style>
 </head>
@@ -201,55 +246,103 @@
 
     <header>
         <h1>🧙‍♀️ Команда «Баба Яга»</h1>
-        <p>Робототехнические проекты OnStage</p>
+        <p>Президентский физико-математический лицей №239, г. Санкт-Петербург</p>
     </header>
 
-    <!-- Главная страница (Главный экран) -->
     <div id="main-view" style="width: 100%; max-width: 900px;">
         
-        <!-- Секция команды -->
         <h2 class="section-title">👥 Команда проекта</h2>
         <div class="grid-container">
             <div class="card-team">
-                <img src="matvey.jpg" alt="Марков Матвей" class="avatar" onerror="this.src='https://via.placeholder.com/90/161b22/58a6ff?text=ММ'">
+                <img src="matvey.jpg" alt="Марков Матвей" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ММ'">
                 <h3>Марков Матвей</h3>
-                <p class="role">Капитан & Главный конструктор</p>
+                <p class="role">Капитан команды, главный конструктор и электрик проекта</p>
             </div>
             <div class="card-team">
-                <img src="lida.jpg" alt="Токарева Лидия" class="avatar" onerror="this.src='https://via.placeholder.com/90/161b22/58a6ff?text=ТЛ'">
-                <h3>Токарева Лидия</h3>
+                <img src="alisa.jpg" alt="Алиса Маркова" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=МА'">
+                <h3>Алиса Маркова</h3>
+                <p class="role">Конструктор ног Избушки</p>
+            </div>
+            <div class="card-team">
+                <img src="lida.jpg" alt="Лида Токарева" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ЛТ'">
+                <h3>Лида Токарева</h3>
                 <p class="role">Главный программист</p>
-            </div>
-            <div class="card-team">
-                <img src="alisa.jpg" alt="Маркова Алиса" class="avatar" onerror="this.src='https://via.placeholder.com/90/161b22/58a6ff?text=МА'">
-                <h3>Маркова Алиса</h3>
-                <p class="role">Художник & Конструктор ног</p>
             </div>
         </div>
 
-        <!-- Секция роботов -->
+        <h2 class="section-title">📋 О проекте</h2>
+        <div class="accordion-container">
+            
+            <button class="accordion-btn" onclick="toggleAccordion('ann')">
+                <span>📖 Аннотация</span> <span>▼</span>
+            </button>
+            <div id="ann" class="accordion-content">
+                Вдохновлённая популярным персонажем русских народных сказок Бабой Ягой, наша команда создала проект по мотивам сказок о ней. Целью проекта стало создание театрального роботизированного шоу, в котором принимают участие автономные роботы и их создатели, в качестве актеров. Для этого были спроектированы и изготовлены роботы, Березка Кошка Собака, Избушка и ноги избушки.
+            </div>
+
+            <button class="accordion-btn" onclick="toggleAccordion('story')">
+                <span>🎭 Сюжет сказки</span> <span>▼</span>
+            </button>
+            <div id="story" class="accordion-content">
+                В нашем выступлении мы рассказываем русскую народную сказку про девочку Машеньку, которую мачеха отправляет в лес к Бабе Яге за иголкой и ниткой. По дороге Машенька встречает сказочных персонажей, кошку собаку, берёзку и избушку на курьих ножках. Девочка ласкова и добра к ним угощает кошку рыбой, даёт собаке кость и украшает берёзку алой ленточкой. Когда девочка оказывается у избушки, Баба Яга собирается съесть девочку. Машенька убегает от нее по лесу, а сказочные персонажи помогают ей спастись.<br><br>
+                Благодаря доброте Машеньки все герои объединяются помогают ей благополучно вернуться домой.<br>
+                <strong>Главная мораль нашей сказки, делай добро — добро вернется!</strong>
+            </div>
+
+            <button class="accordion-btn" onclick="toggleAccordion('tech')">
+                <span>🛠️ Проектирование и изготовление</span> <span>▼</span>
+            </button>
+            <div id="tech" class="accordion-content">
+                Конструкции роботов были разработаны в САПР SolidWorks.<br>
+                Детали для 3D-печати подготавливались в программе Orca Slicer.<br><br>
+                <strong>Технологии изготовления:</strong>
+                <ul>
+                    <li>Лазерная резка фанеры</li>
+                    <li>Печать на 3D-принтерах</li>
+                    <li>Сборка конструкций с использованием соединений шип-паз, прямой и ласточкин хвост</li>
+                    <li>Пайка электрической схемы</li>
+                </ul>
+            </div>
+
+            <button class="accordion-btn" onclick="toggleAccordion('soft')">
+                <span>💻 Программное обеспечение</span> <span>▼</span>
+            </button>
+            <div id="soft" class="accordion-content">
+                <strong>Используемые программные инструменты:</strong>
+                <ul>
+                    <li><strong>RobotC</strong> — программирование роботов</li>
+                    <li><strong>Spike</strong> — программирование робота березки</li>
+                    <li><strong>Arduino IDE</strong> — программирования избушки и березки</li>
+                    <li><strong>SolidWorks</strong> — проектирование конструкций</li>
+                    <li><strong>Orca Slicer, Bambu Studio</strong> — подготовка моделей для 3D-печати</li>
+                    <li><strong>RDWorks</strong> — управление лазерным станком с ЧПУ</li>
+                    <li><strong>PixyMon</strong> — программирование камеры</li>
+                </ul>
+            </div>
+
+        </div>
+
         <h2 class="section-title">🤖 Модели и Конструкции</h2>
-        <div class="grid-container">
+        <div class="grid-container" style="margin-bottom: 30px;">
             <div class="card-project" onclick="openModel('izbushka')">
                 <h3>🏠 Избушка</h3>
-                <p>Избушка на курьих ножках с механикой движения.</p>
+                <p>3D-модель и интерактивный просмотр в AR</p>
                 <span class="btn-view">Открыть 3D / AR</span>
             </div>
             <div class="card-project" onclick="openModel('catdog')">
                 <h3>🐈‍⬛ Кошка и Собака</h3>
-                <p>Интерактивные персонажи с программируемой логикой.</p>
+                <p>3D-модель и интерактивный просмотр в AR</p>
                 <span class="btn-view">Открыть 3D / AR</span>
             </div>
             <div class="card-project" onclick="openModel('bereza')">
                 <h3>🌲 Берёза</h3>
-                <p>Декоративный элемент сцены с анимацией и механизмами.</p>
+                <p>3D-модель и интерактивный просмотр в AR</p>
                 <span class="btn-view">Открыть 3D / AR</span>
             </div>
         </div>
 
     </div>
 
-    <!-- Просмотрщик моделей -->
     <div id="viewer-container" class="viewer-container">
         <button class="btn-back" onclick="closeModel()">← Назад к меню</button>
         <h2 id="model-title" style="color: #58a6ff; margin-bottom: 12px;">Модель</h2>
@@ -260,37 +353,48 @@
             ios-src=""
             alt="3D модель" 
             ar 
-            ar-modes="quick-look scene-viewer webxr" 
+            ar-modes="scene-viewer quick-look webxr" 
             ar-scale="auto"
             camera-controls 
             auto-rotate 
             shadow-intensity="1">
             
             <button slot="ar-button" class="ar-button">
-                📱 Посмотреть в AR (на столе)
+                📱 Посмотреть в AR
             </button>
         </model-viewer>
     </div>
 
     <script>
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+
         function openModel(modelName) {
             document.getElementById('main-view').style.display = 'none';
             const viewer = document.getElementById('viewer-container');
             const display = document.getElementById('model-display');
             const title = document.getElementById('model-title');
 
+            const baseUrl = window.location.origin + window.location.pathname.replace('index.html', '');
+
             if (modelName === 'izbushka') {
                 title.innerText = "🏠 Избушка на курьих ножках";
-                display.src = "izbushka.glb";
-                display.setAttribute('ios-src', 'izbushka.usdz');
+                display.src = baseUrl + "izbushka.glb";
+                display.setAttribute('ios-src', baseUrl + "izbushka.usdz");
             } else if (modelName === 'catdog') {
                 title.innerText = "🐈‍⬛ Кошка и Собака";
-                display.src = "catdog.glb"; 
-                display.setAttribute('ios-src', 'catdog.usdz');
+                display.src = baseUrl + "catdog.glb"; 
+                display.setAttribute('ios-src', baseUrl + "catdog.usdz");
             } else if (modelName === 'bereza') {
                 title.innerText = "🌲 Берёза";
-                display.src = "bereza.glb";
-                display.setAttribute('ios-src', 'bereza.usdz');
+                display.src = baseUrl + "bereza.glb";
+                display.setAttribute('ios-src', baseUrl + "bereza.usdz");
             }
 
             viewer.classList.add('active');
