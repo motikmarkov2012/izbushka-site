@@ -1,251 +1,30 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Избушка на курьих ножках — RoboCup OnStage</title>
-  
-  <!-- Подключение компонента model-viewer для 3D и AR -->
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
-
-  <style>
-    :root {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --accent-color: #38bdf8;
-      --accent-hover: #0284c7;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --border-color: #334155;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      line-height: 1.6;
-      padding-bottom: 80px; /* Отступ под мобильное меню */
-    }
-
-    header {
-      background-color: var(--card-bg);
-      border-bottom: 1px solid var(--border-color);
-      padding: 1rem 1.5rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      color: var(--accent-color);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--text-main);
-      text-decoration: none;
-      font-size: 0.95rem;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: var(--accent-color);
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 1.5rem;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 2rem 0;
-    }
-
-    .hero h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .hero p {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-    }
-
-    .card {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .card h2 {
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 0.5rem;
-      color: var(--accent-color);
-    }
-
-    /* Настройки 3D просмотрщика */
-    model-viewer {
-      width: 100%;
-      height: 400px;
-      background-color: #0b0f19;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-    }
-
-    .tech-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-
-    .tech-table th, .tech-table td {
-      text-align: left;
-      padding: 0.75rem;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 0.95rem;
-    }
-
-    .tech-table th {
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    /* Мобильное нижнее меню */
-    .mobile-nav {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: var(--card-bg);
-      border-top: 1px solid var(--border-color);
-      padding: 0.75rem 0;
-      justify-content: space-around;
-      z-index: 1000;
-    }
-
-    .mobile-nav a {
-      color: var(--text-main);
-      text-decoration: none;
-      font-size: 0.85rem;
-      text-align: center;
-    }
-
-    /* Адаптивность для смартфонов */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-      }
-
-      .mobile-nav {
-        display: flex;
-      }
-
-      model-viewer {
-        height: 320px;
-      }
-
-      .hero h1 {
-        font-size: 1.6rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Избушка 3D</title>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background: #0f172a; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+        header { width: 100%; padding: 20px; text-align: center; background: #1e293b; border-bottom: 2px solid #38bdf8; }
+        header h1 { color: #38bdf8; }
+        .viewer-container { width: 90%; max-width: 800px; height: 500px; margin: 30px auto; background: #1e293b; border-radius: 16px; overflow: hidden; border: 1px solid #334155; }
+        model-viewer { width: 100%; height: 100%; }
+    </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo">Баба Яга / RoboCup</div>
-    <ul class="nav-links">
-      <li><a href="#about">О проекте</a></li>
-      <li><a href="#model">3D-модель</a></li>
-      <li><a href="#specs">Характеристики</a></li>
-    </ul>
-  </header>
+    <header>
+        <h1>CyberBabaYaga.Tech</h1>
+        <p>Интерактивная 3D-избушка на курьих ножках</p>
+    </header>
 
-  <div class="container">
-    
-    <section class="hero">
-      <h1>Робототехнический комплекс «Избушка»</h1>
-      <p>Автономный робот-персонаж для категории RoboCup OnStage</p>
-    </section>
-
-    <!-- 3D Модель -->
-    <section id="model" class="card">
-      <h2>3D-Модель и AR</h2>
-      <model-viewer 
-        src="izbushka.glb" 
-        alt="3D модель Избушки" 
-        auto-rotate 
-        camera-controls 
-        ar 
-        shadow-intensity="1">
-      </model-viewer>
-    </section>
-
-    <!-- Описание -->
-    <section id="about" class="card">
-      <h2>Концепция проекта</h2>
-      <p>Проект представляет собой механизированный сценический комплекс с динамической балансировкой и аниматроникой. Система имитирует движения сказочного персонажа, поддерживая связь по беспроводному протоколу.</p>
-    </section>
-
-    <!-- Характеристики -->
-    <section id="specs" class="card">
-      <h2>Спецификация и компоненты</h2>
-      <table class="tech-table">
-        <tr>
-          <th>Компонент</th>
-          <th>Описание</th>
-        </tr>
-        <tr>
-          <td>Микроконтроллер</td>
-          <td>ESP32 / STM32</td>
-        </tr>
-        <tr>
-          <td>Приводы</td>
-          <td>Сервоприводы с металлическим редуктором</td>
-        </tr>
-        <tr>
-          <td>Питание</td>
-          <td>LiPo 2S / 3S аккумулятор</td>
-        </tr>
-        <tr>
-          <td>Материал корпуса</td>
-          <td>Березовая фанера 4мм, 3D-печать (PETG)</td>
-        </tr>
-      </table>
-    </section>
-
-  </div>
-
-  <!-- Нижняя панель для навигации с телефона -->
-  <nav class="mobile-nav">
-    <a href="#model">3D-Модель</a>
-    <a href="#about">О проекте</a>
-    <a href="#specs">Спецификация</a>
-  </nav>
+    <div class="viewer-container">
+        <!-- Убедись, что файл izbushka.glb лежит рядом с index.html -->
+        <model-viewer src="izbushka.glb" ar camera-controls auto-rotate shadow-intensity="1"></model-viewer>
+    </div>
 
 </body>
 </html>
