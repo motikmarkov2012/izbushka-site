@@ -56,7 +56,6 @@
             position: relative;
         }
 
-        /* Панель переключателей темы и языка */
         .controls-bar {
             position: absolute;
             top: 20px;
@@ -117,7 +116,6 @@
             max-width: 900px;
         }
 
-        /* Интерактивная плашка участника */
         .card-team {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -283,50 +281,50 @@
             color: var(--title-color);
         }
 
-        /* Элементы управления 3D моделью */
         .model-wrapper {
             position: relative;
             width: 100%;
+            height: 500px;
         }
 
         model-viewer {
             width: 100%;
-            height: 480px;
+            height: 100%;
             background-color: var(--viewer-bg);
             border-radius: 12px;
             --poster-color: transparent;
-            touch-action: pan-y;
+            touch-action: none; /* Разрешает свободное вращение пальцем */
         }
 
         .model-controls {
             display: flex;
             gap: 8px;
-            margin-top: 10px;
+            margin-top: 12px;
             justify-content: center;
             flex-wrap: wrap;
         }
 
-        .3d-btn {
+        .btn-3d {
             background-color: var(--bg-color);
             color: var(--text-color);
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 6px 12px;
-            font-size: 0.8rem;
+            padding: 8px 14px;
+            font-size: 0.85rem;
             font-weight: bold;
             cursor: pointer;
         }
 
-        .3d-btn:hover {
+        .btn-3d:hover {
             border-color: var(--header-color);
             color: var(--header-color);
         }
 
-        .3d-hint {
+        .hint-3d {
             text-align: center;
             color: var(--subtext-color);
-            font-size: 0.8rem;
-            margin-top: 8px;
+            font-size: 0.85rem;
+            margin-top: 10px;
         }
 
         .ar-button {
@@ -345,7 +343,6 @@
             z-index: 100;
         }
 
-        /* Профиль участника */
         .member-profile {
             display: flex;
             flex-direction: column;
@@ -385,7 +382,6 @@
 </head>
 <body>
 
-    <!-- Переключатели языка (циклический RU -> EN -> CN) и темы -->
     <div class="controls-bar">
         <button class="control-btn" id="lang-toggle" onclick="toggleLanguage()">RU</button>
         <button class="control-btn" id="theme-toggle" onclick="toggleTheme()">☀️</button>
@@ -396,24 +392,20 @@
         <p id="title-school">Президентский физико-математический лицей №239, г. Санкт-Петербург</p>
     </header>
 
-    <!-- Главная страница -->
     <div id="main-view" style="width: 100%; max-width: 900px;">
         
         <h2 class="section-title" id="sec-team">Команда проекта</h2>
         <div class="grid-container">
-            <!-- 1. Марков Матвей -->
             <div class="card-team" onclick="openMember('matvey')">
                 <img src="matvey.jpg" alt="Марков Матвей" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ММ'">
                 <h3 id="matvey-name">Марков Матвей</h3>
                 <p class="role" id="matvey-role">Капитан команды, главный конструктор и электрик проекта</p>
             </div>
-            <!-- 2. Токарева Лида -->
             <div class="card-team" onclick="openMember('lida')">
                 <img src="lida.jpg" alt="Токарева Лида" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ТЛ'">
                 <h3 id="lida-name">Токарева Лида</h3>
                 <p class="role" id="lida-role">Главный программист</p>
             </div>
-            <!-- 3. Маркова Алиса -->
             <div class="card-team" onclick="openMember('alisa')">
                 <img src="alisa.jpg" alt="Маркова Алиса" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=МА'">
                 <h3 id="alisa-name">Маркова Алиса</h3>
@@ -493,7 +485,7 @@
                 <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
                 <span class="btn-view btn-view-text">Открыть 3D / AR</span>
             </div>
-            <div class="card-project" onclick="openModel('bereza')">
+            <div class="card-project" onclick="openModel('birch')">
                 <h3 id="card-ber-title">Берёза</h3>
                 <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
                 <span class="btn-view btn-view-text">Открыть 3D / AR</span>
@@ -529,8 +521,11 @@
                 ar-modes="webxr scene-viewer quick-look" 
                 ar-scale="auto"
                 camera-controls 
+                touch-action="none"
+                interaction-prompt="auto"
                 auto-rotate 
-                shadow-intensity="1">
+                shadow-intensity="1.5"
+                shadow-softness="0.8">
                 
                 <button slot="ar-button" class="ar-button" id="ar-btn-text">
                     Посмотреть в AR
@@ -539,15 +534,14 @@
         </div>
 
         <div class="model-controls">
-            <button class="3d-btn" onclick="resetModelCamera()" id="btn-reset-cam">Сбросить камеру</button>
-            <button class="3d-btn" onclick="toggleAutoRotate()" id="btn-toggle-rotate">Автовращение: Вкл</button>
-            <button class="3d-btn" onclick="toggleFullscreen()" id="btn-fullscreen">На полный экран</button>
+            <button class="btn-3d" onclick="resetModelCamera()" id="btn-reset-cam">Сбросить камеру</button>
+            <button class="btn-3d" onclick="toggleAutoRotate()" id="btn-toggle-rotate">Автовращение: Вкл</button>
+            <button class="btn-3d" onclick="toggleFullscreen()" id="btn-fullscreen">На полный экран</button>
         </div>
-        <p class="3d-hint" id="hint-3d">🖱️ Вращение: ЛКМ | Приближение: Колёсико | Перемещение: ПКМ</p>
+        <p class="hint-3d" id="hint-3d">🖱️ Вращение: Зажмите ЛКМ | Зумирование: Колёсико | Панорама: Зажмите ПКМ</p>
     </div>
 
     <script>
-        // Поддержка 3 языков: ru, en, cn
         const langOrder = ['ru', 'en', 'cn'];
         let currentLangIndex = 0;
         let currentLang = 'ru';
@@ -571,7 +565,7 @@
                 btnRotateOn: "Автовращение: Вкл",
                 btnRotateOff: "Автовращение: Выкл",
                 btnFullscreen: "На полный экран",
-                hint3D: "🖱️ Вращение: ЛКМ | Приближение: Колёсико | Перемещение: ПКМ",
+                hint3D: "🖱️ Вращение: Зажмите ЛКМ | Зумирование: Колёсико | Панорама: Зажмите ПКМ",
                 
                 matveyName: "Марков Матвей",
                 matveyRole: "Капитан команды, главный конструктор и электрик проекта",
@@ -633,7 +627,7 @@
                 btnRotateOn: "Auto-rotate: ON",
                 btnRotateOff: "Auto-rotate: OFF",
                 btnFullscreen: "Fullscreen Mode",
-                hint3D: "🖱️ Rotate: Left Click | Zoom: Scroll | Pan: Right Click",
+                hint3D: "🖱️ Rotate: Hold Left Click | Zoom: Scroll | Pan: Hold Right Click",
 
                 matveyName: "Matvey Markov",
                 matveyRole: "Team Captain, Lead Hardware Designer & Electrical Engineer",
@@ -695,7 +689,7 @@
                 btnRotateOn: "自动旋转: 开启",
                 btnRotateOff: "自动旋转: 关闭",
                 btnFullscreen: "全屏查看",
-                hint3D: "🖱️ 旋转: 鼠标左键 | 缩放: 滚轮 | 移动: 鼠标右键",
+                hint3D: "🖱️ 旋转: 按住左键 | 缩放: 滚轮 | 移动: 按住右键",
 
                 matveyName: "Markov Matvey",
                 matveyRole: "队长、首席机械设计师及电气工程师",
@@ -865,13 +859,19 @@
                 title.innerText = t.catTitle;
                 display.src = "catdog.glb"; 
                 display.setAttribute('ios-src', "catdog.usdz");
-            } else if (modelName === 'bereza') {
+            } else if (modelName === 'birch') {
                 title.innerText = t.berTitle;
-                display.src = "bereza.glb";
-                display.setAttribute('ios-src', "bereza.usdz");
+                display.src = "birch.glb";
+                display.setAttribute('ios-src', "birch.usdz");
             }
 
             viewer.classList.add('active');
+            
+            // Переинициализация настроек камеры при открытии
+            setTimeout(() => {
+                display.resetTurntable();
+                display.jumpToGoal();
+            }, 100);
         }
 
         function closeModel() {
@@ -880,11 +880,11 @@
             document.getElementById('main-view').style.display = 'block';
         }
 
-        /* Дополнительные функции управления 3D моделью */
         function resetModelCamera() {
             const display = document.getElementById('model-display');
             display.cameraOrbit = "auto auto auto";
             display.cameraTarget = "auto auto auto";
+            display.fieldOfView = "auto";
         }
 
         function toggleAutoRotate() {
