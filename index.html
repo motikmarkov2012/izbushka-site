@@ -58,7 +58,7 @@
             max-width: 900px;
         }
 
-        /* Кликабельная карточка участника */
+        /* Интерактивная плашка участника */
         .card-team {
             background-color: #161b22;
             border: 1px solid #30363d;
@@ -187,7 +187,6 @@
             font-size: 0.85rem;
         }
 
-        /* Общие стили для просмотрщиков */
         .viewer-container {
             display: none;
             width: 100%;
@@ -245,6 +244,7 @@
             z-index: 100;
         }
 
+        /* Профиль участника */
         .member-profile {
             display: flex;
             flex-direction: column;
@@ -266,13 +266,7 @@
         .member-profile h2 {
             color: #58a6ff;
             font-size: 1.6rem;
-            margin-bottom: 8px;
-        }
-
-        .member-profile h4 {
-            color: #8b949e;
-            font-size: 1rem;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .member-description {
@@ -281,9 +275,10 @@
             border-radius: 10px;
             padding: 16px;
             color: #c9d1d9;
-            text-align: left;
+            text-align: center;
             width: 100%;
             line-height: 1.6;
+            font-size: 1.05rem;
         }
     </style>
 </head>
@@ -294,22 +289,24 @@
         <p>Президентский физико-математический лицей №239, г. Санкт-Петербург</p>
     </header>
 
-    <!-- Главный экран -->
+    <!-- Главная страница -->
     <div id="main-view" style="width: 100%; max-width: 900px;">
         
-        <!-- Секция команды -->
         <h2 class="section-title">👥 Команда проекта</h2>
         <div class="grid-container">
+            <!-- 1. Марков Матвей -->
             <div class="card-team" onclick="openMember('matvey')">
                 <img src="matvey.jpg" alt="Марков Матвей" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ММ'">
                 <h3>Марков Матвей</h3>
                 <p class="role">Капитан команды, главный конструктор и электрик проекта</p>
             </div>
+            <!-- 2. Токарева Лида -->
             <div class="card-team" onclick="openMember('lida')">
                 <img src="lida.jpg" alt="Токарева Лида" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ТЛ'">
                 <h3>Токарева Лида</h3>
                 <p class="role">Главный программист</p>
             </div>
+            <!-- 3. Маркова Алиса -->
             <div class="card-team" onclick="openMember('alisa')">
                 <img src="alisa.jpg" alt="Маркова Алиса" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=МА'">
                 <h3>Маркова Алиса</h3>
@@ -317,7 +314,6 @@
             </div>
         </div>
 
-        <!-- Секция описания и информации -->
         <h2 class="section-title">📋 О проекте</h2>
         <div class="accordion-container">
             
@@ -370,7 +366,6 @@
 
         </div>
 
-        <!-- Секция 3D моделей -->
         <h2 class="section-title">🤖 Модели и Конструкции</h2>
         <div class="grid-container" style="margin-bottom: 30px;">
             <div class="card-project" onclick="openModel('izbushka')">
@@ -392,20 +387,19 @@
 
     </div>
 
-    <!-- Страница участника команды -->
+    <!-- Страница выбранного участника -->
     <div id="member-container" class="viewer-container">
         <button class="btn-back" onclick="closeMember()">← Назад к меню</button>
         <div class="member-profile">
             <img id="member-photo" src="" alt="" onerror="this.src='https://via.placeholder.com/120/161b22/58a6ff?text=Участник'">
             <h2 id="member-name">Имя Участника</h2>
-            <h4 id="member-role">Роль</h4>
             <div id="member-desc" class="member-description">
-                Здесь позже будет подробное описание участника команды...
+                Описание участника...
             </div>
         </div>
     </div>
 
-    <!-- Просмотрщик моделей -->
+    <!-- Просмотрщик 3D моделей -->
     <div id="viewer-container" class="viewer-container">
         <button class="btn-back" onclick="closeModel()">← Назад к меню</button>
         <h2 id="model-title" style="color: #58a6ff; margin-bottom: 12px;">Модель</h2>
@@ -438,30 +432,26 @@
             }
         }
 
-        /* Логика открытия профиля участника */
+        /* Открытие отдельного экрана участника */
         function openMember(id) {
             document.getElementById('main-view').style.display = 'none';
             const container = document.getElementById('member-container');
             const photo = document.getElementById('member-photo');
             const name = document.getElementById('member-name');
-            const role = document.getElementById('member-role');
             const desc = document.getElementById('member-desc');
 
             if (id === 'matvey') {
                 photo.src = "matvey.jpg";
                 name.innerText = "Марков Матвей";
-                role.innerText = "Капитан команды, главный конструктор и электрик проекта";
-                desc.innerHTML = "Здесь можно написать всё подробное описание о задачах, роли и работе Матвея.";
+                desc.innerText = "Капитан команды, главный конструктор и электрик проекта";
             } else if (id === 'lida') {
                 photo.src = "lida.jpg";
                 name.innerText = "Токарева Лида";
-                role.innerText = "Главный программист";
-                desc.innerHTML = "Здесь можно написать всё подробное описание о задачах, роли и работе Лиды.";
+                desc.innerText = "Главный программист";
             } else if (id === 'alisa') {
                 photo.src = "alisa.jpg";
                 name.innerText = "Маркова Алиса";
-                role.innerText = "Конструктор ног Избушки";
-                desc.innerHTML = "Здесь можно написать всё подробное описание о задачах, роли и работе Алисы.";
+                desc.innerText = "Конструктор ног Избушки";
             }
 
             container.classList.add('active');
@@ -472,7 +462,7 @@
             document.getElementById('main-view').style.display = 'block';
         }
 
-        /* Логика открытия 3D модели */
+        /* Открытие 3D моделей */
         function openModel(modelName) {
             document.getElementById('main-view').style.display = 'none';
             const viewer = document.getElementById('viewer-container');
