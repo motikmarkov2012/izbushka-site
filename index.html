@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v2.9)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v3.0)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -22,10 +22,10 @@
             --viewer-bg: #010409;
             --hint-bg: #1f6feb;
             --hint-text: #ffffff;
-            --overlay-bg: rgba(13, 17, 23, 0.94);
+            --overlay-bg: rgba(13, 17, 23, 0.96);
         }
 
-        /* Светлая тема по умолчанию */
+        /* Светлая тема */
         [data-theme="light"] {
             --bg-color: #f6f8fa;
             --text-color: #24292f;
@@ -41,7 +41,7 @@
             --viewer-bg: #eaf0f6;
             --hint-bg: #0969da;
             --hint-text: #ffffff;
-            --overlay-bg: rgba(246, 248, 250, 0.95);
+            --overlay-bg: rgba(246, 248, 250, 0.97);
         }
 
         * {
@@ -368,6 +368,7 @@
             touch-action: none;
         }
 
+        /* Полный адаптивный оверлей без обрезания кнопок */
         .gesture-tutorial {
             position: absolute;
             top: 0;
@@ -379,18 +380,19 @@
             z-index: 50;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            padding: 16px;
             text-align: center;
-            backdrop-filter: blur(6px);
+            backdrop-filter: blur(8px);
+            overflow-y: auto;
         }
 
         .tutorial-title {
             color: var(--header-color);
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: bold;
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -398,31 +400,31 @@
         .gesture-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
-            max-width: 340px;
-            margin-bottom: 20px;
+            max-width: 360px;
+            margin-bottom: 12px;
         }
 
         .gesture-item {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            padding: 10px 14px;
+            padding: 8px 12px;
             border-radius: 8px;
             text-align: left;
         }
 
         .gesture-info h4 {
             color: var(--title-color);
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 2px;
         }
 
         .gesture-info p {
             color: var(--subtext-color);
-            font-size: 0.78rem;
-            line-height: 1.3;
+            font-size: 0.75rem;
+            line-height: 1.25;
         }
 
         .btn-start-3d {
@@ -430,11 +432,17 @@
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 10px 24px;
-            font-size: 0.9rem;
+            padding: 12px 28px;
+            font-size: 0.95rem;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+
+        .btn-start-3d:hover {
+            background-color: var(--btn-green-hover);
         }
 
         .dev-container {
@@ -549,13 +557,13 @@
 </head>
 <body data-theme="light">
 
-    <!-- Фиксированная панель управления -->
+    <!-- Панель переключения языка и темы -->
     <div class="controls-bar">
         <button class="control-btn" id="lang-toggle" onclick="toggleLanguage()">RU</button>
         <button class="control-btn" id="theme-toggle" onclick="toggleTheme()">🌙</button>
     </div>
 
-    <!-- Всплывающее уведомление-подсказка -->
+    <!-- Всплывающая подсказка -->
     <div id="settings-hint" class="settings-hint" onclick="closeSettingsHint()">
         💡 <span id="hint-text-popup">Переключение языка и темы здесь!</span>
     </div>
@@ -657,7 +665,7 @@
 
         </div>
 
-        <!-- Роботы проекта -->
+        <!-- 3D Модели -->
         <h2 class="section-title" id="sec-models">Модели и Конструкции</h2>
         <div class="grid-container" style="margin-bottom: 30px;">
             
@@ -751,7 +759,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn-start-3d" onclick="closeTutorial()" id="tut-btn">Перейти к просмотру</button>
+                <button class="btn-start-3d" onclick="start3DView()" id="tut-btn">Перейти к просмотру</button>
             </div>
 
             <!-- Блок разработки -->
@@ -933,35 +941,59 @@
                 matveyRole: "Team Captain, Lead Designer & Electrician. Creator of the Hut on Chicken Legs",
                 matveyFullDesc: `• Team Captain, Lead Designer and Electrician.
 • Creator of the Hut on Chicken Legs.
-• Recreated the traditional fairytale scene: the Hut rotates, produces sounds, and changes LED strip indicators.
-• Using a Pixy 2 camera, the program detects red color in the frame to control bottom-board servos for body rotation.
-• Engineered power supply circuits and 3D SolidWorks models for all structural parts.`,
+• Recreated the traditional Russian fairytale scene: the Hut rotates, plays sound effects, and changes LED strip status.
+• The program uses a Pixy 2 vision camera to detect red objects in the frame, controlling a servo motor on the lower board to turn the platform.
+• The lower board program waits for signals, controlling platform rotation and LED light animations.
+• Conducted color recognition research: proved red color is recognized most reliably by the camera with minimal detection errors.
+• Designed the complete 3D model of the Hut's body in SolidWorks CAD and configured the electrical power system.`,
 
                 lidaName: "Lida Tokareva",
                 lidaRole: "Lead Software Engineer. Programmed Cat and Dog robots",
                 lidaFullDesc: `• Lead Software Engineer of the project.
-• Programmed Cat and Dog robots in RobotC for LEGO Mindstorms EV3.
+• Programmed Cat and Dog robots in RobotC for LEGO Mindstorms EV3 controllers.
 • Co-creator of the Hut's walking legs together with Alisa Markova.
-• Developed PD-regulator line tracking, sensor calibration, intersection handling, turning, and animated leg emotions.`,
+• Implemented interaction algorithms for Cat and Dog: line-following with PD-regulator, sensor calibration, intersection handling, turning, and synchronized leg movements to simulate emotions.
+• Conducted research on how line-tracking behavior depends on distance between light sensor centers to reduce deviation angle.`,
 
                 alisaName: "Alisa Markova",
                 alisaRole: "Hut Legs Mechanical Designer",
-                alisaFullDesc: `• Mechanical Designer of the Hut's legs (co-created with Lida Tokareva).
-• Designed bird-like leg mechanics and joint structures.
-• Innovated the mechanical support node connecting body rotation with walking legs.
-• Hand-sewed custom fleece costumes for the chicken legs.`,
+                alisaFullDesc: `• Mechanical Designer of the Hut's legs (co-creator with Lida Tokareva).
+• Designed the mechanical structure of the Hut's legs resembling bird leg anatomy.
+• Innovated the key mechanical support node physically connecting body rotation with walking legs.
+• Hand-sewed custom fleece costumes for the chicken legs mounted over the robot frame.
+• Conducted research optimizing inter-axis leg distance for smooth walking, minimal friction, and zero mechanical collision.
+• Developed humorous motion patterns enriching performance perception.`,
 
                 accAnnTitle: "Abstract",
-                accAnnText: "Inspired by the fairytale character Baba Yaga, our team produced a theatrical robotic show featuring autonomous robots alongside human actors: Birch Tree, Cat, Dog, Hut, and Chicken Legs.",
+                accAnnText: "Inspired by the iconic character of Russian folk fairytales «Baba Yaga», our team created a theatrical robotic performance featuring autonomous robots alongside human actors: Birch Tree, Cat, Dog, Hut, and Chicken Legs.",
 
                 accStoryTitle: "Fairytale Storyline",
-                accStoryText: "Young Mashenka is sent into the forest by her stepmother to Baba Yaga. On her way, she meets friendly characters and shares kindness. When Baba Yaga attempts to capture her, all characters unite to help Mashenka return home safely.<br><br><strong>Main Moral: Do good and good will return to you!</strong>",
+                accStoryText: `Our performance tells the Russian folk tale of young Mashenka, sent into the forest by her stepmother to get needle and thread from Baba Yaga. Along the way, Mashenka meets fairytale characters: a cat, dog, birch tree, and the hut on chicken legs. Mashenka is kind to them: feeds the cat fish, gives the dog a bone, and decorates the birch with a red ribbon. When she reaches the hut, Baba Yaga tries to capture her, but the characters help her escape.<br><br>
+                Thanks to Mashenka's kindness, all heroes unite to help her safely return home.<br>
+                <strong>Main Moral: Do good, and good will return to you!</strong>`,
 
                 accTechTitle: "Design & Fabrication",
-                accTechText: "Structures engineered in SolidWorks CAD. Fabrication includes CNC laser cutting, 3D printing, mortise-and-tenon joints, and custom soldering.",
+                accTechText: `Robot structures engineered in SolidWorks CAD.<br>
+                3D printing models prepared using Orca Slicer.<br><br>
+                <strong>Manufacturing technologies utilized:</strong>
+                <ul>
+                    <li>CNC Laser cutting of plywood</li>
+                    <li>3D Printing</li>
+                    <li>Assembly using mortise-and-tenon, groove, and dovetail joints</li>
+                    <li>Electric circuit soldering</li>
+                </ul>`,
 
                 accSoftTitle: "Software Tools",
-                accSoftText: "RobotC (EV3), Spike (Birch), Arduino IDE (Hut & Birch), SolidWorks, Orca Slicer, Bambu Studio, RDWorks, PixyMon.",
+                accSoftText: `<strong>Software tools used across the project:</strong>
+                <ul>
+                    <li><strong>RobotC</strong> — EV3 robot programming</li>
+                    <li><strong>Spike</strong> — Birch tree robot programming</li>
+                    <li><strong>Arduino IDE</strong> — Hut and Birch programming</li>
+                    <li><strong>SolidWorks</strong> — CAD structural design</li>
+                    <li><strong>Orca Slicer, Bambu Studio</strong> — 3D printing preparation</li>
+                    <li><strong>RDWorks</strong> — CNC laser control</li>
+                    <li><strong>PixyMon</strong> — Vision camera setup</li>
+                </ul>`,
 
                 izbTitle: "The Hut",
                 izbFullTitle: "Hut on Chicken Legs",
@@ -1004,32 +1036,60 @@
                 matveyName: "Markov Matvey",
                 matveyRole: "队长、首席设计师及电气工程师。“鸡脚小屋”制作者",
                 matveyFullDesc: `• 团队队长、首席设计师及电气工程师。
-• 鸡脚小屋的创造者。
-• 使用 Pixy 2 视觉摄像头识别红色并控制舵机与旋转机构。`,
+• “鸡脚小屋”的创造者。
+• 还原了俄罗斯童话经典场景：小屋能够旋转、播放音效并改变 LED 灯带状态。
+• 程序通过 Pixy 2 摄像头检测画面中的红色物体，控制底板舵机实现平台旋转。
+• 底板程序接收信号并控制旋转与 LED 灯光动画。
+• 进行了颜色识别研究：证明红色在各种灯光下识别最稳定，出错率最低。
+• 在 SolidWorks 中完成了小屋本体 full 3D 模型设计与电路供电系统搭建。`,
 
                 lidaName: "Lida Tokareva",
                 lidaRole: "首席软件工程师。编写了“猫”和“狗”机器人的程序",
-                lidaFullDesc: `• 首席软件工程师。
-• 编写了“猫”和“狗”机器人的 RobotC (LEGO EV3) 程序。
-• 与 Alisa Markova 共同制作了小屋腿部。`,
+                lidaFullDesc: `• 项目首席软件工程师。
+• 在 LEGO Mindstorms EV3 上使用 RobotC 语言编写了“猫”和“狗”机器人的控制程序。
+• 与 Alisa Markova 共同制作了小屋的行走腿部。
+• 实现了巡线 PD 调节器、传感器校准、交叉路口识别、转向以及模拟情绪的腿部同步动作。
+• 进行了光照传感器中心间距对巡线平稳度影响的研究，有效降低了偏航角度。`,
 
                 alisaName: "Alisa Markova",
                 alisaRole: "小屋腿部结构设计师",
-                alisaFullDesc: `• 小屋腿部结构设计师。
-• 创新设计了将主体旋转与行走腿部物理连接的机械节点。
-• 手工缝制了原汁原味的羊毛“鸡脚”服装。`,
+                alisaFullDesc: `• 小屋腿部结构设计师（与 Lida Tokareva 共同制作）。
+• 设计了仿生鸟类腿部结构。
+• 创新开发了连接旋转主体与行走腿部的关键支撑机械节点。
+• 手工缝制了装配在机器人骨架上的羊毛“鸡脚”服装。
+• 进行了腿部轴间距优化研究，确保行走平稳、减小摩擦并避免结构干涉。
+• 开发了富有幽默感的动作模式，提升了舞台表演效果。`,
 
                 accAnnTitle: "项目摘要",
-                accAnnText: "受“雅加婆婆”童话故事启发，我们制作了一出由自主机器人与演员共同演绎的舞台剧。",
+                accAnnText: "受俄罗斯经典民间童话《雅加婆婆》启发，我们团队打造了一出由自主机器人与人类演员共同演绎的舞台剧。为此设计并制作了桦树、猫、狗、小屋及鸡脚机器人。",
 
                 accStoryTitle: "童话故事情节",
-                accStoryText: "讲述玛申卡在森林中遇到各种角色并用善良感化他们，最终大家团结一致帮助她脱险的故事。<br><br><strong>主要寓意：行善积德，善有善报！</strong>",
+                accStoryText: `我们的表演讲述了小女孩玛申卡被后母派往森林找雅加婆婆要针线的童话故事。路上玛申卡遇到了猫、狗、桦树和鸡脚小屋，并友善地对待他们。当雅加婆婆试图抓走玛申卡时，伙伴们齐心协力帮助她逃脱。<br><br>
+                凭着玛申卡的善良，所有角色团结一致，帮助她平安回家。<br>
+                <strong>主要寓意：行善积德，善有善报！</strong>`,
 
                 accTechTitle: "设计与制造",
-                accTechText: "SolidWorks CAD 设计、激光切割、3D 打印与电路焊接。",
+                accTechText: `机器人结构均在 SolidWorks CAD 中设计。<br>
+                3D 打印切片模型使用 Orca Slicer 准备。<br><br>
+                <strong>采用的制造技术：</strong>
+                <ul>
+                    <li>胶合板数控激光切割</li>
+                    <li>3D 打印技术</li>
+                    <li>榫卯、槽口及燕尾榫结构组装</li>
+                    <li>电路手工焊接</li>
+                </ul>`,
 
                 accSoftTitle: "软件与编程工具",
-                accSoftText: "RobotC, Spike, Arduino IDE, SolidWorks, Orca Slicer, Bambu Studio, RDWorks, PixyMon.",
+                accSoftText: `<strong>项目中使用的软件工具：</strong>
+                <ul>
+                    <li><strong>RobotC</strong> — EV3 机器人编程</li>
+                    <li><strong>Spike</strong> — 桦树机器人编程</li>
+                    <li><strong>Arduino IDE</strong> — 小屋与桦树编程</li>
+                    <li><strong>SolidWorks</strong> — 结构 CAD 设计</li>
+                    <li><strong>Orca Slicer, Bambu Studio</strong> — 3D 打印准备</li>
+                    <li><strong>RDWorks</strong> — 激光切割机控制</li>
+                    <li><strong>PixyMon</strong> — 视觉摄像头配置</li>
+                </ul>`,
 
                 izbTitle: "鸡脚小屋",
                 izbFullTitle: "鸡脚上的小屋",
@@ -1057,11 +1117,13 @@
             }
         }
 
-        function closeTutorial() {
+        // Запуск 3D-просмотра с закрытием оверлея и авто-входом в полноэкранный режим
+        function start3DView() {
             const tut = document.getElementById('gesture-tutorial');
             if (tut) {
                 tut.style.display = 'none';
             }
+            toggleFullscreen();
         }
 
         window.addEventListener('popstate', function(event) {
@@ -1253,7 +1315,6 @@
             document.getElementById('dev-text').innerText = t.devText;
 
             if (currentMemberId) {
-                const photo = document.getElementById('member-photo');
                 const name = document.getElementById('member-name');
                 const desc = document.getElementById('member-desc');
 
