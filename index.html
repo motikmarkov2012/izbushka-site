@@ -998,7 +998,11 @@
             
             const t = translations[currentLang];
             document.getElementById('lang-toggle').innerText = t.langCode;
-            document.getElementById('hint-text-popup').innerText = t.hintPopup;
+            
+            const hintPopup = document.getElementById('hint-text-popup');
+            if (hintPopup) {
+                hintPopup.innerText = t.hintPopup;
+            }
 
             document.getElementById('title-team').innerText = t.titleTeam;
             document.getElementById('title-school').innerText = t.titleSchool;
