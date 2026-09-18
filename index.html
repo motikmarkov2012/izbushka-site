@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v2.0)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v2.2 beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -907,32 +907,47 @@
                 viewer.setAttribute('ios-src', modelAssets[id].usdz);
             }
 
-            // Настройка режимов AR: для Берёзы включается полная поддержка обхода
-            if (id === 'birch') {
-                viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
-                viewer.setAttribute('ar-scale', 'fixed');
-                viewer.setAttribute('ar-placement', 'floor');
-                arBtnWalk.style.display = 'inline-block';
-            } else {
-                viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
-                arBtnWalk.style.display = 'inline-block';
-            }
+            // Включение и настройка AR режима
+            viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
+            viewer.setAttribute('ar-scale', 'fixed');
+            viewer.setAttribute('ar-placement', 'floor');
+            arBtnWalk.style.display = 'inline-block';
 
             document.getElementById('main-view').style.display = 'none';
             document.getElementById('viewer-container').classList.add('active');
             window.scrollTo(0, 0);
         }
 
-        function triggerAR() {
+        async function triggerAR() {
             const viewer = document.getElementById('model-display');
-            if (viewer && typeof viewer.activateAR === 'function') {
-                // Если мобильное устройство поддерживает AR — запускаем
-                viewer.activateAR().catch((err) => {
-                    console.warn("Ошибка при запуске AR:", err);
-                    alert("Для обхода в AR откройте страницу с мобильного устройства (iOS/Android) с поддержкой ARCore или ARKit.");
-                });
+            if (!viewer) return;
+
+            // Запрос разрешений на сенсоры движения (особенно важно для iOS 13+)
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                try {
+                    await DeviceOrientationEvent.requestPermission();
+                } catch (e) {
+                    console.warn("Разрешение на датчики не получено:", e);
+                }
+            }
+
+            // Проверка наличия функционала AR в model-viewer
+            if (typeof viewer.activateAR === 'function') {
+                try {
+                    await viewer.activateAR();
+                } catch (err) {
+                    console.error("Ошибка открытия AR:", err);
+                    
+                    // Резервный клик по стандартной встроенной AR-кнопке
+                    const internalArBtn = viewer.shadowRoot ? viewer.shadowRoot.querySelector('#ar-button') : null;
+                    if (internalArBtn) {
+                        internalArBtn.click();
+                    } else {
+                        alert("Не удалось открыть камеру. Убедитесь, что сайт открыт по HTTPS и с мобильного устройства (Android/iOS) с поддержкой AR.");
+                    }
+                }
             } else {
-                alert("AR режим поддерживается на мобильных устройствах.");
+                alert("Ваше устройство или браузер не поддерживают AR-режим.");
             }
         }
 
