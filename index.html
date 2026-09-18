@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v3.2-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v3.3-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -20,7 +20,7 @@
             --btn-green-hover: #2ea043;
             --accent-green: #7ee787;
             --viewer-bg: #010409;
-            --hint-bg: #1f6feb;
+            --hint-bg: #8957e5;
             --hint-text: #ffffff;
             --overlay-bg: rgba(13, 17, 23, 0.96);
         }
@@ -39,7 +39,7 @@
             --btn-green-hover: #1a7f37;
             --accent-green: #1a7f37;
             --viewer-bg: #eaf0f6;
-            --hint-bg: #0969da;
+            --hint-bg: #8250df;
             --hint-text: #ffffff;
             --overlay-bg: rgba(246, 248, 250, 0.97);
         }
@@ -66,14 +66,14 @@
             overflow-x: hidden;
         }
 
-        /* Индикатор бета-версии для быстрого контроля */
+        /* Почти прозрачный бета-бейдж в противоположном верхнем левом углу */
         .beta-badge {
             position: fixed;
-            bottom: 8px;
-            right: 12px;
-            font-size: 0.7rem;
+            top: 14px;
+            left: 14px;
+            font-size: 0.75rem;
             color: var(--subtext-color);
-            opacity: 0.6;
+            opacity: 0.35;
             z-index: 999;
             font-family: monospace;
             pointer-events: none;
@@ -105,20 +105,23 @@
             border-color: var(--header-color);
         }
 
+        /* Обновлённая подсказка с кнопкой закрытия и пульсацией прозрачности */
         .settings-hint {
             position: fixed;
             top: 56px;
             right: 12px;
             background-color: var(--hint-bg);
             color: var(--hint-text);
-            padding: 10px 14px;
+            padding: 8px 12px 8px 14px;
             border-radius: 10px;
             font-size: 0.85rem;
             font-weight: 600;
             box-shadow: 0 6px 16px rgba(0,0,0,0.25);
             z-index: 1001;
-            cursor: pointer;
-            animation: fadeIn 0.5s ease-out forwards, blinkGlow 2s infinite alternate;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: fadeIn 0.5s ease-out forwards, pulseOpacity 2.5s infinite ease-in-out;
         }
 
         .settings-hint::before {
@@ -133,14 +136,35 @@
             border-bottom: 6px solid var(--hint-bg);
         }
 
+        .hint-close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #ffffff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            cursor: pointer;
+            line-height: 1;
+            transition: background-color 0.2s;
+        }
+
+        .hint-close-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
         @keyframes fadeIn {
             0% { opacity: 0; transform: translateY(-10px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes blinkGlow {
-            0% { opacity: 1; filter: brightness(1); }
-            100% { opacity: 0.8; filter: brightness(1.2); }
+        @keyframes pulseOpacity {
+            0% { opacity: 1; }
+            50% { opacity: 0.45; }
+            100% { opacity: 1; }
         }
 
         header {
@@ -497,32 +521,6 @@
             line-height: 1.5;
         }
 
-        .model-controls {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-3d {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 8px 12px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .hint-3d {
-            text-align: center;
-            color: var(--subtext-color);
-            font-size: 0.78rem;
-            margin-top: 8px;
-        }
-
         .member-profile {
             display: flex;
             flex-direction: column;
@@ -560,7 +558,7 @@
             white-space: pre-line;
         }
 
-        /* Полноэкранный чистый режим просмотра v3.2 */
+        /* Полноэкранный режим 3D */
         body.fullscreen-3d-active {
             padding: 0 !important;
             overflow: hidden !important;
@@ -570,8 +568,6 @@
         body.fullscreen-3d-active #main-view,
         body.fullscreen-3d-active #member-container,
         body.fullscreen-3d-active #settings-hint,
-        body.fullscreen-3d-active .hint-3d,
-        body.fullscreen-3d-active .model-controls,
         body.fullscreen-3d-active #model-title {
             display: none !important;
         }
@@ -611,13 +607,14 @@
             .section-title { font-size: 1.1rem; }
             .controls-bar { top: 10px; right: 10px; }
             .settings-hint { top: 52px; right: 10px; font-size: 0.8rem; }
+            .beta-badge { top: 12px; left: 10px; font-size: 0.7rem; }
         }
     </style>
 </head>
 <body data-theme="light">
 
-    <!-- Текстовый индикатор бета-версии -->
-    <div class="beta-badge">v3.2-beta</div>
+    <!-- Прозрачный индикатор бета-версии в левом верхнем углу -->
+    <div class="beta-badge">v3.3-beta</div>
 
     <!-- Панель переключения языка и темы -->
     <div class="controls-bar" id="global-controls">
@@ -625,9 +622,10 @@
         <button class="control-btn" id="theme-toggle" onclick="toggleTheme()">🌙</button>
     </div>
 
-    <!-- Всплывающая подсказка -->
-    <div id="settings-hint" class="settings-hint" onclick="closeSettingsHint()">
-        💡 <span id="hint-text-popup">Переключение языка и темы здесь!</span>
+    <!-- Всплывающая подсказка с пульсацией и кнопкой закрытия -->
+    <div id="settings-hint" class="settings-hint">
+        <span>💡 <span id="hint-text-popup">Переключение языка и темы здесь!</span></span>
+        <button class="hint-close-btn" onclick="closeSettingsHint()" aria-label="Закрыть">✕</button>
     </div>
 
     <header>
@@ -795,7 +793,7 @@
     <!-- Просмотрщик 3D моделей -->
     <div id="viewer-container" class="viewer-container">
         
-        <!-- Верхняя плашка управления для чистого полноэкранного режима -->
+        <!-- Верхняя плашка управления для полноэкранного режима -->
         <div class="fullscreen-top-bar" id="fs-top-bar">
             <button class="btn-back" style="margin-bottom:0;" onclick="goBack()">← <span class="back-text">Назад к меню</span></button>
         </div>
@@ -849,13 +847,6 @@
                 shadow-softness="0.8">
             </model-viewer>
         </div>
-
-        <div class="model-controls" id="model-controls-bar">
-            <button class="btn-3d" onclick="resetModelCamera()" id="btn-reset-cam">Сбросить камеру</button>
-            <button class="btn-3d" onclick="toggleAutoRotate()" id="btn-toggle-rotate">Автовращение: Вкл</button>
-            <button class="btn-3d" onclick="start3DView()" id="btn-fullscreen">На полный экран</button>
-        </div>
-        <p class="hint-3d" id="hint-3d">🖱️ Вращение: Зажмите ЛКМ | Зумирование: Колёсико | Панорама: Зажмите ПКМ</p>
     </div>
 
     <script>
@@ -889,11 +880,6 @@
                 btnView: "Открыть 3D",
                 btnMoreText: "Подробнее →",
                 cardSub: "Интерактивный просмотр",
-                btnResetCam: "Сбросить камеру",
-                btnRotateOn: "Автовращение: Вкл",
-                btnRotateOff: "Автовращение: Выкл",
-                btnFullscreen: "На полный экран",
-                hint3D: "🖱️ Вращение: Пальцем/ЛКМ | Зумирование: Двумя пальцами/Колёсико",
                 
                 tutTitle: "Инструкция по навигации 3D",
                 tutRotTitle: "Вращение на 360°",
@@ -986,11 +972,6 @@
                 btnView: "Open 3D",
                 btnMoreText: "Details →",
                 cardSub: "Interactive View",
-                btnResetCam: "Reset Camera",
-                btnRotateOn: "Auto-rotate: ON",
-                btnRotateOff: "Auto-rotate: OFF",
-                btnFullscreen: "Fullscreen",
-                hint3D: "🖱️ Rotate: Drag | Zoom: Scroll / Pinch",
 
                 tutTitle: "3D Navigation Guide",
                 tutRotTitle: "360° Object Rotation",
@@ -1082,11 +1063,6 @@
                 btnView: "打开 3D",
                 btnMoreText: "详细信息 →",
                 cardSub: "交互式查看",
-                btnResetCam: "重置视角",
-                btnRotateOn: "自动旋转: 开启",
-                btnRotateOff: "自动旋转: 关闭",
-                btnFullscreen: "全屏查看",
-                hint3D: "🖱️ 旋转: 单指拖动 | 缩放: 双指缩放",
 
                 tutTitle: "3D 导航说明",
                 tutRotTitle: "360° 全景旋转",
@@ -1109,7 +1085,7 @@
 • 程序通过 Pixy 2 摄像头检测画面中的红色物体，控制底板舵机实现平台旋转。
 • 底板程序接收信号并控制旋转与 LED 灯光动画。
 • 进行了颜色识别研究：证明红色在各种灯光下识别最稳定，出错率最低。
-• 在 SolidWorks 中完成了小屋本体 full 3D 模型设计与电路供电系统搭建。`,
+• 在 SolidWorks 中完成了小屋本体 3D 模型设计与电路供电系统搭建。`,
 
                 lidaName: "Lida Tokareva",
                 lidaRole: "首席软件工程师。编写了“猫”和“狗”机器人的程序",
@@ -1177,10 +1153,10 @@
         function closeSettingsHint() {
             const hint = document.getElementById('settings-hint');
             if (hint) {
-                hint.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                hint.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
                 hint.style.opacity = '0';
                 hint.style.transform = 'translateY(-10px)';
-                setTimeout(() => hint.remove(), 600);
+                setTimeout(() => hint.remove(), 400);
             }
         }
 
@@ -1211,7 +1187,7 @@
             }
         }
 
-        // Обработка кнопки "Назад" и жестов свайпа назад
+        // Обработка кнопки "Назад" и жестов свайпа
         window.addEventListener('popstate', function(event) {
             if (currentView !== 'main') {
                 showMainViewUI();
@@ -1225,7 +1201,6 @@
             currentView = viewName;
         }
 
-        // Версия 3.2: Выход из полноэкранного 3D сразу возврщает на главный экран к карточке
         function goBack() {
             if (currentView !== 'main') {
                 history.back();
@@ -1249,7 +1224,6 @@
                 viewer.removeAttribute('src');
             }
 
-            // Плавный скролл ровно к той карточке, откуда был осуществлен вход
             if (savedModelId) {
                 const cardEl = document.getElementById('card-' + savedModelId);
                 if (cardEl) {
@@ -1297,8 +1271,6 @@
             const viewer = document.getElementById('model-display');
             const title = document.getElementById('model-title');
             const devWrapper = document.getElementById('dev-wrapper');
-            const controlsBar = document.getElementById('model-controls-bar');
-            const hint3d = document.getElementById('hint-3d');
             const tut = document.getElementById('gesture-tutorial');
             const container = document.getElementById('viewer-container');
 
@@ -1318,14 +1290,10 @@
                 if (tut) tut.style.display = 'none';
                 viewer.style.display = 'none';
                 devWrapper.style.display = 'flex';
-                controlsBar.style.display = 'none';
-                hint3d.style.display = 'none';
             } else {
                 if (tut) tut.style.display = 'flex';
                 devWrapper.style.display = 'none';
                 viewer.style.display = 'block';
-                controlsBar.style.display = 'flex';
-                hint3d.style.display = 'block';
 
                 if (modelAssets[id] && modelAssets[id].gltf) {
                     viewer.setAttribute('src', modelAssets[id].gltf);
@@ -1335,7 +1303,6 @@
             document.getElementById('main-view').style.display = 'none';
             container.classList.add('active');
 
-            // Автоматическое центрирование по кнопке для всех роботов кроме берёзы
             if (id !== 'birch') {
                 setTimeout(() => {
                     const tutBtn = document.getElementById('tut-btn');
@@ -1412,10 +1379,6 @@
             document.getElementById('card-cat-title').innerText = t.catTitle;
             document.getElementById('card-dog-title').innerText = t.dogTitle;
 
-            document.getElementById('btn-reset-cam').innerText = t.btnResetCam;
-            document.getElementById('btn-fullscreen').innerText = t.btnFullscreen;
-            document.getElementById('hint-3d').innerText = t.hint3D;
-
             document.getElementById('tut-title').innerText = t.tutTitle;
             document.getElementById('tut-rot-title').innerText = t.tutRotTitle;
             document.getElementById('tut-rot-desc').innerText = t.tutRotDesc;
@@ -1458,26 +1421,6 @@
                 } else if (currentModelId === 'dog') {
                     title.innerText = t.dogTitle;
                 }
-            }
-        }
-
-        function resetModelCamera() {
-            const viewer = document.getElementById('model-display');
-            viewer.cameraOrbit = 'auto auto auto';
-            viewer.cameraTarget = 'auto auto auto';
-        }
-
-        function toggleAutoRotate() {
-            const viewer = document.getElementById('model-display');
-            const btn = document.getElementById('btn-toggle-rotate');
-            const t = translations[currentLang];
-
-            if (viewer.hasAttribute('auto-rotate')) {
-                viewer.removeAttribute('auto-rotate');
-                btn.innerText = t.btnRotateOff;
-            } else {
-                viewer.setAttribute('auto-rotate', '');
-                btn.innerText = t.btnRotateOn;
             }
         }
     </script>
