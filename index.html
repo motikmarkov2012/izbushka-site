@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v3.3-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v3.4-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -23,6 +23,8 @@
             --hint-bg: #8957e5;
             --hint-text: #ffffff;
             --overlay-bg: rgba(13, 17, 23, 0.96);
+            --ios-pill-bg: rgba(30, 38, 48, 0.75);
+            --ios-pill-active: rgba(255, 255, 255, 0.15);
         }
 
         /* Светлая тема */
@@ -42,6 +44,8 @@
             --hint-bg: #8250df;
             --hint-text: #ffffff;
             --overlay-bg: rgba(246, 248, 250, 0.97);
+            --ios-pill-bg: rgba(220, 225, 232, 0.75);
+            --ios-pill-active: rgba(255, 255, 255, 0.9);
         }
 
         * {
@@ -66,7 +70,6 @@
             overflow-x: hidden;
         }
 
-        /* Почти прозрачный бета-бейдж в противоположном верхнем левом углу */
         .beta-badge {
             position: fixed;
             top: 14px;
@@ -82,30 +85,83 @@
 
         .controls-bar {
             position: fixed;
-            top: 12px;
+            top: 10px;
             right: 12px;
             display: flex;
+            align-items: center;
             gap: 8px;
             z-index: 1000;
         }
 
-        .control-btn {
-            background-color: var(--card-bg);
-            color: var(--text-color);
+        /* Переключатель языка в стиле iOS Segmented Control */
+        .ios-segmented-control {
+            position: relative;
+            display: flex;
+            background: var(--ios-pill-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border-color);
-            padding: 8px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.85rem;
+            border-radius: 30px;
+            padding: 3px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        .control-btn:hover {
+        .ios-segmented-control .glider {
+            position: absolute;
+            top: 3px;
+            bottom: 3px;
+            left: 3px;
+            width: 46px;
+            background-color: var(--ios-pill-active);
+            border-radius: 20px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .ios-segmented-btn {
+            position: relative;
+            z-index: 2;
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            padding: 6px 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s;
+        }
+
+        .ios-segmented-btn.active {
+            color: var(--header-color);
+            font-weight: bold;
+        }
+
+        .theme-btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+
+        .theme-btn:hover {
             border-color: var(--header-color);
         }
 
-        /* Обновлённая подсказка с кнопкой закрытия и пульсацией прозрачности */
         .settings-hint {
             position: fixed;
             top: 56px;
@@ -558,7 +614,6 @@
             white-space: pre-line;
         }
 
-        /* Полноэкранный режим 3D */
         body.fullscreen-3d-active {
             padding: 0 !important;
             overflow: hidden !important;
@@ -608,23 +663,27 @@
             .controls-bar { top: 10px; right: 10px; }
             .settings-hint { top: 52px; right: 10px; font-size: 0.8rem; }
             .beta-badge { top: 12px; left: 10px; font-size: 0.7rem; }
+            .ios-segmented-btn { padding: 4px 8px; font-size: 0.75rem; }
         }
     </style>
 </head>
 <body data-theme="light">
 
-    <!-- Прозрачный индикатор бета-версии в левом верхнем углу -->
-    <div class="beta-badge">v3.3-beta</div>
+    <div class="beta-badge">v3.4-beta</div>
 
-    <!-- Панель переключения языка и темы -->
+    <!-- Обновлённая панель управления в стиле iOS Tab Bar -->
     <div class="controls-bar" id="global-controls">
-        <button class="control-btn" id="lang-toggle" onclick="toggleLanguage()">RU</button>
-        <button class="control-btn" id="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <div class="ios-segmented-control" id="lang-segmented">
+            <div class="glider" id="lang-glider"></div>
+            <button class="ios-segmented-btn active" id="btn-ru" onclick="selectLanguage('ru', 0)">🇷🇺 RU</button>
+            <button class="ios-segmented-btn" id="btn-en" onclick="selectLanguage('en', 1)">🇬🇧 EN</button>
+            <button class="ios-segmented-btn" id="btn-cn" onclick="selectLanguage('cn', 2)">🇨🇳 CN</button>
+        </div>
+        <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Тема">🌙</button>
     </div>
 
-    <!-- Всплывающая подсказка с пульсацией и кнопкой закрытия -->
     <div id="settings-hint" class="settings-hint">
-        <span>💡 <span id="hint-text-popup">Переключение языка и темы здесь!</span></span>
+        <span>💡 <span id="hint-text-popup">Выбор языка и темы оформления</span></span>
         <button class="hint-close-btn" onclick="closeSettingsHint()" aria-label="Закрыть">✕</button>
     </div>
 
@@ -635,7 +694,6 @@
 
     <div id="main-view" style="width: 100%; max-width: 900px;">
         
-        <!-- Секция команды -->
         <h2 class="section-title" id="sec-team">НАША КОМАНДА</h2>
         <div class="grid-container">
             <div class="card-team" onclick="openMember('matvey')">
@@ -664,7 +722,6 @@
             </div>
         </div>
 
-        <!-- О проекте -->
         <h2 class="section-title" id="sec-about">О проекте</h2>
         <div class="accordion-container">
             
@@ -725,7 +782,6 @@
 
         </div>
 
-        <!-- 3D Модели -->
         <h2 class="section-title" id="sec-models">Модели и Конструкции</h2>
         <div class="grid-container" style="margin-bottom: 30px;">
             
@@ -778,7 +834,6 @@
 
     </div>
 
-    <!-- Страница выбранного участника -->
     <div id="member-container" class="viewer-container">
         <button class="btn-back" onclick="goBack()">← <span class="back-text">Назад к меню</span></button>
         <div class="member-profile">
@@ -790,10 +845,7 @@
         </div>
     </div>
 
-    <!-- Просмотрщик 3D моделей -->
     <div id="viewer-container" class="viewer-container">
-        
-        <!-- Верхняя плашка управления для полноэкранного режима -->
         <div class="fullscreen-top-bar" id="fs-top-bar">
             <button class="btn-back" style="margin-bottom:0;" onclick="goBack()">← <span class="back-text">Назад к меню</span></button>
         </div>
@@ -801,7 +853,6 @@
         <h2 id="model-title" style="color: var(--header-color); margin-bottom: 10px;">Модель</h2>
         
         <div class="model-wrapper" id="model-wrapper-box">
-            <!-- Оверлей обучения -->
             <div id="gesture-tutorial" class="gesture-tutorial">
                 <div class="tutorial-title" id="tut-title">Инструкция по навигации 3D</div>
                 <div class="gesture-list">
@@ -827,7 +878,6 @@
                 <button class="btn-start-3d" onclick="start3DView()" id="tut-btn">Перейти к просмотру</button>
             </div>
 
-            <!-- Блок разработки -->
             <div id="dev-wrapper" class="dev-container" style="display: none;">
                 <span class="dev-badge" id="dev-badge">В разработке</span>
                 <div class="dev-title" id="dev-title">Модель готовится к публикации</div>
@@ -850,8 +900,6 @@
     </div>
 
     <script>
-        const langOrder = ['ru', 'en', 'cn'];
-        let currentLangIndex = 0;
         let currentLang = 'ru';
 
         let currentView = 'main'; 
@@ -869,8 +917,7 @@
 
         const translations = {
             ru: {
-                langCode: "RU",
-                hintPopup: "Переключение языка и темы здесь!",
+                hintPopup: "Выбор языка и темы оформления",
                 titleTeam: "БАБА ЯГА",
                 titleSchool: "Президентский физико-математический лицей №239, г. Санкт-Петербург",
                 secTeam: "НАША КОМАНДА",
@@ -961,8 +1008,7 @@
                 dogTitle: "Собака"
             },
             en: {
-                langCode: "EN",
-                hintPopup: "Switch language and theme here!",
+                hintPopup: "Select language and theme",
                 titleTeam: "BABA YAGA",
                 titleSchool: "Presidential Physics and Mathematics Lyceum №239, Saint Petersburg",
                 secTeam: "OUR TEAM",
@@ -1052,8 +1098,7 @@
                 dogTitle: "Dog"
             },
             cn: {
-                langCode: "中文",
-                hintPopup: "在此处切换语言和主题！",
+                hintPopup: "选择语言和主题",
                 titleTeam: "«Baba Yaga» 团队",
                 titleSchool: "圣彼得堡第239总统物理数学中学",
                 secTeam: "我们的团队",
@@ -1148,6 +1193,7 @@
             setTimeout(() => {
                 closeSettingsHint();
             }, 20000);
+            updateGliderPosition(0);
         });
 
         function closeSettingsHint() {
@@ -1160,7 +1206,107 @@
             }
         }
 
-        // Запуск полноэкранного 3D-режима
+        function selectLanguage(lang, index) {
+            currentLang = lang;
+            
+            document.querySelectorAll('.ios-segmented-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${lang}`).classList.add('active');
+
+            updateGliderPosition(index);
+
+            const t = translations[currentLang];
+            if (!t) return;
+
+            const hintPopup = document.getElementById('hint-text-popup');
+            if (hintPopup) hintPopup.innerText = t.hintPopup;
+
+            document.getElementById('title-team').innerText = t.titleTeam;
+            document.getElementById('title-school').innerText = t.titleSchool;
+            document.getElementById('sec-team').innerText = t.secTeam;
+            document.getElementById('sec-about').innerText = t.secAbout;
+            document.getElementById('sec-models').innerText = t.secModels;
+
+            document.querySelectorAll('.back-text').forEach(el => el.innerText = t.backText);
+            document.querySelectorAll('.btn-more-text').forEach(el => el.innerText = t.btnMoreText);
+            document.querySelectorAll('.btn-view-text').forEach(el => el.innerText = t.btnView);
+            document.querySelectorAll('.card-sub').forEach(el => el.innerText = t.cardSub);
+
+            document.getElementById('matvey-name').innerText = t.matveyName;
+            document.getElementById('matvey-role').innerText = t.matveyRole;
+            document.getElementById('lida-name').innerText = t.lidaName;
+            document.getElementById('lida-role').innerText = t.lidaRole;
+            document.getElementById('alisa-name').innerText = t.alisaName;
+            document.getElementById('alisa-role').innerText = t.alisaRole;
+
+            document.getElementById('acc-ann-title').innerText = t.accAnnTitle;
+            document.getElementById('acc-ann-text').innerHTML = t.accAnnText;
+            document.getElementById('acc-story-title').innerText = t.accStoryTitle;
+            document.getElementById('acc-story-text').innerHTML = t.accStoryText;
+            document.getElementById('acc-tech-title').innerText = t.accTechTitle;
+            document.getElementById('acc-tech-text').innerHTML = t.accTechText;
+            document.getElementById('acc-soft-title').innerText = t.accSoftTitle;
+            document.getElementById('acc-soft-text').innerHTML = t.accSoftText;
+
+            document.getElementById('card-izb-title').innerText = t.izbTitle;
+            document.getElementById('card-legs-title').innerText = t.legsTitle;
+            document.getElementById('card-ber-title').innerText = t.berTitle;
+            document.getElementById('card-cat-title').innerText = t.catTitle;
+            document.getElementById('card-dog-title').innerText = t.dogTitle;
+
+            document.getElementById('tut-title').innerText = t.tutTitle;
+            document.getElementById('tut-rot-title').innerText = t.tutRotTitle;
+            document.getElementById('tut-rot-desc').innerText = t.tutRotDesc;
+            document.getElementById('tut-zoom-title').innerText = t.tutZoomTitle;
+            document.getElementById('tut-zoom-desc').innerText = t.tutZoomDesc;
+            document.getElementById('tut-pan-title').innerText = t.tutPanTitle;
+            document.getElementById('tut-pan-desc').innerText = t.tutPanDesc;
+            document.getElementById('tut-btn').innerText = t.tutBtn;
+
+            document.getElementById('dev-badge').innerText = t.devBadge;
+            document.getElementById('dev-title').innerText = t.devTitle;
+            document.getElementById('dev-text').innerText = t.devText;
+
+            if (currentMemberId) {
+                const name = document.getElementById('member-name');
+                const desc = document.getElementById('member-desc');
+
+                if (currentMemberId === 'matvey') {
+                    name.innerText = t.matveyName;
+                    desc.innerText = t.matveyFullDesc;
+                } else if (currentMemberId === 'lida') {
+                    name.innerText = t.lidaName;
+                    desc.innerText = t.lidaFullDesc;
+                } else if (currentMemberId === 'alisa') {
+                    name.innerText = t.alisaName;
+                    desc.innerText = t.alisaFullDesc;
+                }
+            }
+
+            if (currentModelId) {
+                const title = document.getElementById('model-title');
+                if (currentModelId === 'izbushka') {
+                    title.innerText = t.izbFullTitle || t.izbTitle;
+                } else if (currentModelId === 'legs') {
+                    title.innerText = t.legsTitle;
+                } else if (currentModelId === 'birch') {
+                    title.innerText = t.berTitle;
+                } else if (currentModelId === 'cat') {
+                    title.innerText = t.catTitle;
+                } else if (currentModelId === 'dog') {
+                    title.innerText = t.dogTitle;
+                }
+            }
+        }
+
+        function updateGliderPosition(index) {
+            const glider = document.getElementById('lang-glider');
+            const targetBtn = document.querySelectorAll('.ios-segmented-btn')[index];
+            if (glider && targetBtn) {
+                glider.style.width = `${targetBtn.offsetWidth}px`;
+                glider.style.transform = `translateX(${targetBtn.offsetLeft - 3}px)`;
+            }
+        }
+
         function start3DView() {
             isFullscreen3D = true;
             document.body.classList.add('fullscreen-3d-active');
@@ -1187,7 +1333,6 @@
             }
         }
 
-        // Обработка кнопки "Назад" и жестов свайпа
         window.addEventListener('popstate', function(event) {
             if (currentView !== 'main') {
                 showMainViewUI();
@@ -1331,96 +1476,6 @@
             } else {
                 body.setAttribute('data-theme', 'light');
                 themeBtn.innerText = '🌙';
-            }
-        }
-
-        function toggleLanguage() {
-            currentLangIndex = (currentLangIndex + 1) % langOrder.length;
-            currentLang = langOrder[currentLangIndex];
-            
-            const t = translations[currentLang];
-            if (!t) return;
-
-            document.getElementById('lang-toggle').innerText = t.langCode;
-            
-            const hintPopup = document.getElementById('hint-text-popup');
-            if (hintPopup) hintPopup.innerText = t.hintPopup;
-
-            document.getElementById('title-team').innerText = t.titleTeam;
-            document.getElementById('title-school').innerText = t.titleSchool;
-            document.getElementById('sec-team').innerText = t.secTeam;
-            document.getElementById('sec-about').innerText = t.secAbout;
-            document.getElementById('sec-models').innerText = t.secModels;
-
-            document.querySelectorAll('.back-text').forEach(el => el.innerText = t.backText);
-            document.querySelectorAll('.btn-more-text').forEach(el => el.innerText = t.btnMoreText);
-            document.querySelectorAll('.btn-view-text').forEach(el => el.innerText = t.btnView);
-            document.querySelectorAll('.card-sub').forEach(el => el.innerText = t.cardSub);
-
-            document.getElementById('matvey-name').innerText = t.matveyName;
-            document.getElementById('matvey-role').innerText = t.matveyRole;
-            document.getElementById('lida-name').innerText = t.lidaName;
-            document.getElementById('lida-role').innerText = t.lidaRole;
-            document.getElementById('alisa-name').innerText = t.alisaName;
-            document.getElementById('alisa-role').innerText = t.alisaRole;
-
-            document.getElementById('acc-ann-title').innerText = t.accAnnTitle;
-            document.getElementById('acc-ann-text').innerHTML = t.accAnnText;
-            document.getElementById('acc-story-title').innerText = t.accStoryTitle;
-            document.getElementById('acc-story-text').innerHTML = t.accStoryText;
-            document.getElementById('acc-tech-title').innerText = t.accTechTitle;
-            document.getElementById('acc-tech-text').innerHTML = t.accTechText;
-            document.getElementById('acc-soft-title').innerText = t.accSoftTitle;
-            document.getElementById('acc-soft-text').innerHTML = t.accSoftText;
-
-            document.getElementById('card-izb-title').innerText = t.izbTitle;
-            document.getElementById('card-legs-title').innerText = t.legsTitle;
-            document.getElementById('card-ber-title').innerText = t.berTitle;
-            document.getElementById('card-cat-title').innerText = t.catTitle;
-            document.getElementById('card-dog-title').innerText = t.dogTitle;
-
-            document.getElementById('tut-title').innerText = t.tutTitle;
-            document.getElementById('tut-rot-title').innerText = t.tutRotTitle;
-            document.getElementById('tut-rot-desc').innerText = t.tutRotDesc;
-            document.getElementById('tut-zoom-title').innerText = t.tutZoomTitle;
-            document.getElementById('tut-zoom-desc').innerText = t.tutZoomDesc;
-            document.getElementById('tut-pan-title').innerText = t.tutPanTitle;
-            document.getElementById('tut-pan-desc').innerText = t.tutPanDesc;
-            document.getElementById('tut-btn').innerText = t.tutBtn;
-
-            document.getElementById('dev-badge').innerText = t.devBadge;
-            document.getElementById('dev-title').innerText = t.devTitle;
-            document.getElementById('dev-text').innerText = t.devText;
-
-            if (currentMemberId) {
-                const name = document.getElementById('member-name');
-                const desc = document.getElementById('member-desc');
-
-                if (currentMemberId === 'matvey') {
-                    name.innerText = t.matveyName;
-                    desc.innerText = t.matveyFullDesc;
-                } else if (currentMemberId === 'lida') {
-                    name.innerText = t.lidaName;
-                    desc.innerText = t.lidaFullDesc;
-                } else if (currentMemberId === 'alisa') {
-                    name.innerText = t.alisaName;
-                    desc.innerText = t.alisaFullDesc;
-                }
-            }
-
-            if (currentModelId) {
-                const title = document.getElementById('model-title');
-                if (currentModelId === 'izbushka') {
-                    title.innerText = t.izbFullTitle || t.izbTitle;
-                } else if (currentModelId === 'legs') {
-                    title.innerText = t.legsTitle;
-                } else if (currentModelId === 'birch') {
-                    title.innerText = t.berTitle;
-                } else if (currentModelId === 'cat') {
-                    title.innerText = t.catTitle;
-                } else if (currentModelId === 'dog') {
-                    title.innerText = t.dogTitle;
-                }
             }
         }
     </script>
