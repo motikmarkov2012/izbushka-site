@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v2.0)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -310,6 +310,17 @@
             cursor: pointer;
         }
 
+        .btn-ar-walk {
+            background-color: var(--btn-green);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         .hint-3d {
             text-align: center;
             color: var(--subtext-color);
@@ -365,8 +376,9 @@
             color: var(--text-color);
             text-align: left;
             width: 100%;
-            line-height: 1.6;
+            line-height: 1.7;
             font-size: 0.9rem;
+            white-space: pre-line;
         }
 
         @media (max-width: 600px) {
@@ -524,7 +536,8 @@
                 alt="3D модель" 
                 ar 
                 ar-modes="webxr scene-viewer quick-look" 
-                ar-scale="auto"
+                ar-scale="fixed"
+                ar-placement="floor"
                 camera-controls 
                 touch-action="pan-y"
                 interaction-prompt="auto"
@@ -533,12 +546,13 @@
                 shadow-softness="0.8">
                 
                 <button slot="ar-button" class="ar-button" id="ar-btn-text">
-                    Посмотреть в AR
+                    🚶 Поставить в реальный размер
                 </button>
             </model-viewer>
         </div>
 
         <div class="model-controls">
+            <button class="btn-ar-walk" onclick="triggerAR()" id="btn-ar-walk">🚶 Пройтись вокруг в 1:1</button>
             <button class="btn-3d" onclick="resetModelCamera()" id="btn-reset-cam">Сбросить камеру</button>
             <button class="btn-3d" onclick="toggleAutoRotate()" id="btn-toggle-rotate">Автовращение: Вкл</button>
             <button class="btn-3d" onclick="toggleFullscreen()" id="btn-fullscreen">На полный экран</button>
@@ -555,7 +569,6 @@
         let currentMemberId = null;
         let currentModelId = null;
 
-        // ЗДЕСЬ ИСПРАВЛЕНЫ РАСШИРЕНИЯ НА .glb
         const modelAssets = {
             izbushka: { gltf: 'izbushka.glb', usdz: 'izbushka.usdz' },
             catdog: { gltf: 'catdog.glb', usdz: 'catdog.usdz' },
@@ -571,7 +584,8 @@
                 secAbout: "О проекте",
                 secModels: "Модели и Конструкции",
                 backText: "Назад к меню",
-                arText: "Посмотреть в AR",
+                arText: "🚶 Поставить в реальный размер",
+                btnArWalk: "🚶 Пройтись вокруг в 1:1",
                 btnView: "Открыть 3D / AR",
                 btnMoreText: "Подробнее →",
                 cardSub: "3D-модель и интерактивный просмотр в AR",
@@ -583,12 +597,42 @@
                 
                 matveyName: "Марков Матвей",
                 matveyRole: "Капитан команды, главный конструктор и электрик проекта",
+                matveyFullDesc: `• Капитан команды «Баба Яга» и главный конструктор проекта.
+• Создатель робота «Избушка на курьих ножках».
+• Спроектировал трёхмерную модель корпуса Избушки в САПР SolidWorks.
+• Разработал и собрал уникальный поворотный механизм на моторах TETRIX.
+• Настроил управление моторами через два драйвера двигателей VNH2SP30.
+• Разработал систему автономного распознавания цвета костюмов с помощью камеры PIXY 2.
+• Продумал и спаял электросхему с автономным питанием (аккумуляторы 18650 12В и 4S 14.4В).
+• Установил понижающие DC-DC преобразователи и светодиодную иллюминацию.
+• Подключил модуль DFPlayer Mini с динамиком для воспроизведения сценических реплик.
+• Отвечает за полную интеграцию всех робототехнических систем и механическую надёжность.`,
                 
                 lidaName: "Токарева Лида",
                 lidaRole: "Главный программист",
-                
+                lidaFullDesc: `• Главный программист команды «Баба Яга».
+• Разработчик управляющих алгоритмов для автономных роботов «Кошка» и «Собака».
+• Запрограммировала шагающие ноги Избушки на языке RobotC в среде LEGO EV3.
+• Реализовала точное движение роботов по линии и перекрёсткам с использованием ПД-регулятора.
+• Настроила интерактивную логику поведения роботов при взаимодействии с актерами.
+• Запрограммировала реакцию «мотание головой» в ответ на вопросы Бабы-Яги.
+• Обеспечила аппаратную синхронизацию между блоками управления EV3 и Arduino.
+• Провела отладку движения ног для создания комичного эффекта «пляшущей Избушки».
+• Настроила автономную работу датчиков цвета и ультразвуковых дальномеров.
+• Отвечает за отладку сценического сценария и автономное поведение всей команды роботов.`,
+
                 alisaName: "Маркова Алиса",
                 alisaRole: "Конструктор ног Избушки",
+                alisaFullDesc: `• Главный художник проекта и декоратор сценического шоу.
+• Создатель автономного робота «Бёрёзка» и конструктор ног Избушки.
+• Разработала конструкцию опорно-механического узла для синхронного поворота и шага ног.
+• Спроектировала подвижные ветки «Берёзки» в программы SolidWorks.
+• Подготовила детали из фанеры и вырезала их на лазерном станке с ЧПУ.
+• Изготовила и настроила механизмы сгибания суставов ног Избушки.
+• Разработала и вручную сшила оригинальный флисовый костюм «куриных ножек».
+• Настроила управление сервоприводами веток через плату Arduino UNO.
+• Отвечает за эстетическое и художественное оформление декораций и роботов.
+• Создала уникальную светодиодную систему подсветок веток для передачи эмоций.`,
 
                 accAnnTitle: "Аннотация",
                 accAnnText: "Вдохновлённая популярным персонажем русских народных сказок Бабой Ягой, наша команда создала проект по мотивам сказок о ней. Целью проекта стало создание театрального роботизированного шоу, в котором принимают участие автономные роботы и их создатели, в качестве актеров. Для этого были спроектированы и изготовлены роботы, Березка Кошка Собака, Избушка и ноги избушки.",
@@ -634,7 +678,8 @@
                 secAbout: "About Project",
                 secModels: "3D Models & Hardware",
                 backText: "Back to Menu",
-                arText: "View in AR",
+                arText: "🚶 View Real-Size AR",
+                btnArWalk: "🚶 Walk Around (1:1)",
                 btnView: "Open 3D / AR",
                 btnMoreText: "Details →",
                 cardSub: "3D Model & Interactive AR View",
@@ -646,12 +691,42 @@
 
                 matveyName: "Matvey Markov",
                 matveyRole: "Team Captain, Lead Hardware Designer & Electrical Engineer",
+                matveyFullDesc: `• Captain of team "Baba Yaga" and lead hardware designer.
+• Builder of the main robot "Hut on Chicken Legs".
+• Designed the 3D model of the Hut body in SolidWorks CAD.
+• Created a custom rotation mechanism powered by TETRIX motors.
+• Configured motor control using dual VNH2SP30 drivers.
+• Implemented autonomous color detection via PIXY 2 camera.
+• Engineered and soldered electric circuits (18650 12V and 4S 14.4V batteries).
+• Installed step-down DC-DC converters and LED lights.
+• Integrated DFPlayer Mini audio module for live show voice lines.
+• Responsible for system integration and structural reliability.`,
 
                 lidaName: "Lida Tokareva",
                 lidaRole: "Lead Software Engineer",
+                lidaFullDesc: `• Lead Software Engineer of team "Baba Yaga".
+• Developer of autonomous control algorithms for "Cat" and "Dog" robots.
+• Programmed walking legs in RobotC for LEGO EV3.
+• Implemented PD controller for accurate line and intersection navigation.
+• Configured interactive logic for actor-robot scene interactions.
+• Programmed head-shaking behavior in response to Baba Yaga's questions.
+• Synchronized hardware communications between EV3 and Arduino controllers.
+• Calibrated leg movement to create the comic "Dancing Hut" effect.
+• Calibrated color sensors and ultrasonic distance sensors.
+• Oversees stage scenario timing and autonomous robot behavior.`,
 
                 alisaName: "Alisa Markova",
                 alisaRole: "Hut Legs Mechanical Designer",
+                alisaFullDesc: `• Lead Artist and Stage Props Designer.
+• Builder of "Birch Tree" robot and designer of the Hut's legs.
+• Engineered the mechanical joint node for synchronized rotation and walking.
+• Designed moving branches of "Birch Tree" in SolidWorks.
+• Laser-cut wooden plywood parts using CNC machines.
+• Assembled and calibrated joint bending mechanisms for chicken legs.
+• Hand-sewed original fleece costumes for the chicken legs.
+• Controlled servo motors for tree branches via Arduino UNO.
+• Responsible for aesthetic and artistic decoration of all robots.
+• Designed custom LED lighting on tree branches to portray emotions.`,
 
                 accAnnTitle: "Abstract",
                 accAnnText: "Inspired by the famous character of Russian folk tales Baba Yaga, our team created a project based on her fairy tales. The goal was to build a theatrical robotic show where autonomous robots and their creators act together on stage.",
@@ -678,7 +753,8 @@
                 secAbout: "关于项目",
                 secModels: "3D模型与机械结构",
                 backText: "返回菜单",
-                arText: "在AR中查看",
+                arText: "🚶 1:1 真实比例 AR",
+                btnArWalk: "🚶 围绕模型行走 (1:1)",
                 btnView: "打开 3D / AR",
                 btnMoreText: "详细信息 →",
                 cardSub: "3D模型与增强现实 (AR) 互动展示",
@@ -690,12 +766,42 @@
 
                 matveyName: "Markov Matvey",
                 matveyRole: "队长、首席机械设计师及电气工程师",
+                matveyFullDesc: `• "Baba Yaga" 团队队长兼首席机械设计师。
+• "鸡脚小屋" 机器人的核心制作者。
+• 在 SolidWorks 中设计了小屋本体的三维模型。
+• 研制了基于 TETRIX 电机的独特旋转机构。
+• 使用双 VNH2SP30 驱动器配置电机控制。
+• 实现了基于 PIXY 2 摄像头的颜色识别系统。
+• 设计并焊接了具有独立供电 (18650 12V / 4S 14.4V) 的电路。
+• 部署了 DC-DC 降压转换器与 LED 灯光系统。
+• 集成 DFPlayer Mini 模块以实现舞台语音播放。
+• 负责所有机器人系统的集成与结构可靠性。`,
 
                 lidaName: "Tokareva Lida",
                 lidaRole: "首席软件工程师",
+                lidaFullDesc: `• "Baba Yaga" 团队首席软件工程师。
+• 开发了“猫”和“狗”机器人的自主控制算法。
+• 在 LEGO EV3 上使用 RobotC 编写了行走腿部程序。
+• 实现了基于 PD 调节器的精确循迹与交叉路口导航。
+• 配置了机器人与演员互动时的逻辑。
+• 编写了在回应“雅加婆婆”问题时“摇晃头部”的动作。
+• 实现了 EV3 与 Arduino 之间的硬件同步通信。
+• 调试腿部运动，创造出滑稽的“跳舞小屋”效果。
+• 调试了颜色传感器和超声波测距仪。
+• 负责舞台剧本的运行与整个机器人团队的自主行为。`,
 
                 alisaName: "Markova Alisa",
                 alisaRole: "小屋腿部结构设计师",
+                alisaFullDesc: `• 团队首席艺术家兼舞台道具设计师。
+• “桦树”机器人的制作者及小屋腿部机械设计师。
+• 设计了用于同步旋转和步行的支撑机械节点。
+• 在 SolidWorks 中设计了“桦树”的活动树枝。
+• 使用 CNC 激光切割机制作了胶合板零部件。
+• 组装并调试了鸡脚关节的弯曲机构。
+• 手工缝制了原汁原味的羊毛“鸡脚”服装。
+• 通过 Arduino UNO 控制树枝舵机的运行。
+• 负责所有机器人和道具的美术与外观设计。
+• 设计了树枝 LED 灯光系统以表达戏剧情感。`,
 
                 accAnnTitle: "项目摘要",
                 accAnnText: "受俄罗斯著名民间故事人物“雅加婆婆”的启发...",
@@ -765,15 +871,15 @@
             if (id === 'matvey') {
                 photo.src = 'matvey.jpg';
                 name.innerText = t.matveyName;
-                desc.innerText = t.matveyRole;
+                desc.innerText = t.matveyFullDesc;
             } else if (id === 'lida') {
                 photo.src = 'lida.jpg';
                 name.innerText = t.lidaName;
-                desc.innerText = t.lidaRole;
+                desc.innerText = t.lidaFullDesc;
             } else if (id === 'alisa') {
                 photo.src = 'alisa.jpg';
                 name.innerText = t.alisaName;
-                desc.innerText = t.alisaRole;
+                desc.innerText = t.alisaFullDesc;
             }
 
             document.getElementById('main-view').style.display = 'none';
@@ -804,6 +910,15 @@
             document.getElementById('main-view').style.display = 'none';
             document.getElementById('viewer-container').classList.add('active');
             window.scrollTo(0, 0);
+        }
+
+        function triggerAR() {
+            const viewer = document.getElementById('model-display');
+            if (viewer && viewer.activateAR) {
+                viewer.activateAR();
+            } else {
+                alert("AR поддерживается на смартфонах iOS и Android с поддержкой ARCore/ARKit.");
+            }
         }
 
         function toggleAccordion(id) {
@@ -839,6 +954,7 @@
             document.querySelectorAll('.back-text').forEach(el => el.innerText = t.backText);
             document.querySelectorAll('.btn-more-text').forEach(el => el.innerText = t.btnMoreText);
             document.getElementById('ar-btn-text').innerText = t.arText;
+            document.getElementById('btn-ar-walk').innerText = t.btnArWalk;
             document.querySelectorAll('.btn-view-text').forEach(el => el.innerText = t.btnView);
             document.querySelectorAll('.card-sub').forEach(el => el.innerText = t.cardSub);
 
