@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v2.4.1)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v2.6)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -22,6 +22,7 @@
             --viewer-bg: #010409;
             --hint-bg: #1f6feb;
             --hint-text: #ffffff;
+            --overlay-bg: rgba(13, 17, 23, 0.92);
         }
 
         [data-theme="light"] {
@@ -39,6 +40,7 @@
             --viewer-bg: #eaf0f6;
             --hint-bg: #0969da;
             --hint-text: #ffffff;
+            --overlay-bg: rgba(246, 248, 250, 0.94);
         }
 
         * {
@@ -90,7 +92,7 @@
             border-color: var(--header-color);
         }
 
-        /* Всплывающая подсказка с привлекающей внимание анимацией */
+        /* Всплывающая подсказка с плавной мигающей пульсацией */
         .settings-hint {
             position: fixed;
             top: 62px;
@@ -103,10 +105,8 @@
             font-weight: 600;
             box-shadow: 0 6px 16px rgba(0,0,0,0.4);
             z-index: 1001;
-            opacity: 0;
-            transform: translateY(-10px);
-            animation: fadeInBounce 0.5s ease-out forwards, pulseGlow 1.5s infinite alternate;
-            pointer-events: none;
+            cursor: pointer;
+            animation: fadeIn 0.5s ease-out forwards, blinkGlow 2s infinite alternate;
         }
 
         .settings-hint::before {
@@ -121,14 +121,14 @@
             border-bottom: 6px solid var(--hint-bg);
         }
 
-        @keyframes fadeInBounce {
+        @keyframes fadeIn {
             0% { opacity: 0; transform: translateY(-10px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 0 0 rgba(31, 111, 235, 0.7); }
-            100% { box-shadow: 0 0 0 12px rgba(31, 111, 235, 0); }
+        @keyframes blinkGlow {
+            0% { opacity: 1; filter: brightness(1); box-shadow: 0 0 4px rgba(31, 111, 235, 0.5); }
+            100% { opacity: 0.75; filter: brightness(1.3); box-shadow: 0 0 16px rgba(31, 111, 235, 0.9); }
         }
 
         header {
@@ -339,6 +339,85 @@
             touch-action: pan-y;
         }
 
+        /* Оверлей интерактивного обучения жестам */
+        .gesture-tutorial {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--overlay-bg);
+            border-radius: 12px;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .tutorial-title {
+            color: var(--header-color);
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .gesture-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 320px;
+            margin-bottom: 20px;
+        }
+
+        .gesture-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        .gesture-icon {
+            font-size: 1.5rem;
+            width: 36px;
+            text-align: center;
+        }
+
+        .gesture-info h4 {
+            color: var(--title-color);
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .gesture-info p {
+            color: var(--subtext-color);
+            font-size: 0.78rem;
+        }
+
+        .btn-start-3d {
+            background-color: var(--btn-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .btn-start-3d:hover {
+            background-color: var(--btn-green-hover);
+        }
+
         .model-controls {
             display: flex;
             gap: 8px;
@@ -418,8 +497,8 @@
         <button class="control-btn" id="theme-toggle" onclick="toggleTheme()">☀️</button>
     </div>
 
-    <!-- Всплывающее уведомление-подсказка -->
-    <div id="settings-hint" class="settings-hint">
+    <!-- Всплывающее уведомление-подсказка (закрывается по клику) -->
+    <div id="settings-hint" class="settings-hint" onclick="closeSettingsHint()">
         💡 <span id="hint-text-popup">Переключение языка и темы здесь!</span>
     </div>
 
@@ -557,6 +636,35 @@
         <h2 id="model-title" style="color: var(--header-color); margin-bottom: 12px;">Модель</h2>
         
         <div class="model-wrapper">
+            <!-- Оверлей с обучением жестам -->
+            <div id="gesture-tutorial" class="gesture-tutorial">
+                <div class="tutorial-title" id="tut-title">💡 Управление 3D-моделью</div>
+                <div class="gesture-list">
+                    <div class="gesture-item">
+                        <div class="gesture-icon">👆</div>
+                        <div class="gesture-info">
+                            <h4 id="tut-rot-title">Вращение</h4>
+                            <p id="tut-rot-desc">Движение 1 пальцем или ЛКМ</p>
+                        </div>
+                    </div>
+                    <div class="gesture-item">
+                        <div class="gesture-icon">🤏</div>
+                        <div class="gesture-info">
+                            <h4 id="tut-zoom-title">Масштаб (Pinch)</h4>
+                            <p id="tut-zoom-desc">Сведение 2 пальцев или колесико</p>
+                        </div>
+                    </div>
+                    <div class="gesture-item">
+                        <div class="gesture-icon">🖐️</div>
+                        <div class="gesture-info">
+                            <h4 id="tut-pan-title">Сдвиг по X/Y</h4>
+                            <p id="tut-pan-desc">Сдвиг 2 пальцами или ПКМ</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-start-3d" onclick="closeTutorial()" id="tut-btn">Понятно, смотреть 3D</button>
+            </div>
+
             <model-viewer 
                 id="model-display"
                 src="" 
@@ -612,6 +720,15 @@
                 btnFullscreen: "На полный экран",
                 hint3D: "🖱️ Вращение: Пальцем/ЛКМ | Зумирование: Двумя пальцами/Колёсико",
                 
+                tutTitle: "💡 Управление 3D-моделью",
+                tutRotTitle: "Вращение",
+                tutRotDesc: "Движение 1 пальцем или ЛКМ",
+                tutZoomTitle: "Масштаб (Pinch)",
+                tutZoomDesc: "Сведение 2 пальцев или колесико",
+                tutPanTitle: "Сдвиг по X/Y",
+                tutPanDesc: "Сдвиг 2 пальцами или ПКМ",
+                tutBtn: "Понятно, смотреть 3D",
+
                 matveyName: "Марков Матвей",
                 matveyRole: "Капитан команды, главный конструктор и электрик проекта",
                 matveyFullDesc: `• Капитан команды «Баба Яга» и главный конструктор проекта.
@@ -704,6 +821,15 @@
                 btnRotateOff: "Auto-rotate: OFF",
                 btnFullscreen: "Fullscreen",
                 hint3D: "🖱️ Rotate: Drag | Zoom: Scroll / Pinch",
+
+                tutTitle: "💡 3D Control Guide",
+                tutRotTitle: "Rotate",
+                tutRotDesc: "Drag with 1 finger or Left Click",
+                tutZoomTitle: "Zoom (Pinch)",
+                tutZoomDesc: "Pinch with 2 fingers or Mouse Wheel",
+                tutPanTitle: "Pan (Shift X/Y)",
+                tutPanDesc: "Drag with 2 fingers or Right Click",
+                tutBtn: "Got it, view 3D",
 
                 matveyName: "Matvey Markov",
                 matveyRole: "Team Captain, Lead Hardware Designer & Electrician",
@@ -798,6 +924,15 @@
                 btnFullscreen: "全屏查看",
                 hint3D: "🖱️ 旋转: 单指拖动 | 缩放: 双指缩放",
 
+                tutTitle: "💡 3D 模型操作指南",
+                tutRotTitle: "旋转",
+                tutRotDesc: "单指拖动或鼠标左键",
+                tutZoomTitle: "缩放 (Pinch)",
+                tutZoomDesc: "双指捏合或鼠标滚轮",
+                tutPanTitle: "平移 (X/Y 轴)",
+                tutPanDesc: "双指拖动或鼠标右键",
+                tutBtn: "明白了，查看 3D",
+
                 matveyName: "Markov Matvey",
                 matveyRole: "队长、首席机械设计师及电气工程师",
                 matveyFullDesc: `• "Baba Yaga" 团队队长兼首席机械设计师。
@@ -874,18 +1009,30 @@
             }
         };
 
-        // Запуск показа подсказки на 5 секунд при входе на сайт
+        // Запуск показа подсказки на 20 секунд при входе на сайт
         window.addEventListener('DOMContentLoaded', () => {
             const hint = document.getElementById('settings-hint');
             setTimeout(() => {
-                if (hint) {
-                    hint.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                    hint.style.opacity = '0';
-                    hint.style.transform = 'translateY(-10px)';
-                    setTimeout(() => hint.remove(), 600);
-                }
-            }, 5000);
+                closeSettingsHint();
+            }, 20000); // 20 секунд
         });
+
+        function closeSettingsHint() {
+            const hint = document.getElementById('settings-hint');
+            if (hint) {
+                hint.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                hint.style.opacity = '0';
+                hint.style.transform = 'translateY(-10px)';
+                setTimeout(() => hint.remove(), 600);
+            }
+        }
+
+        function closeTutorial() {
+            const tut = document.getElementById('gesture-tutorial');
+            if (tut) {
+                tut.style.display = 'none';
+            }
+        }
 
         window.addEventListener('popstate', function(event) {
             if (currentView !== 'main') {
@@ -956,6 +1103,10 @@
             const t = translations[currentLang];
             const viewer = document.getElementById('model-display');
             const title = document.getElementById('model-title');
+
+            // Показываем оверлей с обучением жестам
+            const tut = document.getElementById('gesture-tutorial');
+            if (tut) tut.style.display = 'flex';
 
             if (id === 'izbushka') {
                 title.innerText = t.izbFullTitle || t.izbTitle;
@@ -1037,6 +1188,16 @@
             document.getElementById('btn-reset-cam').innerText = t.btnResetCam;
             document.getElementById('btn-fullscreen').innerText = t.btnFullscreen;
             document.getElementById('hint-3d').innerText = t.hint3D;
+
+            // Перевод оверлея обучения
+            document.getElementById('tut-title').innerText = t.tutTitle;
+            document.getElementById('tut-rot-title').innerText = t.tutRotTitle;
+            document.getElementById('tut-rot-desc').innerText = t.tutRotDesc;
+            document.getElementById('tut-zoom-title').innerText = t.tutZoomTitle;
+            document.getElementById('tut-zoom-desc').innerText = t.tutZoomDesc;
+            document.getElementById('tut-pan-title').innerText = t.tutPanTitle;
+            document.getElementById('tut-pan-desc').innerText = t.tutPanDesc;
+            document.getElementById('tut-btn').innerText = t.tutBtn;
 
             if (currentMemberId) {
                 const photo = document.getElementById('member-photo');
