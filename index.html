@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v2.7)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v2.7.1)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -22,7 +22,7 @@
             --viewer-bg: #010409;
             --hint-bg: #1f6feb;
             --hint-text: #ffffff;
-            --overlay-bg: rgba(13, 17, 23, 0.92);
+            --overlay-bg: rgba(13, 17, 23, 0.94);
         }
 
         [data-theme="light"] {
@@ -40,7 +40,7 @@
             --viewer-bg: #eaf0f6;
             --hint-bg: #0969da;
             --hint-text: #ffffff;
-            --overlay-bg: rgba(246, 248, 250, 0.94);
+            --overlay-bg: rgba(246, 248, 250, 0.95);
         }
 
         * {
@@ -65,7 +65,6 @@
             overflow-x: hidden;
         }
 
-        /* Фиксированная панель управления вверху */
         .controls-bar {
             position: fixed;
             top: 16px;
@@ -85,14 +84,12 @@
             font-weight: bold;
             font-size: 0.85rem;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            position: relative;
         }
 
         .control-btn:hover {
             border-color: var(--header-color);
         }
 
-        /* Всплывающая подсказка */
         .settings-hint {
             position: fixed;
             top: 62px;
@@ -263,57 +260,66 @@
             margin-top: 8px;
         }
 
-        /* Карточка робота с собственной аватаркой */
-        .card-project {
+        /* Обновленные горизонтальные карточки роботов (Аватарка сбоку) */
+        .card-project-horiz {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 16px;
-            text-align: center;
+            padding: 14px;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transition: transform 0.2s, border-color 0.2s;
+            transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
+            gap: 14px;
         }
 
-        .card-project:hover, .card-project:active {
+        .card-project-horiz:hover, .card-project-horiz:active {
             transform: translateY(-2px);
             border-color: var(--accent-green);
+            background-color: var(--card-hover-bg);
         }
 
-        .robot-avatar {
+        .robot-avatar-side {
             width: 75px;
             height: 75px;
+            min-width: 75px;
             border-radius: 12px;
             object-fit: cover;
             border: 2px solid var(--accent-green);
-            margin-bottom: 10px;
             background-color: var(--border-color);
         }
 
-        .card-project h3 {
-            color: var(--accent-green);
-            font-size: 1.1rem;
-            margin-bottom: 6px;
+        .robot-card-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            width: 100%;
         }
 
-        .card-project p {
+        .robot-card-info h3 {
+            color: var(--accent-green);
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+            text-align: left;
+        }
+
+        .robot-card-info p {
             color: var(--subtext-color);
-            font-size: 0.85rem;
-            margin-bottom: 12px;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            text-align: left;
         }
 
         .btn-view {
             display: inline-block;
             background-color: var(--btn-green);
             color: white;
-            padding: 8px 16px;
+            padding: 5px 12px;
             border-radius: 6px;
             font-weight: bold;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .viewer-container {
@@ -360,7 +366,7 @@
             touch-action: pan-y;
         }
 
-        /* Оверлей обучения жестам */
+        /* Строгий оверлей обучения жестам (Без иконок/эмодзи) */
         .gesture-tutorial {
             position: absolute;
             top: 0;
@@ -374,53 +380,48 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 24px;
             text-align: center;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(6px);
         }
 
         .tutorial-title {
             color: var(--header-color);
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: bold;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .gesture-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             width: 100%;
-            max-width: 320px;
-            margin-bottom: 20px;
+            max-width: 340px;
+            margin-bottom: 24px;
         }
 
         .gesture-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            padding: 10px 14px;
-            border-radius: 10px;
+            padding: 12px 16px;
+            border-radius: 8px;
             text-align: left;
-        }
-
-        .gesture-icon {
-            font-size: 1.5rem;
-            width: 36px;
-            text-align: center;
         }
 
         .gesture-info h4 {
             color: var(--title-color);
-            font-size: 0.9rem;
-            margin-bottom: 2px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 3px;
         }
 
         .gesture-info p {
             color: var(--subtext-color);
             font-size: 0.78rem;
+            line-height: 1.3;
         }
 
         .btn-start-3d {
@@ -429,14 +430,55 @@
             border: none;
             border-radius: 8px;
             padding: 10px 24px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .btn-start-3d:hover {
             background-color: var(--btn-green-hover);
+        }
+
+        /* Плашка «В разработке» */
+        .dev-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            min-height: 320px;
+            background-color: var(--viewer-bg);
+            border-radius: 12px;
+            border: 1px dashed var(--border-color);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .dev-badge {
+            display: inline-block;
+            background-color: rgba(234, 179, 8, 0.15);
+            color: #eab308;
+            border: 1px solid rgba(234, 179, 8, 0.4);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 14px;
+        }
+
+        .dev-title {
+            color: var(--title-color);
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .dev-text {
+            color: var(--subtext-color);
+            font-size: 0.88rem;
+            max-width: 360px;
+            line-height: 1.5;
         }
 
         .model-controls {
@@ -512,7 +554,7 @@
 </head>
 <body>
 
-    <!-- Фиксированная плашка управления -->
+    <!-- Фиксированная панель управления -->
     <div class="controls-bar">
         <button class="control-btn" id="lang-toggle" onclick="toggleLanguage()">RU</button>
         <button class="control-btn" id="theme-toggle" onclick="toggleTheme()">☀️</button>
@@ -620,58 +662,58 @@
 
         </div>
 
-        <!-- 5 Отдельных роботов по порядку с аватарками -->
+        <!-- 5 Отдельных роботов с горизонтальными аватарами -->
         <h2 class="section-title" id="sec-models">Модели и Конструкции</h2>
         <div class="grid-container" style="margin-bottom: 30px;">
             
             <!-- 1. Избушка -->
-            <div class="card-project" onclick="openModel('izbushka')">
-                <div>
-                    <img src="izbushka_card.jpg" alt="Избушка" class="robot-avatar" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Избушка'">
+            <div class="card-project-horiz" onclick="openModel('izbushka')">
+                <img src="izbushka_card.jpg" alt="Избушка" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Избушка'">
+                <div class="robot-card-info">
                     <h3 id="card-izb-title">Избушка</h3>
-                    <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                    <p class="card-sub">3D-модель и интерактивный просмотр</p>
+                    <span class="btn-view btn-view-text">Открыть 3D</span>
                 </div>
-                <span class="btn-view btn-view-text">Открыть 3D</span>
             </div>
 
             <!-- 2. Ноги избушки -->
-            <div class="card-project" onclick="openModel('legs')">
-                <div>
-                    <img src="legs_card.jpg" alt="Ноги избушки" class="robot-avatar" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Ноги'">
+            <div class="card-project-horiz" onclick="openModel('legs')">
+                <img src="legs_card.jpg" alt="Ноги избушки" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Ноги'">
+                <div class="robot-card-info">
                     <h3 id="card-legs-title">Ноги избушки</h3>
-                    <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                    <p class="card-sub">Интерактивный просмотр</p>
+                    <span class="btn-view btn-view-text">Открыть 3D</span>
                 </div>
-                <span class="btn-view btn-view-text">Открыть 3D</span>
             </div>
 
             <!-- 3. Берёза -->
-            <div class="card-project" onclick="openModel('birch')">
-                <div>
-                    <img src="birch_card.jpg" alt="Берёза" class="robot-avatar" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Берёза'">
+            <div class="card-project-horiz" onclick="openModel('birch')">
+                <img src="birch_card.jpg" alt="Берёза" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Берёза'">
+                <div class="robot-card-info">
                     <h3 id="card-ber-title">Берёза</h3>
-                    <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                    <p class="card-sub">3D-модель и интерактивный просмотр</p>
+                    <span class="btn-view btn-view-text">Открыть 3D</span>
                 </div>
-                <span class="btn-view btn-view-text">Открыть 3D</span>
             </div>
 
             <!-- 4. Кошка -->
-            <div class="card-project" onclick="openModel('cat')">
-                <div>
-                    <img src="cat_card.jpg" alt="Кошка" class="robot-avatar" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Кошка'">
+            <div class="card-project-horiz" onclick="openModel('cat')">
+                <img src="cat_card.jpg" alt="Кошка" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Кошка'">
+                <div class="robot-card-info">
                     <h3 id="card-cat-title">Кошка</h3>
-                    <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                    <p class="card-sub">3D-модель и интерактивный просмотр</p>
+                    <span class="btn-view btn-view-text">Открыть 3D</span>
                 </div>
-                <span class="btn-view btn-view-text">Открыть 3D</span>
             </div>
 
             <!-- 5. Собака -->
-            <div class="card-project" onclick="openModel('dog')">
-                <div>
-                    <img src="dog_card.jpg" alt="Собака" class="robot-avatar" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Собака'">
+            <div class="card-project-horiz" onclick="openModel('dog')">
+                <img src="dog_card.jpg" alt="Собака" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Собака'">
+                <div class="robot-card-info">
                     <h3 id="card-dog-title">Собака</h3>
-                    <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                    <p class="card-sub">3D-модель и интерактивный просмотр</p>
+                    <span class="btn-view btn-view-text">Открыть 3D</span>
                 </div>
-                <span class="btn-view btn-view-text">Открыть 3D</span>
             </div>
 
         </div>
@@ -696,33 +738,37 @@
         <h2 id="model-title" style="color: var(--header-color); margin-bottom: 12px;">Модель</h2>
         
         <div class="model-wrapper">
-            <!-- Оверлей с обучением жестам -->
+            <!-- Оверлей обучения (Строгий стиль без иконок) -->
             <div id="gesture-tutorial" class="gesture-tutorial">
-                <div class="tutorial-title" id="tut-title">💡 Управление 3D-моделью</div>
+                <div class="tutorial-title" id="tut-title">Инструкция по навигации 3D</div>
                 <div class="gesture-list">
                     <div class="gesture-item">
-                        <div class="gesture-icon">👆</div>
                         <div class="gesture-info">
-                            <h4 id="tut-rot-title">Вращение</h4>
-                            <p id="tut-rot-desc">Движение 1 пальцем или ЛКМ</p>
+                            <h4 id="tut-rot-title">Вращение объекта</h4>
+                            <p id="tut-rot-desc">Перетаскивание одним пальцем или удерживая ЛКМ</p>
                         </div>
                     </div>
                     <div class="gesture-item">
-                        <div class="gesture-icon">🤏</div>
                         <div class="gesture-info">
-                            <h4 id="tut-zoom-title">Масштаб (Pinch)</h4>
-                            <p id="tut-zoom-desc">Сведение 2 пальцев или колесико</p>
+                            <h4 id="tut-zoom-title">Масштабирование (Зум)</h4>
+                            <p id="tut-zoom-desc">Сведение двух пальцев или прокрутка колесиком мыши</p>
                         </div>
                     </div>
                     <div class="gesture-item">
-                        <div class="gesture-icon">🖐️</div>
                         <div class="gesture-info">
-                            <h4 id="tut-pan-title">Сдвиг по X/Y</h4>
-                            <p id="tut-pan-desc">Сдвиг 2 пальцами или ПКМ</p>
+                            <h4 id="tut-pan-title">Панорамирование (Параллельный сдвиг)</h4>
+                            <p id="tut-pan-desc">Сдвиг двумя пальцами или удерживая ПКМ</p>
                         </div>
                     </div>
                 </div>
-                <button class="btn-start-3d" onclick="closeTutorial()" id="tut-btn">Понятно, смотреть 3D</button>
+                <button class="btn-start-3d" onclick="closeTutorial()" id="tut-btn">Перейти к просмотру</button>
+            </div>
+
+            <!-- Блок если модель находится в разработке -->
+            <div id="dev-wrapper" class="dev-container" style="display: none;">
+                <span class="dev-badge" id="dev-badge">В разработке</span>
+                <div class="dev-title" id="dev-title">Модель готовится к публикации</div>
+                <div class="dev-text" id="dev-text">Интерактивная 3D-модель ног Избушки находится на стадии финальной калибровки и будет доступна в ближайшем обновлении.</div>
             </div>
 
             <model-viewer 
@@ -738,7 +784,7 @@
             </model-viewer>
         </div>
 
-        <div class="model-controls">
+        <div class="model-controls" id="model-controls-bar">
             <button class="btn-3d" onclick="resetModelCamera()" id="btn-reset-cam">Сбросить камеру</button>
             <button class="btn-3d" onclick="toggleAutoRotate()" id="btn-toggle-rotate">Автовращение: Вкл</button>
             <button class="btn-3d" onclick="toggleFullscreen()" id="btn-fullscreen">На полный экран</button>
@@ -755,12 +801,11 @@
         let currentMemberId = null;
         let currentModelId = null;
 
-        // Связь каждого из 5 роботов с их 3D-файлами
         const modelAssets = {
             izbushka: { gltf: 'izbushka.glb' },
-            legs: { gltf: 'izbushka.glb' }, // Позже подключим отдельные ноги
+            legs: { dev: true }, // Указываем, что модель в разработке
             birch: { gltf: 'birch.glb' },
-            cat: { gltf: 'catdog.glb' },   // Обоим кошке и собаке задействован catdog.glb
+            cat: { gltf: 'catdog.glb' },
             dog: { gltf: 'catdog.glb' }
         };
 
@@ -776,21 +821,25 @@
                 backText: "Назад к меню",
                 btnView: "Открыть 3D",
                 btnMoreText: "Подробнее →",
-                cardSub: "Интерактивная 3D-модель",
+                cardSub: "Интерактивный просмотр",
                 btnResetCam: "Сбросить камеру",
                 btnRotateOn: "Автовращение: Вкл",
                 btnRotateOff: "Автовращение: Выкл",
                 btnFullscreen: "На полный экран",
                 hint3D: "🖱️ Вращение: Пальцем/ЛКМ | Зумирование: Двумя пальцами/Колёсико",
                 
-                tutTitle: "💡 Управление 3D-моделью",
-                tutRotTitle: "Вращение",
-                tutRotDesc: "Движение 1 пальцем или ЛКМ",
-                tutZoomTitle: "Масштаб (Pinch)",
-                tutZoomDesc: "Сведение 2 пальцев или колесико",
-                tutPanTitle: "Сдвиг по X/Y",
-                tutPanDesc: "Сдвиг 2 пальцами или ПКМ",
-                tutBtn: "Понятно, смотреть 3D",
+                tutTitle: "Инструкция по навигации 3D",
+                tutRotTitle: "Вращение объекта",
+                tutRotDesc: "Перетаскивание одним пальцем или удерживая ЛКМ",
+                tutZoomTitle: "Масштабирование (Зум)",
+                tutZoomDesc: "Сведение двух пальцев или прокрутка колесиком мыши",
+                tutPanTitle: "Панорамирование (Параллельный сдвиг)",
+                tutPanDesc: "Сдвиг двумя пальцами или удерживая ПКМ",
+                tutBtn: "Перейти к просмотру",
+
+                devBadge: "В разработке",
+                devTitle: "Модель готовится к публикации",
+                devText: "Интерактивная 3D-модель ног Избушки находится на стадии финальной калибровки и будет доступна в ближайшем обновлении.",
 
                 matveyName: "Марков Матвей",
                 matveyRole: "Капитан команды, главный конструктор и электрик проекта",
@@ -880,21 +929,25 @@
                 backText: "Back to Menu",
                 btnView: "Open 3D",
                 btnMoreText: "Details →",
-                cardSub: "Interactive 3D Model",
+                cardSub: "Interactive View",
                 btnResetCam: "Reset Camera",
                 btnRotateOn: "Auto-rotate: ON",
                 btnRotateOff: "Auto-rotate: OFF",
                 btnFullscreen: "Fullscreen",
                 hint3D: "🖱️ Rotate: Drag | Zoom: Scroll / Pinch",
 
-                tutTitle: "💡 3D Control Guide",
-                tutRotTitle: "Rotate",
-                tutRotDesc: "Drag with 1 finger or Left Click",
-                tutZoomTitle: "Zoom (Pinch)",
-                tutZoomDesc: "Pinch with 2 fingers or Mouse Wheel",
-                tutPanTitle: "Pan (Shift X/Y)",
-                tutPanDesc: "Drag with 2 fingers or Right Click",
-                tutBtn: "Got it, view 3D",
+                tutTitle: "3D Navigation Guide",
+                tutRotTitle: "Object Rotation",
+                tutRotDesc: "Drag with 1 finger or Left Mouse Button",
+                tutZoomTitle: "Zooming",
+                tutZoomDesc: "Pinch with two fingers or Mouse Wheel",
+                tutPanTitle: "Panning (Parallel Shift)",
+                tutPanDesc: "Drag with two fingers or Right Mouse Button",
+                tutBtn: "Proceed to view",
+
+                devBadge: "Under Development",
+                devTitle: "Model coming soon",
+                devText: "The interactive 3D model of the Hut's legs is currently undergoing final calibration and will be available in the next update.",
 
                 matveyName: "Matvey Markov",
                 matveyRole: "Team Captain, Lead Hardware Designer & Electrician",
@@ -984,21 +1037,25 @@
                 backText: "返回菜单",
                 btnView: "打开 3D",
                 btnMoreText: "详细信息 →",
-                cardSub: "交互式 3D 模型",
+                cardSub: "交互式查看",
                 btnResetCam: "重置视角",
                 btnRotateOn: "自动旋转: 开启",
                 btnRotateOff: "自动旋转: 关闭",
                 btnFullscreen: "全屏查看",
                 hint3D: "🖱️ 旋转: 单指拖动 | 缩放: 双指缩放",
 
-                tutTitle: "💡 3D 模型操作指南",
-                tutRotTitle: "旋转",
-                tutRotDesc: "单指拖动或鼠标左键",
-                tutZoomTitle: "缩放 (Pinch)",
+                tutTitle: "3D 导航说明",
+                tutRotTitle: "物体旋转",
+                tutRotDesc: "单指拖动或按住鼠标左键",
+                tutZoomTitle: "缩放",
                 tutZoomDesc: "双指捏合或鼠标滚轮",
-                tutPanTitle: "平移 (X/Y 轴)",
-                tutPanDesc: "双指拖动或鼠标右键",
-                tutBtn: "明白了，查看 3D",
+                tutPanTitle: "平移",
+                tutPanDesc: "双指拖动或按住鼠标右键",
+                tutBtn: "开始查看",
+
+                devBadge: "开发中",
+                devTitle: "模型即将发布",
+                devText: "小屋腿部的交互式 3D 模型正在进行最终校准，将在下次更新中提供。",
 
                 matveyName: "Markov Matvey",
                 matveyRole: "队长、首席机械设计师及电气工程师",
@@ -1078,7 +1135,6 @@
             }
         };
 
-        // Подсказка при открытии
         window.addEventListener('DOMContentLoaded', () => {
             const hint = document.getElementById('settings-hint');
             setTimeout(() => {
@@ -1172,10 +1228,10 @@
             const t = translations[currentLang];
             const viewer = document.getElementById('model-display');
             const title = document.getElementById('model-title');
-
-            // Показываем оверлей обучения
+            const devWrapper = document.getElementById('dev-wrapper');
+            const controlsBar = document.getElementById('model-controls-bar');
+            const hint3d = document.getElementById('hint-3d');
             const tut = document.getElementById('gesture-tutorial');
-            if (tut) tut.style.display = 'flex';
 
             if (id === 'izbushka') {
                 title.innerText = t.izbFullTitle || t.izbTitle;
@@ -1189,8 +1245,23 @@
                 title.innerText = t.dogTitle;
             }
 
-            if (modelAssets[id]) {
-                viewer.setAttribute('src', modelAssets[id].gltf);
+            // Проверка: находится ли модель в разработке
+            if (modelAssets[id] && modelAssets[id].dev) {
+                if (tut) tut.style.display = 'none';
+                viewer.style.display = 'none';
+                devWrapper.style.display = 'flex';
+                controlsBar.style.display = 'none';
+                hint3d.style.display = 'none';
+            } else {
+                if (tut) tut.style.display = 'flex';
+                devWrapper.style.display = 'none';
+                viewer.style.display = 'block';
+                controlsBar.style.display = 'flex';
+                hint3d.style.display = 'block';
+
+                if (modelAssets[id] && modelAssets[id].gltf) {
+                    viewer.setAttribute('src', modelAssets[id].gltf);
+                }
             }
 
             document.getElementById('main-view').style.display = 'none';
@@ -1254,7 +1325,6 @@
             document.getElementById('acc-soft-title').innerText = t.accSoftTitle;
             document.getElementById('acc-soft-text').innerHTML = t.accSoftText;
 
-            // Заголовки роботов
             document.getElementById('card-izb-title').innerText = t.izbTitle;
             document.getElementById('card-legs-title').innerText = t.legsTitle;
             document.getElementById('card-ber-title').innerText = t.berTitle;
@@ -1273,6 +1343,10 @@
             document.getElementById('tut-pan-title').innerText = t.tutPanTitle;
             document.getElementById('tut-pan-desc').innerText = t.tutPanDesc;
             document.getElementById('tut-btn').innerText = t.tutBtn;
+
+            document.getElementById('dev-badge').innerText = t.devBadge;
+            document.getElementById('dev-title').innerText = t.devTitle;
+            document.getElementById('dev-text').innerText = t.devText;
 
             if (currentMemberId) {
                 const photo = document.getElementById('member-photo');
