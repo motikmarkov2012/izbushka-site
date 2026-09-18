@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v3.0)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v3.1)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -368,7 +368,6 @@
             touch-action: none;
         }
 
-        /* Полный адаптивный оверлей без обрезания кнопок */
         .gesture-tutorial {
             position: absolute;
             top: 0;
@@ -547,6 +546,52 @@
             white-space: pre-line;
         }
 
+        /* Полноэкранный чистый режим просмотра v3.1 */
+        body.fullscreen-3d-active {
+            padding: 0 !important;
+            overflow: hidden !important;
+        }
+
+        body.fullscreen-3d-active header,
+        body.fullscreen-3d-active #main-view,
+        body.fullscreen-3d-active #member-container,
+        body.fullscreen-3d-active #settings-hint,
+        body.fullscreen-3d-active .hint-3d,
+        body.fullscreen-3d-active .model-controls,
+        body.fullscreen-3d-active #model-title {
+            display: none !important;
+        }
+
+        body.fullscreen-3d-active #viewer-container {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            border-radius: 0 !important;
+            border: none !important;
+            padding: 0 !important;
+            z-index: 99999 !important;
+            background-color: var(--viewer-bg) !important;
+        }
+
+        body.fullscreen-3d-active .model-wrapper {
+            height: 100vh !important;
+            border-radius: 0 !important;
+        }
+
+        body.fullscreen-3d-active .fullscreen-top-bar {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100000;
+        }
+
         @media (max-width: 600px) {
             header h1 { font-size: 1.5rem; }
             .section-title { font-size: 1.1rem; }
@@ -558,7 +603,7 @@
 <body data-theme="light">
 
     <!-- Панель переключения языка и темы -->
-    <div class="controls-bar">
+    <div class="controls-bar" id="global-controls">
         <button class="control-btn" id="lang-toggle" onclick="toggleLanguage()">RU</button>
         <button class="control-btn" id="theme-toggle" onclick="toggleTheme()">🌙</button>
     </div>
@@ -732,10 +777,15 @@
 
     <!-- Просмотрщик 3D моделей -->
     <div id="viewer-container" class="viewer-container">
-        <button class="btn-back" onclick="goBack()">← <span class="back-text">Назад к меню</span></button>
+        
+        <!-- Верхняя плашка управления для чистого полноэкранного режима -->
+        <div class="fullscreen-top-bar" id="fs-top-bar">
+            <button class="btn-back" style="margin-bottom:0;" onclick="goBack()">← <span class="back-text">Назад к меню</span></button>
+        </div>
+
         <h2 id="model-title" style="color: var(--header-color); margin-bottom: 10px;">Модель</h2>
         
-        <div class="model-wrapper">
+        <div class="model-wrapper" id="model-wrapper-box">
             <!-- Оверлей обучения -->
             <div id="gesture-tutorial" class="gesture-tutorial">
                 <div class="tutorial-title" id="tut-title">Инструкция по навигации 3D</div>
@@ -786,7 +836,7 @@
         <div class="model-controls" id="model-controls-bar">
             <button class="btn-3d" onclick="resetModelCamera()" id="btn-reset-cam">Сбросить камеру</button>
             <button class="btn-3d" onclick="toggleAutoRotate()" id="btn-toggle-rotate">Автовращение: Вкл</button>
-            <button class="btn-3d" onclick="toggleFullscreen()" id="btn-fullscreen">На полный экран</button>
+            <button class="btn-3d" onclick="start3DView()" id="btn-fullscreen">На полный экран</button>
         </div>
         <p class="hint-3d" id="hint-3d">🖱️ Вращение: Зажмите ЛКМ | Зумирование: Колёсико | Панорама: Зажмите ПКМ</p>
     </div>
@@ -799,6 +849,7 @@
         let currentView = 'main'; 
         let currentMemberId = null;
         let currentModelId = null;
+        let isFullscreen3D = false;
 
         const modelAssets = {
             izbushka: { gltf: 'izbushka.glb' },
@@ -1101,7 +1152,6 @@
         };
 
         window.addEventListener('DOMContentLoaded', () => {
-            const hint = document.getElementById('settings-hint');
             setTimeout(() => {
                 closeSettingsHint();
             }, 20000);
@@ -1117,17 +1167,37 @@
             }
         }
 
-        // Запуск 3D-просмотра с закрытием оверлея и авто-входом в полноэкранный режим
+        // Запуск минималистичного 3D-режима без лишних деталей
         function start3DView() {
-            const tut = document.getElementById('gesture-tutorial');
-            if (tut) {
-                tut.style.display = 'none';
+            isFullscreen3D = true;
+            document.body.classList.add('fullscreen-3d-active');
+
+            const globalControls = document.getElementById('global-controls');
+            const fsBar = document.getElementById('fs-top-bar');
+            
+            if (globalControls && fsBar) {
+                fsBar.appendChild(globalControls);
             }
-            toggleFullscreen();
+
+            const tut = document.getElementById('gesture-tutorial');
+            if (tut) tut.style.display = 'none';
+        }
+
+        function exit3DFullscreen() {
+            if (!isFullscreen3D) return;
+            isFullscreen3D = false;
+            document.body.classList.remove('fullscreen-3d-active');
+
+            const globalControls = document.getElementById('global-controls');
+            if (globalControls) {
+                document.body.appendChild(globalControls);
+            }
         }
 
         window.addEventListener('popstate', function(event) {
-            if (currentView !== 'main') {
+            if (isFullscreen3D) {
+                exit3DFullscreen();
+            } else if (currentView !== 'main') {
                 showMainViewUI();
             }
         });
@@ -1140,12 +1210,15 @@
         }
 
         function goBack() {
-            if (currentView !== 'main') {
+            if (isFullscreen3D) {
+                exit3DFullscreen();
+            } else if (currentView !== 'main') {
                 history.back();
             }
         }
 
         function showMainViewUI() {
+            exit3DFullscreen();
             currentView = 'main';
             currentMemberId = null;
             currentModelId = null;
@@ -1199,6 +1272,7 @@
             const controlsBar = document.getElementById('model-controls-bar');
             const hint3d = document.getElementById('hint-3d');
             const tut = document.getElementById('gesture-tutorial');
+            const container = document.getElementById('viewer-container');
 
             if (id === 'izbushka') {
                 title.innerText = t.izbFullTitle || t.izbTitle;
@@ -1231,8 +1305,21 @@
             }
 
             document.getElementById('main-view').style.display = 'none';
-            document.getElementById('viewer-container').classList.add('active');
-            window.scrollTo(0, 0);
+            container.classList.add('active');
+
+            // Автоматическое центрирование по кнопке для всех роботов кроме берёзы
+            if (id !== 'birch') {
+                setTimeout(() => {
+                    const tutBtn = document.getElementById('tut-btn');
+                    if (tutBtn && tutBtn.offsetParent !== null) {
+                        tutBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else {
+                        container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 100);
+            } else {
+                window.scrollTo(0, 0);
+            }
         }
 
         function toggleAccordion(id) {
@@ -1363,16 +1450,6 @@
             } else {
                 viewer.setAttribute('auto-rotate', '');
                 btn.innerText = t.btnRotateOn;
-            }
-        }
-
-        function toggleFullscreen() {
-            const container = document.getElementById('viewer-container');
-            if (!document.fullscreenElement) {
-                if (container.requestFullscreen) container.requestFullscreen();
-                else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
-            } else {
-                if (document.exitFullscreen) document.exitFullscreen();
             }
         }
     </script>
