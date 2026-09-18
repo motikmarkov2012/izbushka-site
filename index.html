@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v2.6)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v2.7)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -92,7 +92,7 @@
             border-color: var(--header-color);
         }
 
-        /* Всплывающая подсказка с плавной мигающей пульсацией */
+        /* Всплывающая подсказка */
         .settings-hint {
             position: fixed;
             top: 62px;
@@ -263,6 +263,7 @@
             margin-top: 8px;
         }
 
+        /* Карточка робота с собственной аватаркой */
         .card-project {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -271,6 +272,26 @@
             text-align: center;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-project:hover, .card-project:active {
+            transform: translateY(-2px);
+            border-color: var(--accent-green);
+        }
+
+        .robot-avatar {
+            width: 75px;
+            height: 75px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid var(--accent-green);
+            margin-bottom: 10px;
+            background-color: var(--border-color);
         }
 
         .card-project h3 {
@@ -339,7 +360,7 @@
             touch-action: pan-y;
         }
 
-        /* Оверлей интерактивного обучения жестам */
+        /* Оверлей обучения жестам */
         .gesture-tutorial {
             position: absolute;
             top: 0;
@@ -497,7 +518,7 @@
         <button class="control-btn" id="theme-toggle" onclick="toggleTheme()">☀️</button>
     </div>
 
-    <!-- Всплывающее уведомление-подсказка (закрывается по клику) -->
+    <!-- Всплывающее уведомление-подсказка -->
     <div id="settings-hint" class="settings-hint" onclick="closeSettingsHint()">
         💡 <span id="hint-text-popup">Переключение языка и темы здесь!</span>
     </div>
@@ -509,6 +530,7 @@
 
     <div id="main-view" style="width: 100%; max-width: 900px;">
         
+        <!-- Секция команды -->
         <h2 class="section-title" id="sec-team">Команда проекта</h2>
         <div class="grid-container">
             <div class="card-team" onclick="openMember('matvey')">
@@ -537,6 +559,7 @@
             </div>
         </div>
 
+        <!-- О проекте -->
         <h2 class="section-title" id="sec-about">О проекте</h2>
         <div class="accordion-container">
             
@@ -597,23 +620,60 @@
 
         </div>
 
+        <!-- 5 Отдельных роботов по порядку с аватарками -->
         <h2 class="section-title" id="sec-models">Модели и Конструкции</h2>
         <div class="grid-container" style="margin-bottom: 30px;">
+            
+            <!-- 1. Избушка -->
             <div class="card-project" onclick="openModel('izbushka')">
-                <h3 id="card-izb-title">Избушка</h3>
-                <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                <div>
+                    <img src="izbushka_card.jpg" alt="Избушка" class="robot-avatar" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Избушка'">
+                    <h3 id="card-izb-title">Избушка</h3>
+                    <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                </div>
                 <span class="btn-view btn-view-text">Открыть 3D</span>
             </div>
-            <div class="card-project" onclick="openModel('catdog')">
-                <h3 id="card-cat-title">Кошка и Собака</h3>
-                <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+
+            <!-- 2. Ноги избушки -->
+            <div class="card-project" onclick="openModel('legs')">
+                <div>
+                    <img src="legs_card.jpg" alt="Ноги избушки" class="robot-avatar" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Ноги'">
+                    <h3 id="card-legs-title">Ноги избушки</h3>
+                    <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                </div>
                 <span class="btn-view btn-view-text">Открыть 3D</span>
             </div>
+
+            <!-- 3. Берёза -->
             <div class="card-project" onclick="openModel('birch')">
-                <h3 id="card-ber-title">Берёза</h3>
-                <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                <div>
+                    <img src="birch_card.jpg" alt="Берёза" class="robot-avatar" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Берёза'">
+                    <h3 id="card-ber-title">Берёза</h3>
+                    <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                </div>
                 <span class="btn-view btn-view-text">Открыть 3D</span>
             </div>
+
+            <!-- 4. Кошка -->
+            <div class="card-project" onclick="openModel('cat')">
+                <div>
+                    <img src="cat_card.jpg" alt="Кошка" class="robot-avatar" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Кошка'">
+                    <h3 id="card-cat-title">Кошка</h3>
+                    <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                </div>
+                <span class="btn-view btn-view-text">Открыть 3D</span>
+            </div>
+
+            <!-- 5. Собака -->
+            <div class="card-project" onclick="openModel('dog')">
+                <div>
+                    <img src="dog_card.jpg" alt="Собака" class="robot-avatar" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Собака'">
+                    <h3 id="card-dog-title">Собака</h3>
+                    <p class="card-sub">3D-модель и интерактивный просмотр в AR</p>
+                </div>
+                <span class="btn-view btn-view-text">Открыть 3D</span>
+            </div>
+
         </div>
 
     </div>
@@ -695,10 +755,13 @@
         let currentMemberId = null;
         let currentModelId = null;
 
+        // Связь каждого из 5 роботов с их 3D-файлами
         const modelAssets = {
             izbushka: { gltf: 'izbushka.glb' },
-            catdog: { gltf: 'catdog.glb' },
-            birch: { gltf: 'birch.glb' }
+            legs: { gltf: 'izbushka.glb' }, // Позже подключим отдельные ноги
+            birch: { gltf: 'birch.glb' },
+            cat: { gltf: 'catdog.glb' },   // Обоим кошке и собаке задействован catdog.glb
+            dog: { gltf: 'catdog.glb' }
         };
 
         const translations = {
@@ -801,8 +864,10 @@
 
                 izbTitle: "Избушка",
                 izbFullTitle: "Избушка на курьих ножках",
-                catTitle: "Кошка и Собака",
-                berTitle: "Берёза"
+                legsTitle: "Ноги избушки",
+                berTitle: "Берёза",
+                catTitle: "Кошка",
+                dogTitle: "Собака"
             },
             en: {
                 langCode: "EN",
@@ -903,8 +968,10 @@
 
                 izbTitle: "The Hut",
                 izbFullTitle: "Hut on Chicken Legs",
-                catTitle: "Cat & Dog",
-                berTitle: "Birch Tree"
+                legsTitle: "Chicken Legs",
+                berTitle: "Birch Tree",
+                catTitle: "Cat",
+                dogTitle: "Dog"
             },
             cn: {
                 langCode: "中文",
@@ -1004,17 +1071,19 @@
 
                 izbTitle: "鸡脚小屋",
                 izbFullTitle: "鸡脚上的小屋",
-                catTitle: "猫与狗",
-                berTitle: "桦树"
+                legsTitle: "鸡脚",
+                berTitle: "桦树",
+                catTitle: "猫",
+                dogTitle: "狗"
             }
         };
 
-        // Запуск показа подсказки на 20 секунд при входе на сайт
+        // Подсказка при открытии
         window.addEventListener('DOMContentLoaded', () => {
             const hint = document.getElementById('settings-hint');
             setTimeout(() => {
                 closeSettingsHint();
-            }, 20000); // 20 секунд
+            }, 20000);
         });
 
         function closeSettingsHint() {
@@ -1104,16 +1173,20 @@
             const viewer = document.getElementById('model-display');
             const title = document.getElementById('model-title');
 
-            // Показываем оверлей с обучением жестам
+            // Показываем оверлей обучения
             const tut = document.getElementById('gesture-tutorial');
             if (tut) tut.style.display = 'flex';
 
             if (id === 'izbushka') {
                 title.innerText = t.izbFullTitle || t.izbTitle;
-            } else if (id === 'catdog') {
-                title.innerText = t.catTitle;
+            } else if (id === 'legs') {
+                title.innerText = t.legsTitle;
             } else if (id === 'birch') {
                 title.innerText = t.berTitle;
+            } else if (id === 'cat') {
+                title.innerText = t.catTitle;
+            } else if (id === 'dog') {
+                title.innerText = t.dogTitle;
             }
 
             if (modelAssets[id]) {
@@ -1181,15 +1254,17 @@
             document.getElementById('acc-soft-title').innerText = t.accSoftTitle;
             document.getElementById('acc-soft-text').innerHTML = t.accSoftText;
 
+            // Заголовки роботов
             document.getElementById('card-izb-title').innerText = t.izbTitle;
-            document.getElementById('card-cat-title').innerText = t.catTitle;
+            document.getElementById('card-legs-title').innerText = t.legsTitle;
             document.getElementById('card-ber-title').innerText = t.berTitle;
+            document.getElementById('card-cat-title').innerText = t.catTitle;
+            document.getElementById('card-dog-title').innerText = t.dogTitle;
 
             document.getElementById('btn-reset-cam').innerText = t.btnResetCam;
             document.getElementById('btn-fullscreen').innerText = t.btnFullscreen;
             document.getElementById('hint-3d').innerText = t.hint3D;
 
-            // Перевод оверлея обучения
             document.getElementById('tut-title').innerText = t.tutTitle;
             document.getElementById('tut-rot-title').innerText = t.tutRotTitle;
             document.getElementById('tut-rot-desc').innerText = t.tutRotDesc;
@@ -1220,10 +1295,14 @@
                 const title = document.getElementById('model-title');
                 if (currentModelId === 'izbushka') {
                     title.innerText = t.izbFullTitle || t.izbTitle;
-                } else if (currentModelId === 'catdog') {
-                    title.innerText = t.catTitle;
+                } else if (currentModelId === 'legs') {
+                    title.innerText = t.legsTitle;
                 } else if (currentModelId === 'birch') {
                     title.innerText = t.berTitle;
+                } else if (currentModelId === 'cat') {
+                    title.innerText = t.catTitle;
+                } else if (currentModelId === 'dog') {
+                    title.innerText = t.dogTitle;
                 }
             }
         }
