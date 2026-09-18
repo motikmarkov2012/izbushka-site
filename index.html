@@ -807,7 +807,7 @@
                 accAnnText: "受俄罗斯著名民间故事人物“雅加婆婆”的启发...",
 
                 accStoryTitle: "童话故事情节",
-                accStoryText: `在我们的表演中...`,
+                accStoryText: `在 our performance...`,
 
                 accTechTitle: "设计与制造",
                 accTechText: `机器人结构均在 SolidWorks...`,
@@ -822,7 +822,6 @@
             }
         };
 
-        // --- ОБРАБОТКА КНОПОК И ЖЕСТОВ "НАЗАД" (SAMSUNG, IPHONE, XIAOMI) ---
         window.addEventListener('popstate', function(event) {
             if (currentView !== 'main') {
                 showMainViewUI();
@@ -893,6 +892,7 @@
             const t = translations[currentLang];
             const viewer = document.getElementById('model-display');
             const title = document.getElementById('model-title');
+            const arBtnWalk = document.getElementById('btn-ar-walk');
 
             if (id === 'izbushka') {
                 title.innerText = t.izbFullTitle || t.izbTitle;
@@ -907,6 +907,17 @@
                 viewer.setAttribute('ios-src', modelAssets[id].usdz);
             }
 
+            // Настройка режимов AR: для Берёзы включается полная поддержка обхода
+            if (id === 'birch') {
+                viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
+                viewer.setAttribute('ar-scale', 'fixed');
+                viewer.setAttribute('ar-placement', 'floor');
+                arBtnWalk.style.display = 'inline-block';
+            } else {
+                viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
+                arBtnWalk.style.display = 'inline-block';
+            }
+
             document.getElementById('main-view').style.display = 'none';
             document.getElementById('viewer-container').classList.add('active');
             window.scrollTo(0, 0);
@@ -914,10 +925,14 @@
 
         function triggerAR() {
             const viewer = document.getElementById('model-display');
-            if (viewer && viewer.activateAR) {
-                viewer.activateAR();
+            if (viewer && typeof viewer.activateAR === 'function') {
+                // Если мобильное устройство поддерживает AR — запускаем
+                viewer.activateAR().catch((err) => {
+                    console.warn("Ошибка при запуске AR:", err);
+                    alert("Для обхода в AR откройте страницу с мобильного устройства (iOS/Android) с поддержкой ARCore или ARKit.");
+                });
             } else {
-                alert("AR поддерживается на смартфонах iOS и Android с поддержкой ARCore/ARKit.");
+                alert("AR режим поддерживается на мобильных устройствах.");
             }
         }
 
