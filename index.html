@@ -3,71 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v3.8-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v3.8-beta-1)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
         :root {
-            /* Базовая прозрачность жидкого стекла (регулируется ползунком) */
-            --glass-alpha: 0.65;
-            --glass-blur: 24px;
-
-            --bg-color: #080c14;
-            --text-color: #f0f6fc;
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
             --header-color: #58a6ff;
             --subtext-color: #8b949e;
-
-            /* Эффекты жидкого стекла */
-            --glass-bg: rgba(22, 27, 34, var(--glass-alpha));
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-
-            --card-hover-bg: rgba(30, 38, 48, 0.85);
+            --card-bg: #161b22;
+            --card-hover-bg: #1c2129;
+            --border-color: #30363d;
             --title-color: #f0f6fc;
             --btn-green: #238636;
             --btn-green-hover: #2ea043;
             --accent-green: #7ee787;
             --viewer-bg: #010409;
-            --hint-bg: rgba(137, 87, 229, 0.85);
+            --hint-bg: #8957e5;
             --hint-text: #ffffff;
-            --overlay-bg: rgba(13, 17, 23, 0.88);
+            --overlay-bg: rgba(13, 17, 23, 0.96);
+
+            /* Полуматовое / полупрозрачное жидкое стекло только для кнопок навигации */
+            --glass-btn-bg: rgba(22, 27, 34, 0.5);
+            --glass-btn-border: rgba(255, 255, 255, 0.18);
+            --glass-blur: blur(12px) saturate(160%);
 
             /* Переменные панели iOS */
-            --ios-glass-bg: rgba(22, 27, 34, var(--glass-alpha));
-            --ios-glass-border: rgba(255, 255, 255, 0.22);
+            --ios-glass-bg: rgba(22, 27, 34, 0.55);
+            --ios-glass-border: rgba(255, 255, 255, 0.15);
             --ios-pill-bg: rgba(255, 255, 255, 0.12);
             --ios-pill-active: #ffffff;
             --ios-text-active: #0d1117;
-            --ios-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            --ios-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
         }
 
         /* Светлая тема */
         [data-theme="light"] {
-            --bg-color: #eef2f7;
-            --text-color: #1f2328;
+            --bg-color: #f6f8fa;
+            --text-color: #24292f;
             --header-color: #0969da;
             --subtext-color: #57606a;
-
-            --glass-bg: rgba(255, 255, 255, var(--glass-alpha));
-            --glass-border: rgba(255, 255, 255, 0.6);
-            --glass-glow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
-
-            --card-hover-bg: rgba(255, 255, 255, 0.95);
+            --card-bg: #ffffff;
+            --card-hover-bg: #f3f4f6;
+            --border-color: #d0d7de;
             --title-color: #1F2328;
             --btn-green: #1f883d;
             --btn-green-hover: #1a7f37;
             --accent-green: #1a7f37;
             --viewer-bg: #eaf0f6;
-            --hint-bg: rgba(130, 80, 223, 0.88);
+            --hint-bg: #8250df;
             --hint-text: #ffffff;
-            --overlay-bg: rgba(246, 248, 250, 0.92);
+            --overlay-bg: rgba(246, 248, 250, 0.97);
 
-            --ios-glass-bg: rgba(255, 255, 255, var(--glass-alpha));
-            --ios-glass-border: rgba(0, 0, 0, 0.12);
-            --ios-pill-bg: rgba(0, 0, 0, 0.06);
+            /* Полуматовое жидкое стекло для кнопок в светлой теме */
+            --glass-btn-bg: rgba(255, 255, 255, 0.5);
+            --glass-btn-border: rgba(0, 0, 0, 0.12);
+
+            --ios-glass-bg: rgba(255, 255, 255, 0.55);
+            --ios-glass-border: rgba(0, 0, 0, 0.08);
+            --ios-pill-bg: rgba(0, 0, 0, 0.05);
             --ios-pill-active: #0969da;
             --ios-text-active: #ffffff;
-            --ios-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --ios-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -75,84 +73,53 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s, backdrop-filter 0.3s;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Анимированный фоновый градиент под «жидким стеклом» */
         body {
-            background: radial-gradient(circle at 20% 20%, #1e293b 0%, #0d1117 50%, #05080d 100%);
-            background-attachment: fixed;
+            background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
             padding: 12px;
-            padding-top: 88px;
+            padding-top: 80px;
             position: relative;
             overflow-x: hidden;
         }
 
-        [data-theme="light"] body {
-            background: radial-gradient(circle at 20% 20%, #e2e8f0 0%, #f1f5f9 50%, #cbd5e1 100%);
-            background-attachment: fixed;
-        }
-
-        /* Прозрачный бета-бейдж */
+        /* Бета-бейдж */
         .beta-badge {
             position: fixed;
             top: 18px;
             left: 18px;
             font-size: 0.75rem;
             color: var(--subtext-color);
-            opacity: 0.45;
+            opacity: 0.35;
             z-index: 999;
             font-family: monospace;
             pointer-events: none;
             user-select: none;
         }
 
-        /* iOS-панель управления с эффектом матового жидкого стекла */
+        /* iOS-панель управления с мягким полуматовым стеклом */
         .controls-bar {
             position: fixed;
             top: 12px;
             right: 12px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             z-index: 1000;
             background: var(--ios-glass-bg);
-            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--ios-glass-border);
-            padding: 6px 12px;
+            padding: 5px 8px;
             border-radius: 30px;
             box-shadow: var(--ios-shadow);
-        }
-
-        /* Ползунок «Жидкого стекла» */
-        .glass-slider-container {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--ios-pill-bg);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .glass-slider-container span {
-            font-size: 0.7rem;
-            opacity: 0.85;
-            white-space: nowrap;
-        }
-
-        .glass-range {
-            width: 70px;
-            accent-color: var(--header-color);
-            cursor: pointer;
         }
 
         /* iOS Segmented Switcher для языков */
@@ -172,7 +139,7 @@
             color: var(--text-color);
             font-weight: 600;
             font-size: 0.8rem;
-            padding: 5px 10px;
+            padding: 6px 10px;
             border-radius: 18px;
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -186,21 +153,18 @@
         .lang-option.active {
             background: var(--ios-pill-active);
             color: var(--ios-text-active);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
         }
 
-        /* Контрастные и заметные SVG-флаги стран на любом фоне */
         .flag-icon {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
+            width: 18px;
+            height: 13px;
+            border-radius: 2px;
             object-fit: cover;
+            box-shadow: 0 0 2px rgba(0,0,0,0.3);
             flex-shrink: 0;
-            box-shadow: 0 0 0 1.5px rgba(255,255,255,0.7), 0 2px 6px rgba(0,0,0,0.3);
-            background: #fff;
         }
 
-        /* Кнопка смены темы */
         .theme-toggle-btn {
             background: var(--ios-pill-bg);
             border: none;
@@ -217,24 +181,21 @@
         }
 
         .theme-toggle-btn:hover {
-            transform: scale(1.08);
+            transform: scale(1.05);
         }
 
         /* Подсказка */
         .settings-hint {
             position: fixed;
-            top: 76px;
+            top: 72px;
             right: 12px;
-            background: var(--hint-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background-color: var(--hint-bg);
             color: var(--hint-text);
-            padding: 8px 14px;
-            border-radius: 14px;
+            padding: 8px 12px 8px 14px;
+            border-radius: 12px;
             font-size: 0.85rem;
             font-weight: 600;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
             z-index: 1001;
             display: flex;
             align-items: center;
@@ -254,24 +215,27 @@
             border-bottom: 6px solid var(--hint-bg);
         }
 
+        /* Кнопка закрытия в стиле полуматового жидкого стекла */
         .hint-close-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
+            background: var(--glass-btn-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-btn-border);
             color: #ffffff;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.75rem;
             cursor: pointer;
             line-height: 1;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.15s ease;
         }
 
         .hint-close-btn:hover {
-            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
         }
 
         @keyframes fadeIn {
@@ -281,7 +245,7 @@
 
         @keyframes pulseOpacity {
             0% { opacity: 1; }
-            50% { opacity: 0.55; }
+            50% { opacity: 0.45; }
             100% { opacity: 1; }
         }
 
@@ -295,9 +259,8 @@
 
         header h1 {
             color: var(--header-color);
-            font-size: 1.9rem;
+            font-size: 1.8rem;
             margin-bottom: 4px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
         header p {
@@ -311,54 +274,48 @@
             max-width: 900px;
             color: var(--title-color);
             font-size: 1.2rem;
-            margin: 18px 0 12px 0;
-            border-bottom: 1px solid var(--glass-border);
+            margin: 16px 0 10px 0;
+            border-bottom: 1px solid var(--border-color);
             padding-bottom: 6px;
         }
 
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 14px;
+            gap: 12px;
             width: 100%;
             max-width: 900px;
         }
 
-        /* Стиль жидкого матового стекла для карточек */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            box-shadow: var(--glass-glow);
-        }
-
         .card-team {
-            padding: 18px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
             text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
         }
 
         .card-team:hover, .card-team:active {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             border-color: var(--header-color);
-            background: var(--card-hover-bg);
+            background-color: var(--card-hover-bg);
         }
 
         .avatar {
-            width: 82px;
-            height: 82px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--header-color);
             margin-bottom: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            background-color: var(--border-color);
         }
 
         .card-team h3 {
@@ -370,7 +327,7 @@
         .card-team .role {
             color: var(--subtext-color);
             font-size: 0.85rem;
-            line-height: 1.35;
+            line-height: 1.3;
             margin-bottom: 12px;
         }
 
@@ -378,8 +335,8 @@
             background-color: transparent;
             color: var(--header-color);
             border: 1px solid var(--header-color);
-            border-radius: 8px;
-            padding: 6px 14px;
+            border-radius: 6px;
+            padding: 6px 12px;
             font-size: 0.8rem;
             font-weight: bold;
         }
@@ -394,13 +351,11 @@
         }
 
         .accordion-btn {
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+            background-color: var(--card-bg);
             color: var(--title-color);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 14px 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px 16px;
             font-size: 0.95rem;
             font-weight: bold;
             text-align: left;
@@ -408,16 +363,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: var(--glass-glow);
         }
 
         .accordion-content {
             display: none;
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--glass-blur));
-            -webkit-backdrop-filter: blur(var(--glass-blur));
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
             padding: 16px;
             color: var(--text-color);
             font-size: 0.9rem;
@@ -430,18 +382,22 @@
         }
 
         .card-project-horiz {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
             padding: 14px;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
             display: flex;
             align-items: center;
             gap: 14px;
-            transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
         }
 
         .card-project-horiz:hover, .card-project-horiz:active {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             border-color: var(--accent-green);
-            background: var(--card-hover-bg);
+            background-color: var(--card-hover-bg);
         }
 
         .robot-avatar-side {
@@ -451,7 +407,7 @@
             border-radius: 12px;
             object-fit: cover;
             border: 2px solid var(--accent-green);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            background-color: var(--border-color);
         }
 
         .robot-card-info {
@@ -480,18 +436,21 @@
             display: inline-block;
             background-color: var(--btn-green);
             color: white;
-            padding: 6px 14px;
-            border-radius: 8px;
+            padding: 5px 12px;
+            border-radius: 6px;
             font-weight: bold;
             font-size: 0.8rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
         .viewer-container {
             display: none;
             width: 100%;
             max-width: 900px;
-            padding: 14px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             position: relative;
         }
 
@@ -499,25 +458,34 @@
             display: block;
         }
 
+        /* Кнопки Назад / Отмена в стиле полуматового полупрозрачного жидкого стекла */
         .btn-back {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
+            background: var(--glass-btn-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
             color: var(--text-color);
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--glass-btn-border);
             border-radius: 10px;
             padding: 8px 16px;
             font-size: 0.85rem;
             font-weight: bold;
             cursor: pointer;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .btn-back:hover, .btn-back:active {
+            transform: translateY(-1px);
+            border-color: var(--header-color);
         }
 
         .model-wrapper {
             position: relative;
             width: 100%;
             height: 72vh;
-            min-height: 400px;
-            border-radius: 14px;
+            min-height: 380px;
+            border-radius: 12px;
             overflow: hidden;
             touch-action: none;
         }
@@ -526,11 +494,11 @@
             width: 100%;
             height: 100%;
             background-color: var(--viewer-bg);
-            border-radius: 14px;
+            border-radius: 12px;
             touch-action: none;
         }
 
-        /* Наглядный оверлей инструкции к 3D-режиму */
+        /* Инструкция к 3D-режиму */
         .gesture-tutorial {
             position: absolute;
             top: 0;
@@ -538,16 +506,15 @@
             width: 100%;
             height: 100%;
             background-color: var(--overlay-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: 14px;
+            border-radius: 12px;
             z-index: 50;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 16px;
+            padding: 18px 14px;
             text-align: center;
+            backdrop-filter: blur(10px);
             overflow-y: auto;
         }
 
@@ -557,7 +524,7 @@
 
         .tutorial-title {
             color: var(--header-color);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -566,84 +533,80 @@
 
         .tutorial-subtitle {
             color: var(--subtext-color);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
         }
 
         .gesture-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 8px;
             width: 100%;
-            max-width: 520px;
-            margin: 10px 0;
+            max-width: 480px;
+            margin: 8px 0;
         }
 
         .gesture-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 12px 8px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 6px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
 
         .gesture-icon-badge {
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             background: var(--ios-pill-bg);
             border: 1px solid var(--ios-glass-border);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: var(--header-color);
         }
 
         .gesture-card h4 {
             color: var(--title-color);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             margin: 0;
+            line-height: 1.1;
         }
 
         .gesture-card p {
             color: var(--subtext-color);
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             line-height: 1.2;
             margin: 0;
         }
 
-        /* УВЕЛИЧЕННАЯ КНОПКА под инструкцией 3D */
         .btn-start-3d {
             background-color: var(--btn-green);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 14px;
-            padding: 16px 42px;
-            font-size: 1.1rem;
-            font-weight: 800;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 32px;
+            font-size: 0.95rem;
+            font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(35, 134, 54, 0.45);
-            margin-top: 10px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+            margin-top: 6px;
             flex-shrink: 0;
-            width: 90%;
-            max-width: 380px;
-            letter-spacing: 0.3px;
-            transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.15s ease, background-color 0.2s ease;
         }
 
         .btn-start-3d:active {
-            transform: scale(0.96);
+            transform: scale(0.97);
         }
 
         .btn-start-3d:hover {
             background-color: var(--btn-green-hover);
-            box-shadow: 0 8px 24px rgba(46, 160, 67, 0.6);
         }
 
         .dev-container {
@@ -654,15 +617,15 @@
             height: 100%;
             background-color: var(--viewer-bg);
             border-radius: 12px;
-            border: 1px dashed var(--glass-border);
+            border: 1px dashed var(--border-color);
             padding: 24px;
             text-align: center;
         }
 
         .dev-badge {
             display: inline-block;
-            background-color: rgba(234, 179, 8, 0.18);
-            color: #f59e0b;
+            background-color: rgba(234, 179, 8, 0.15);
+            color: #b45309;
             border: 1px solid rgba(234, 179, 8, 0.4);
             padding: 6px 14px;
             border-radius: 20px;
@@ -694,13 +657,13 @@
         }
 
         .member-profile img {
-            width: 105px;
-            height: 105px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--header-color);
             margin-bottom: 12px;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+            background-color: var(--border-color);
         }
 
         .member-profile h2 {
@@ -710,18 +673,16 @@
         }
 
         .member-description {
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--glass-blur));
-            border: 1px solid var(--glass-border);
-            border-radius: 14px;
-            padding: 18px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
             color: var(--text-color);
             text-align: left;
             width: 100%;
             line-height: 1.7;
             font-size: 0.9rem;
             white-space: pre-line;
-            box-shadow: var(--glass-glow);
         }
 
         /* Полноэкранный режим 3D */
@@ -769,48 +730,38 @@
         }
 
         @media (max-width: 600px) {
-            body { padding-top: 84px; }
+            body { padding-top: 76px; }
             header h1 { font-size: 1.5rem; }
             .section-title { font-size: 1.1rem; }
-            .controls-bar { top: 8px; right: 8px; padding: 4px 8px; gap: 6px; }
-            .glass-slider-container span { display: none; }
-            .glass-range { width: 50px; }
-            .lang-option { padding: 4px 6px; font-size: 0.75rem; }
-            .theme-toggle-btn { width: 30px; height: 30px; font-size: 0.85rem; }
-            .settings-hint { top: 68px; right: 8px; font-size: 0.8rem; }
+            .controls-bar { top: 8px; right: 8px; padding: 4px 6px; }
+            .lang-option { padding: 5px 7px; font-size: 0.75rem; }
+            .theme-toggle-btn { width: 30px; height: 30px; font-size: 0.9rem; }
+            .settings-hint { top: 64px; right: 8px; font-size: 0.8rem; }
             .beta-badge { top: 12px; left: 10px; font-size: 0.7rem; }
             .gesture-grid { grid-template-columns: 1fr; max-width: 280px; gap: 6px; }
             .gesture-card { flex-direction: row; text-align: left; padding: 8px 10px; }
-            .gesture-icon-badge { width: 36px; height: 36px; min-width: 36px; font-size: 1.1rem; }
-            .btn-start-3d { padding: 14px 24px; font-size: 1rem; width: 95%; }
+            .gesture-icon-badge { width: 34px; height: 34px; min-width: 34px; font-size: 1rem; }
         }
     </style>
 </head>
 <body data-theme="light">
 
     <!-- Бейдж бета-версии -->
-    <div class="beta-badge">v3.8-beta</div>
+    <div class="beta-badge">v3.8-beta-1</div>
 
-    <!-- iOS-панель переключения языка, темы и ползунок «Жидкого стекла» -->
+    <!-- iOS-панель переключения языка и темы -->
     <div class="controls-bar" id="global-controls">
-        
-        <!-- Ползунок настройки прозрачности матового стекла -->
-        <div class="glass-slider-container" title="Настройка прозрачности матового стекла">
-            <span>💧 Стекло</span>
-            <input type="range" id="glass-opacity" class="glass-range" min="0.2" max="0.95" step="0.05" value="0.65" oninput="updateGlassOpacity(this.value)">
-        </div>
-
         <div class="lang-segmented-control">
             <button class="lang-option active" id="lang-ru" onclick="selectLanguage('ru')">
-                <svg class="flag-icon" viewBox="0 0 512 512"><path fill="#f0f0f0" d="M0 85.33h512v113.78H0z"/><path fill="#0052b4" d="M0 199.11h512v113.78H0z"/><path fill="#d80027" d="M0 312.89h512v113.78H0z"/></svg>
+                <svg class="flag-icon" viewBox="0 0 640 480"><path fill="#fff" d="0 0h640v160H0z"/><path fill="#0039a6" d="0 160h640v160H0z"/><path fill="#d52b1e" d="0 320h640v160H0z"/></svg>
                 <span>RU</span>
             </button>
             <button class="lang-option" id="lang-en" onclick="selectLanguage('en')">
-                <svg class="flag-icon" viewBox="0 0 512 512"><path fill="#0052b4" d="M0 0h512v512H0z"/><path fill="#f0f0f0" d="M68 0l188 141L444 0h68v51L324 256l188 141v51h-68L256 307 68 512H0v-51l188-141L0 51V0h68z"/><path fill="#d80027" d="m336 307 176 132v25h-34L302 331l34-24zM176 205 0 73V48h34l176 133-34 24zm0 102L0 439v25h34l176-132-34-25zm160-102L512 73V48h-34L302 181l34 24z"/><path fill="#f0f0f0" d="M192 0h128v512H192zM0 192h512v128H0z"/><path fill="#d80027" d="M213 0h86v512h-86zM0 213h512v86H0z"/></svg>
+                <svg class="flag-icon" viewBox="0 0 640 480"><path fill="#012169" d="0 0h640v480H0z"/><path fill="#FFF" d="m75 0 245 180L565 0h75v55L400 240l240 185v55h-75L320 300 75 480H0v-55l240-185L0 55V0h75z"/><path fill="#C8102E" d="m420 280 220 165v35h-50L350 310l70-30zM220 200 0 35V0h50l240 170-70 30zM220 280 0 445v35h50l240-170-70-30zm200-80L640 35V0h-50L350 170l70 30z"/><path fill="#FFF" d="M240 0h160v480H240zM0 160h640v160H0z"/><path fill="#C8102E" d="M267 0h106v480H267zM0 187h640v106H0z"/></svg>
                 <span>EN</span>
             </button>
             <button class="lang-option" id="lang-cn" onclick="selectLanguage('cn')">
-                <svg class="flag-icon" viewBox="0 0 512 512"><path fill="#d80027" d="M0 0h512v512H0z"/><path fill="#ffda44" d="m118 108 20 62 65-47-53 38 65 47h-80l-20 62-20-62H15l65-47-53-38 65 47zm116-43 9 29 29-21-24 18 9 29-24-18-24 18 9-29-24-18 29 21zm47 48 18 25 30-9-19 23 18 25-30-9-18 25-5-31-30-9 25-18zm0 63 25 18-5 31-18-25-30 9 18-25-19-23 30 9 18-25zm-47 49 24 18-9 29 24-18 24 18-9-29 29-21h-36l-9-29-9 29h-36z"/></svg>
+                <svg class="flag-icon" viewBox="0 0 640 480"><path fill="#ee1c25" d="0 0h640v480H0z"/><path fill="#ffde00" d="M120 96l25 76h80l-65 47 25 76-65-47-65 47 25-76-65-47h80zm120-48l12 37h39l-31 23 12 37-32-23-31 23 12-37-32-23h39zm48 48l22 32 37-12-23 31 23 32-38-11-22 32-6-39-38-11 32-23zm0 80l32 23-6 39-22-32-38 11 23-32-23-31 37 12zM240 224l31 23-12 37 32-23 31 23-12-37 31-23h-39l-12-37-12 37z"/></svg>
                 <span>CN</span>
             </button>
         </div>
@@ -819,7 +770,7 @@
 
     <!-- Всплывающая подсказка -->
     <div id="settings-hint" class="settings-hint">
-        <span>💡 <span id="hint-text-popup">Переключение языка, темы и прозрачность стекла здесь!</span></span>
+        <span>💡 <span id="hint-text-popup">Переключение языка и темы здесь!</span></span>
         <button class="hint-close-btn" onclick="closeSettingsHint()" aria-label="Закрыть">✕</button>
     </div>
 
@@ -833,25 +784,25 @@
         <!-- Секция команды -->
         <h2 class="section-title" id="sec-team">НАША КОМАНДА</h2>
         <div class="grid-container">
-            <div class="card-team glass-card" onclick="openMember('matvey')">
+            <div class="card-team" onclick="openMember('matvey')">
                 <div>
-                    <img src="matvey.jpg" alt="Марков Матвей" class="avatar" onerror="this.src='https://via.placeholder.com/82/161b22/58a6ff?text=ММ'">
+                    <img src="matvey.jpg" alt="Марков Матвей" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ММ'">
                     <h3 id="matvey-name">Марков Матвей</h3>
                     <p class="role" id="matvey-role">Капитан команды, главный конструктор и электрик проекта. Создатель Избушки на курьих ножках</p>
                 </div>
                 <span class="btn-more btn-more-text">Подробнее →</span>
             </div>
-            <div class="card-team glass-card" onclick="openMember('lida')">
+            <div class="card-team" onclick="openMember('lida')">
                 <div>
-                    <img src="lida.jpg" alt="Токарева Лидия" class="avatar" onerror="this.src='https://via.placeholder.com/82/161b22/58a6ff?text=ТЛ'">
+                    <img src="lida.jpg" alt="Токарева Лидия" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ТЛ'">
                     <h3 id="lida-name">Лида Токарева</h3>
                     <p class="role" id="lida-role">Главный программист проекта. Запрограммировала роботов Кошка и Собака</p>
                 </div>
                 <span class="btn-more btn-more-text">Подробнее →</span>
             </div>
-            <div class="card-team glass-card" onclick="openMember('alisa')">
+            <div class="card-team" onclick="openMember('alisa')">
                 <div>
-                    <img src="alisa.jpg" alt="Маркова Алиса" class="avatar" onerror="this.src='https://via.placeholder.com/82/161b22/58a6ff?text=МА'">
+                    <img src="alisa.jpg" alt="Маркова Алиса" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=МА'">
                     <h3 id="alisa-name">Алиса Маркова</h3>
                     <p class="role" id="alisa-role">Конструктор ног Избушки</p>
                 </div>
@@ -924,7 +875,7 @@
         <h2 class="section-title" id="sec-models">Модели и Конструкции</h2>
         <div class="grid-container" style="margin-bottom: 30px;">
             
-            <div class="card-project-horiz glass-card" id="card-izbushka" onclick="openModel('izbushka')">
+            <div class="card-project-horiz" id="card-izbushka" onclick="openModel('izbushka')">
                 <img src="izbushka_card.jpg" alt="Избушка" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Избушка'">
                 <div class="robot-card-info">
                     <h3 id="card-izb-title">Избушка</h3>
@@ -933,7 +884,7 @@
                 </div>
             </div>
 
-            <div class="card-project-horiz glass-card" id="card-legs" onclick="openModel('legs')">
+            <div class="card-project-horiz" id="card-legs" onclick="openModel('legs')">
                 <img src="legs_card.jpg" alt="Ноги избушки" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Ноги'">
                 <div class="robot-card-info">
                     <h3 id="card-legs-title">Ноги избушки</h3>
@@ -942,7 +893,7 @@
                 </div>
             </div>
 
-            <div class="card-project-horiz glass-card" id="card-birch" onclick="openModel('birch')">
+            <div class="card-project-horiz" id="card-birch" onclick="openModel('birch')">
                 <img src="birch_card.jpg" alt="Берёза" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Берёза'">
                 <div class="robot-card-info">
                     <h3 id="card-ber-title">Берёза</h3>
@@ -951,7 +902,7 @@
                 </div>
             </div>
 
-            <div class="card-project-horiz glass-card" id="card-cat" onclick="openModel('cat')">
+            <div class="card-project-horiz" id="card-cat" onclick="openModel('cat')">
                 <img src="cat_card.jpg" alt="Кошка" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Кошка'">
                 <div class="robot-card-info">
                     <h3 id="card-cat-title">Кошка</h3>
@@ -960,7 +911,7 @@
                 </div>
             </div>
 
-            <div class="card-project-horiz glass-card" id="card-dog" onclick="openModel('dog')">
+            <div class="card-project-horiz" id="card-dog" onclick="openModel('dog')">
                 <img src="dog_card.jpg" alt="Собака" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Собака'">
                 <div class="robot-card-info">
                     <h3 id="card-dog-title">Собака</h3>
@@ -996,7 +947,7 @@
         <h2 id="model-title" style="color: var(--header-color); margin-bottom: 10px;">Модель</h2>
         
         <div class="model-wrapper" id="model-wrapper-box">
-            <!-- Оверлей инструкции 3D-режима с УВЕЛИЧЕННОЙ кнопкой -->
+            <!-- Оверлей навигации 3D -->
             <div id="gesture-tutorial" class="gesture-tutorial">
                 <div class="tutorial-header">
                     <div class="tutorial-title" id="tut-title">Управление 3D-моделью</div>
@@ -1027,7 +978,6 @@
                     </div>
                 </div>
 
-                <!-- Увеличенная заметная кнопка -->
                 <button class="btn-start-3d" onclick="start3DView()" id="tut-btn">Перейти к просмотру</button>
             </div>
 
@@ -1060,14 +1010,7 @@
         let currentModelId = null;
         let isFullscreen3D = false;
 
-        /* Динамическая регуляция прозрачности жидкого стекла */
-        function updateGlassOpacity(val) {
-            document.documentElement.style.setProperty('--glass-alpha', val);
-            const blurVal = Math.round(val * 32) + 'px';
-            document.documentElement.style.setProperty('--glass-blur', blurVal);
-        }
-
-        /* Усиленный виброотклик для Android и iOS Safari */
+        /* Виброотклик (Haptic Feedback) */
         function triggerHaptic(intensity = 'medium') {
             if ("vibrate" in navigator) {
                 try {
@@ -1104,7 +1047,7 @@
 
         const translations = {
             ru: {
-                hintPopup: "Переключение языка, темы и прозрачность стекла здесь!",
+                hintPopup: "Переключение языка и темы здесь!",
                 titleTeam: "БАБА ЯГА",
                 titleSchool: "Президентский физико-математический лицей №239, г. Санкт-Петербург",
                 secTeam: "НАША КОМАНДА",
@@ -1122,7 +1065,7 @@
                 tutZoomDesc: "2 пальца или колесико",
                 tutPanTitle: "Сдвиг",
                 tutPanDesc: "2 пальца или ПКМ",
-                tutBtn: "ПЕРЕЙТИ К ПРОСМОТРУ",
+                tutBtn: "Перейти к просмотру",
 
                 devBadge: "В разработке",
                 devTitle: "Модель готовится к публикации",
@@ -1195,7 +1138,7 @@
                 dogTitle: "Собака"
             },
             en: {
-                hintPopup: "Adjust language, theme, and glass transparency here!",
+                hintPopup: "Switch language and theme here!",
                 titleTeam: "BABA YAGA",
                 titleSchool: "Presidential Physics and Mathematics Lyceum №239, Saint Petersburg",
                 secTeam: "OUR TEAM",
@@ -1213,7 +1156,7 @@
                 tutZoomDesc: "Pinch or Scroll",
                 tutPanTitle: "Pan",
                 tutPanDesc: "2 fingers or RMB",
-                tutBtn: "PROCEED TO VIEW",
+                tutBtn: "Proceed to view",
 
                 devBadge: "Under Development",
                 devTitle: "Model coming soon",
@@ -1285,7 +1228,7 @@
                 dogTitle: "Dog"
             },
             cn: {
-                hintPopup: "在此处调整语言、主题和玻璃透明度！",
+                hintPopup: "在此处切换语言和主题！",
                 titleTeam: "«Baba Yaga» 团队",
                 titleSchool: "圣彼得堡第239总统物理数学中学",
                 secTeam: "我们的团队",
@@ -1320,7 +1263,7 @@
 • 在 SolidWorks 中完成了小屋本体 3D 模型设计与电路供电系统搭建。`,
 
                 lidaName: "Lida Tokareva",
-                lidaRole: "首席软件工程师。编写了“猫”และ“狗”机器人的程序",
+                lidaRole: "首席软件工程师。编写了“猫”和“狗”机器人的程序",
                 lidaFullDesc: `• 项目首席软件工程师。
 • 在 LEGO Mindstorms EV3 上使用 RobotC 语言编写了“猫”和“狗”机器人的控制程序。
 • 与 Alisa Markova 共同制作了小屋的行走腿部。
