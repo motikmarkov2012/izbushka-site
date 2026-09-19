@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v4.7-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v4.8-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -35,9 +35,9 @@
             --ios-text-active: #0d1117;
             --ios-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 
-            --wine-bg: rgba(114, 47, 55, 0.85);
-            --wine-hover: rgba(139, 58, 68, 0.95);
-            --wine-border: rgba(163, 72, 83, 0.5);
+            /* Жидкое стекло для кнопки контактов */
+            --contact-glass-bg: rgba(114, 47, 55, 0.45);
+            --contact-glass-border: rgba(255, 255, 255, 0.25);
         }
 
         [data-theme="light"] {
@@ -66,9 +66,8 @@
             --ios-text-active: #ffffff;
             --ios-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 
-            --wine-bg: rgba(128, 0, 32, 0.85);
-            --wine-hover: rgba(153, 0, 38, 0.95);
-            --wine-border: rgba(179, 0, 45, 0.5);
+            --contact-glass-bg: rgba(128, 0, 32, 0.35);
+            --contact-glass-border: rgba(0, 0, 0, 0.18);
         }
 
         * {
@@ -97,6 +96,7 @@
             position: relative;
         }
 
+        /* Бейдж версии в правом нижнем углу */
         .beta-badge {
             position: fixed;
             bottom: 12px;
@@ -110,16 +110,16 @@
             z-index: 999;
         }
 
-        /* Кнопка контактов в левом верхнем углу на одном уровне с панелью языка (Liquid Glass) */
+        /* Кнопка контактов в стиле жидкого стекла в левом верхнем углу на уровне плашки языка */
         .btn-contact-wine {
             position: fixed;
             top: calc(12px + env(safe-area-inset-top, 0px));
             left: calc(12px + env(safe-area-inset-left, 0px));
-            background: var(--wine-bg);
+            background: var(--contact-glass-bg);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
             color: #ffffff;
-            border: 1px solid var(--wine-border);
+            border: 1px solid var(--contact-glass-border);
             padding: 0 14px;
             height: 46px;
             border-radius: 23px;
@@ -131,20 +131,20 @@
             align-items: center;
             gap: 6px;
             z-index: 100001;
-            opacity: 0.85;
-            animation: contactPulse 2s ease-in-out 3;
-            transition: opacity 0.2s, background-color 0.2s, transform 0.15s;
+            opacity: 0.75;
+            animation: pulseAttention 2.2s infinite ease-in-out;
+            transition: opacity 0.2s, transform 0.15s;
         }
 
-        @keyframes contactPulse {
-            0% { opacity: 0.4; transform: scale(0.96); }
-            50% { opacity: 1; transform: scale(1.03); }
-            100% { opacity: 0.85; transform: scale(1); }
+        @keyframes pulseAttention {
+            0% { opacity: 0.55; transform: scale(0.98); }
+            50% { opacity: 0.95; transform: scale(1.02); }
+            100% { opacity: 0.55; transform: scale(0.98); }
         }
 
         .btn-contact-wine:hover {
             opacity: 1;
-            background-color: var(--wine-hover);
+            animation: none;
         }
 
         .btn-contact-wine:active {
@@ -168,7 +168,7 @@
 
         .contact-modal-card {
             background: var(--card-bg);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--contact-glass-border);
             border-radius: 20px;
             padding: 24px;
             width: 90%;
@@ -219,7 +219,6 @@
             font-weight: bold;
             font-size: 0.85rem;
             cursor: pointer;
-            transition: background-color 0.2s;
         }
 
         .btn-copy-email:active {
@@ -237,7 +236,7 @@
             cursor: pointer;
         }
 
-        /* Верхняя панель переключения языка и темы справа */
+        /* Верхняя панель переключения языка и темы в правом углу */
         .controls-bar {
             position: fixed;
             top: calc(12px + env(safe-area-inset-top, 0px));
@@ -312,7 +311,7 @@
             flex-shrink: 0;
         }
 
-        /* Подсказка расположена аккуратно под плашкой языка, не задевая заголовок */
+        /* Всплывающая подсказка строго под плашкой языка, не задевает название Баба Яга */
         .settings-hint {
             position: fixed;
             top: 72px;
@@ -361,7 +360,7 @@
         header {
             text-align: center;
             margin-bottom: 16px;
-            margin-top: 10px;
+            margin-top: 16px;
             width: 100%;
             max-width: 900px;
         }
@@ -875,10 +874,10 @@
 <body data-theme="light">
 
     <!-- Бейдж версии в правом нижнем углу -->
-    <div class="beta-badge">v4.6-beta</div>
+    <div class="beta-badge">v4.8-beta</div>
 
-    <!-- Кнопка контактов в левом верхнем углу (на одном уровне с панелью языка) -->
-    <button class="btn-contact-wine" onclick="openContactModal()">✉ Контакты</button>
+    <!-- Фиксированная кнопка контактов в стиле жидкого стекла слева на уровне плашки языка -->
+    <button class="btn-contact-wine" onclick="openContactModal()">✉ <span id="contact-btn-lbl">Контакты</span></button>
 
     <!-- Модальное окно контактов -->
     <div id="contact-modal" class="contact-modal-overlay">
@@ -888,12 +887,12 @@
             <div class="email-display-box" id="email-text">moticmarkov@gmail.com</div>
             <div class="modal-action-btns">
                 <button class="btn-copy-email" onclick="copyContactEmail()" id="btn-copy-lbl">📋 Скопировать почту</button>
-                <button class="btn-close-modal" onclick="closeContactModal()">Закрыть</button>
+                <button class="btn-close-modal" onclick="closeContactModal()" id="btn-close-lbl">Закрыть</button>
             </div>
         </div>
     </div>
 
-    <!-- Панель переключения языка и темы справа -->
+    <!-- Верхняя панель переключения языка и темы справа -->
     <div class="controls-bar" id="global-controls">
         <div class="lang-segmented-control">
             <button class="lang-option active" id="lang-ru" onclick="selectLanguage('ru')">
@@ -912,7 +911,7 @@
         <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Смена темы">🌙</button>
     </div>
 
-    <!-- Всплывающая подсказка ниже плашки языка (не перекрывает название) -->
+    <!-- Всплывающая подсказка строго под плашкой языка -->
     <div id="settings-hint" class="settings-hint">
         <span>💡 <span id="hint-text-popup">Переключение языка и темы здесь!</span></span>
         <button class="hint-close-btn" onclick="closeSettingsHint()" aria-label="Закрыть">✕</button>
@@ -1187,6 +1186,7 @@
 
         const translations = {
             ru: {
+                contactBtn: "Контакты",
                 hintPopup: "Переключение языка и темы здесь!",
                 titleTeam: "БАБА ЯГА",
                 titleSchool: "Президентский физико-математический лицей №239, г. Санкт-Петербург",
@@ -1197,6 +1197,10 @@
                 btnView: "Открыть 3D",
                 btnMoreText: "Подробнее →",
                 cardSub: "Интерактивный просмотр",
+                modalContactTitle: "Обращения и связи",
+                modalContactDesc: "По всем вопросам о проекте вы можете написать нам на почту:",
+                btnCopyLbl: "📋 Скопировать почту",
+                btnCloseLbl: "Закрыть",
                 
                 tutorialSteps: [
                     {
@@ -1287,6 +1291,7 @@
                 dogTitle: "Собака"
             },
             en: {
+                contactBtn: "Contacts",
                 hintPopup: "Switch language and theme here!",
                 titleTeam: "BABA YAGA",
                 titleSchool: "Presidential Physics and Mathematics Lyceum №239, Saint Petersburg",
@@ -1297,6 +1302,10 @@
                 btnView: "Open 3D",
                 btnMoreText: "Details →",
                 cardSub: "Interactive View",
+                modalContactTitle: "Contacts & Inquiries",
+                modalContactDesc: "For any questions about the project, you can email us at:",
+                btnCopyLbl: "📋 Copy Email",
+                btnCloseLbl: "Close",
 
                 tutorialSteps: [
                     {
@@ -1386,6 +1395,7 @@
                 dogTitle: "Dog"
             },
             cn: {
+                contactBtn: "联系我们",
                 hintPopup: "在此处切换语言和主题！",
                 titleTeam: "«Baba Yaga» 团队",
                 titleSchool: "圣彼得堡第239总统物理数学中学",
@@ -1396,6 +1406,10 @@
                 btnView: "打开 3D",
                 btnMoreText: "详细信息 →",
                 cardSub: "交互式查看",
+                modalContactTitle: "联系与咨询",
+                modalContactDesc: "有关项目的所有问题，您可以给我们发送电子邮件：",
+                btnCopyLbl: "📋 复制邮箱",
+                btnCloseLbl: "关闭",
 
                 tutorialSteps: [
                     {
@@ -1439,7 +1453,7 @@
 
                 alisaName: "Alisa Markova",
                 alisaRole: "小屋腿部结构设计师",
-                alisaFullDesc: `• 小屋腿部结构设计师（与 Lidia Tokareva 共同制作）。
+                alisaFullDesc: `• 小屋腿部结构设计师（与 Lida Tokareva 共同制作）。
 • 设计了仿生鸟类腿部结构。
 • 创新开发了连接旋转主体与行走腿部的关键支撑机械节点。
 • 手工缝制了装配在机器人骨架上的羊毛“鸡脚”服装。
@@ -1703,6 +1717,12 @@
 
             const t = translations[currentLang];
             if (!t) return;
+
+            document.getElementById('contact-btn-lbl').innerText = t.contactBtn;
+            document.getElementById('modal-contact-title').innerText = t.modalContactTitle;
+            document.getElementById('modal-contact-desc').innerText = t.modalContactDesc;
+            document.getElementById('btn-copy-lbl').innerText = t.btnCopyLbl;
+            document.getElementById('btn-close-lbl').innerText = t.btnCloseLbl;
 
             const hintPopup = document.getElementById('hint-text-popup');
             if (hintPopup) hintPopup.innerText = t.hintPopup;
