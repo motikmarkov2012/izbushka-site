@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v4.0.1-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v4.1-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -23,11 +23,11 @@
             --hint-bg: #8957e5;
             --hint-text: #ffffff;
 
-            --glass-btn-bg: rgba(22, 27, 34, 0.75);
+            --glass-btn-bg: rgba(22, 27, 34, 0.85);
             --glass-btn-border: rgba(255, 255, 255, 0.18);
-            --glass-blur: blur(14px) saturate(160%);
+            --glass-blur: blur(16px) saturate(160%);
 
-            --ios-glass-bg: rgba(22, 27, 34, 0.8);
+            --ios-glass-bg: rgba(22, 27, 34, 0.85);
             --ios-glass-border: rgba(255, 255, 255, 0.15);
             --ios-pill-bg: rgba(255, 255, 255, 0.12);
             --ios-pill-active: #ffffff;
@@ -51,10 +51,10 @@
             --hint-bg: #8250df;
             --hint-text: #ffffff;
 
-            --glass-btn-bg: rgba(255, 255, 255, 0.75);
+            --glass-btn-bg: rgba(255, 255, 255, 0.85);
             --glass-btn-border: rgba(0, 0, 0, 0.12);
 
-            --ios-glass-bg: rgba(255, 255, 255, 0.8);
+            --ios-glass-bg: rgba(255, 255, 255, 0.85);
             --ios-glass-border: rgba(0, 0, 0, 0.08);
             --ios-pill-bg: rgba(0, 0, 0, 0.05);
             --ios-pill-active: #0969da;
@@ -67,14 +67,13 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
             -webkit-tap-highlight-color: transparent;
         }
 
         html, body {
             width: 100%;
-            height: 100%;
             overflow-x: hidden;
+            scroll-behavior: auto !important; /* Убираем резкие скачки скролла */
         }
 
         body {
@@ -102,14 +101,13 @@
             user-select: none;
         }
 
-        /* Полностью зафиксированная верхняя панель (без сдвигов и дерганий) */
+        /* Зафиксированная верхняя панель (строгие размеры, 0 сдвигов) */
         .controls-bar {
             position: fixed;
             top: 12px;
             right: 12px;
             display: flex;
             align-items: center;
-            gap: 8px;
             z-index: 1000;
             background: var(--ios-glass-bg);
             backdrop-filter: var(--glass-blur);
@@ -193,6 +191,8 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            width: 260px;
+            height: 42px;
         }
 
         .settings-hint::before {
@@ -227,19 +227,21 @@
             margin-top: 6px;
             width: 100%;
             max-width: 900px;
-            min-height: 70px;
+            height: 70px;
         }
 
         header h1 {
             color: var(--header-color);
             font-size: 1.8rem;
             margin-bottom: 4px;
+            height: 32px;
         }
 
         header p {
             color: var(--subtext-color);
             font-size: 0.9rem;
             line-height: 1.4;
+            height: 28px;
         }
 
         .section-title {
@@ -250,6 +252,7 @@
             margin: 16px 0 10px 0;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 6px;
+            height: 34px;
         }
 
         .grid-container {
@@ -272,7 +275,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            min-height: 230px;
+            height: 250px;
         }
 
         .card-team:hover, .card-team:active {
@@ -294,6 +297,7 @@
             color: var(--header-color);
             font-size: 1.1rem;
             margin-bottom: 4px;
+            height: 24px;
         }
 
         .card-team .role {
@@ -301,7 +305,8 @@
             font-size: 0.85rem;
             line-height: 1.3;
             margin-bottom: 12px;
-            min-height: 48px;
+            height: 52px;
+            overflow: hidden;
         }
 
         .btn-more {
@@ -336,6 +341,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 48px;
         }
 
         .accordion-content {
@@ -364,7 +370,7 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            min-height: 105px;
+            height: 110px;
         }
 
         .card-project-horiz:hover, .card-project-horiz:active {
@@ -395,6 +401,7 @@
             font-size: 1.05rem;
             margin-bottom: 4px;
             text-align: left;
+            height: 22px;
         }
 
         .robot-card-info p {
@@ -402,7 +409,8 @@
             font-size: 0.8rem;
             margin-bottom: 8px;
             text-align: left;
-            min-height: 32px;
+            height: 34px;
+            overflow: hidden;
         }
 
         .btn-view {
@@ -464,95 +472,94 @@
             touch-action: none;
         }
 
-        /* Минималистичное всплывающее уведомление 3D-гида прямо поверх модели */
+        /* Центрированное всплывающее уведомление ровно по центру экрана */
         .toast-3d-hint {
             position: absolute;
-            bottom: 20px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -50%);
             background: var(--ios-glass-bg);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--ios-glass-border);
             border-radius: 20px;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-            z-index: 100;
-            width: 90%;
-            max-width: 420px;
-            animation: slideUp 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
-        }
-
-        @keyframes slideUp {
-            from { transform: translate(-50%, 30px); opacity: 0; }
-            to { transform: translate(-50%, 0); opacity: 1; }
-        }
-
-        .toast-cursors {
-            display: flex;
-            align-items: center;
-            font-size: 1.4rem;
-            width: 42px;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .cursor-anim-1 {
-            animation: pulseLeftRight 1.6s infinite ease-in-out;
-        }
-
-        .cursor-anim-2 {
-            animation: pulseDiag 1.6s infinite ease-in-out;
-            margin-left: -6px;
-        }
-
-        @keyframes pulseLeftRight {
-            0% { transform: translateX(-6px); }
-            50% { transform: translateX(6px); }
-            100% { transform: translateX(-6px); }
-        }
-
-        @keyframes pulseDiag {
-            0% { transform: scale(0.85); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(0.85); }
-        }
-
-        .toast-text-box {
+            padding: 18px;
             display: flex;
             flex-direction: column;
-            text-align: left;
-            flex-grow: 1;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+            z-index: 100;
+            width: 88%;
+            max-width: 320px;
+            text-align: center;
+        }
+
+        /* Настоящие векторные SVG-курсоры */
+        .real-cursors-stage {
+            position: relative;
+            width: 120px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .svg-cursor {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            fill: var(--header-color);
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+        }
+
+        .cursor-left {
+            animation: moveCursorLeft 1.8s infinite ease-in-out;
+        }
+
+        .cursor-right {
+            animation: moveCursorRight 1.8s infinite ease-in-out;
+        }
+
+        @keyframes moveCursorLeft {
+            0% { transform: translateX(-24px); }
+            50% { transform: translateX(4px); }
+            100% { transform: translateX(-24px); }
+        }
+
+        @keyframes moveCursorRight {
+            0% { transform: translateX(24px); }
+            50% { transform: translateX(-4px); }
+            100% { transform: translateX(24px); }
         }
 
         .toast-title {
             color: var(--title-color);
-            font-size: 0.82rem;
+            font-size: 0.9rem;
             font-weight: 700;
         }
 
         .toast-sub {
             color: var(--subtext-color);
-            font-size: 0.72rem;
+            font-size: 0.78rem;
+            line-height: 1.3;
         }
 
         .btn-confirm-3d {
             background: var(--btn-green);
             color: #ffffff;
             border: none;
-            border-radius: 12px;
-            padding: 6px 14px;
-            font-size: 0.78rem;
+            border-radius: 10px;
+            padding: 10px 24px;
+            font-size: 0.85rem;
             font-weight: bold;
             cursor: pointer;
-            flex-shrink: 0;
+            width: 100%;
         }
 
         .btn-confirm-3d:active {
-            transform: scale(0.95);
+            transform: scale(0.97);
         }
 
         .dev-container {
@@ -631,7 +638,6 @@
             white-space: pre-line;
         }
 
-        /* Полноэкранная верстка 3D */
         body.fullscreen-3d-active {
             padding: 0 !important;
             overflow: hidden !important;
@@ -683,7 +689,7 @@
             .lang-segmented-control { width: 165px; height: 32px; }
             .lang-option { width: 52px; height: 26px; font-size: 0.75rem; }
             .theme-toggle-btn { width: 30px; height: 30px; font-size: 0.85rem; }
-            .settings-hint { top: 60px; right: 8px; font-size: 0.8rem; }
+            .settings-hint { top: 60px; right: 8px; width: 230px; }
             .beta-badge { top: 10px; left: 10px; font-size: 0.7rem; }
         }
     </style>
@@ -691,9 +697,9 @@
 <body data-theme="light">
 
     <!-- Бейдж версии -->
-    <div class="beta-badge">v4.0.1-beta</div>
+    <div class="beta-badge">v4.1-beta</div>
 
-    <!-- Зафиксированная верхняя iOS-панель переключения языка и темы -->
+    <!-- Зафиксированная верхняя панель переключения языка и темы -->
     <div class="controls-bar" id="global-controls">
         <div class="lang-segmented-control">
             <button class="lang-option active" id="lang-ru" onclick="selectLanguage('ru')">
@@ -880,7 +886,7 @@
         </div>
     </div>
 
-    <!-- Чистый просмотрщик 3D моделей -->
+    <!-- Просмотрщик 3D моделей -->
     <div id="viewer-container" class="viewer-container">
         
         <div class="fullscreen-top-bar" id="fs-top-bar">
@@ -891,16 +897,14 @@
         
         <div class="model-wrapper" id="model-wrapper-box">
             
-            <!-- Лёгкое аккуратное всплывающее уведомление-гид -->
+            <!-- Центрированное подсказка-уведомление строго посередине экрана -->
             <div id="toast-3d-hint" class="toast-3d-hint">
-                <div class="toast-cursors">
-                    <span class="cursor-anim-1">👉</span>
-                    <span class="cursor-anim-2">👆</span>
+                <div class="real-cursors-stage">
+                    <svg class="svg-cursor cursor-left" viewBox="0 0 24 24"><path d="M13.64 21.97C13.14 22 12.54 21.81 12.12 21.41L7.7 17.2L5.89 19.01C5.5 19.4 4.83 19.4 4.44 19.01L3.03 17.6C2.64 17.21 2.64 16.54 3.03 16.15L7.95 11.23L1 8.28L21 1L13.72 21L13.64 21.97Z"/></svg>
+                    <svg class="svg-cursor cursor-right" viewBox="0 0 24 24"><path d="M13.64 21.97C13.14 22 12.54 21.81 12.12 21.41L7.7 17.2L5.89 19.01C5.5 19.4 4.83 19.4 4.44 19.01L3.03 17.6C2.64 17.21 2.64 16.54 3.03 16.15L7.95 11.23L1 8.28L21 1L13.72 21L13.64 21.97Z"/></svg>
                 </div>
-                <div class="toast-text-box">
-                    <span class="toast-title" id="toast-title-text">Вращайте и приближайте 3D-модель</span>
-                    <span class="toast-sub" id="toast-sub-text">1 палец — крутить, 2 пальца — масштаб</span>
-                </div>
+                <div class="toast-title" id="toast-title-text">Вращайте и приближайте 3D-модель</div>
+                <div class="toast-sub" id="toast-sub-text">1 курсор — вращение под любым углом<br>2 курсора — масштаб и сдвиг</div>
                 <button class="btn-confirm-3d" onclick="dismiss3DHint()" id="toast-btn-text">Понятно</button>
             </div>
 
@@ -933,6 +937,7 @@
         let currentMemberId = null;
         let currentModelId = null;
         let isFullscreen3D = false;
+        let savedScrollPosition = 0;
 
         function triggerHaptic(intensity = 'medium') {
             if ("vibrate" in navigator) {
@@ -946,18 +951,6 @@
                     }
                 } catch (e) {}
             }
-
-            try {
-                const dummyInput = document.createElement('input');
-                dummyInput.setAttribute('type', 'text');
-                dummyInput.style.position = 'absolute';
-                dummyInput.style.opacity = '0';
-                dummyInput.style.height = '0';
-                document.body.appendChild(dummyInput);
-                dummyInput.focus();
-                dummyInput.setSelectionRange(0, 0);
-                document.body.removeChild(dummyInput);
-            } catch (e) {}
         }
 
         const modelAssets = {
@@ -982,7 +975,7 @@
                 cardSub: "Интерактивный просмотр",
                 
                 toastTitle: "Вращайте и приближайте 3D-модель",
-                toastSub: "1 палец — крутить, 2 пальца — масштаб",
+                toastSub: "1 курсор — вращение под любым углом\n2 курсора — масштаб и сдвиг",
                 toastBtn: "Понятно",
 
                 devBadge: "В разработке",
@@ -1068,7 +1061,7 @@
                 cardSub: "Interactive View",
 
                 toastTitle: "Rotate & Zoom 3D Model",
-                toastSub: "1 finger to rotate, 2 fingers to zoom",
+                toastSub: "1 cursor to rotate freely\n2 cursors to zoom and pan",
                 toastBtn: "Got it",
 
                 devBadge: "Under Development",
@@ -1153,7 +1146,7 @@
                 cardSub: "交互式查看",
 
                 toastTitle: "旋转与缩放 3D 模型",
-                toastSub: "单指滑动旋转，双指捏合缩放",
+                toastSub: "1 个光标自由旋转\n2 个光标缩放和平移",
                 toastBtn: "知道了",
 
                 devBadge: "开发中",
@@ -1237,8 +1230,7 @@
             triggerHaptic('light');
             const hint = document.getElementById('settings-hint');
             if (hint) {
-                hint.style.opacity = '0';
-                setTimeout(() => hint.remove(), 200);
+                hint.style.display = 'none';
             }
         }
 
@@ -1270,6 +1262,7 @@
 
         function pushStateIfNeeded(viewName) {
             if (currentView === 'main') {
+                savedScrollPosition = window.scrollY;
                 history.pushState({ view: viewName }, '');
             }
             currentView = viewName;
@@ -1282,6 +1275,7 @@
             }
         }
 
+        /* Возвращает в меню на ту же позицию без скачков и движений экрана */
         function showMainViewUI() {
             exit3DFullscreen();
 
@@ -1297,6 +1291,8 @@
             if (viewer) {
                 viewer.removeAttribute('src');
             }
+
+            window.scrollTo(0, savedScrollPosition);
         }
 
         function openMember(id) {
@@ -1325,9 +1321,9 @@
 
             document.getElementById('main-view').style.display = 'none';
             document.getElementById('member-container').classList.add('active');
+            window.scrollTo(0, 0);
         }
 
-        /* Мгновенный переход к 3D модели без задержек */
         function openModel(id) {
             triggerHaptic('medium');
             pushStateIfNeeded('model');
@@ -1368,7 +1364,6 @@
             document.getElementById('main-view').style.display = 'none';
             container.classList.add('active');
 
-            // Активация 3D режима сразу
             isFullscreen3D = true;
             document.body.classList.add('fullscreen-3d-active');
             const globalControls = document.getElementById('global-controls');
@@ -1376,6 +1371,7 @@
             if (globalControls && fsBar) {
                 fsBar.appendChild(globalControls);
             }
+            window.scrollTo(0, 0);
         }
 
         function toggleAccordion(id) {
@@ -1445,7 +1441,7 @@
             document.getElementById('card-dog-title').innerText = t.dogTitle;
 
             document.getElementById('toast-title-text').innerText = t.toastTitle;
-            document.getElementById('toast-sub-text').innerText = t.toastSub;
+            document.getElementById('toast-sub-text').innerHTML = t.toastSub.replace('\n', '<br>');
             document.getElementById('toast-btn-text').innerText = t.toastBtn;
 
             document.getElementById('dev-badge').innerText = t.devBadge;
