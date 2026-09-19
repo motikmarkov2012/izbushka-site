@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v4.4-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v4.5-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -98,41 +98,41 @@
             position: relative;
         }
 
-        /* Верхняя левая зона с версией и кнопкой контактов */
-        .top-left-bar {
-            position: fixed;
-            top: calc(12px + env(safe-area-inset-top, 0px));
-            left: calc(12px + env(safe-area-inset-left, 0px));
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 100001;
-        }
-
+        /* Бейдж версии в правом нижнем углу экрана */
         .beta-badge {
+            position: fixed;
+            bottom: 12px;
+            right: 14px;
             font-size: 0.75rem;
             color: var(--subtext-color);
-            opacity: 0.5;
+            opacity: 0.4;
             font-family: monospace;
             pointer-events: none;
             user-select: none;
+            z-index: 999;
         }
 
-        /* Винная кнопка контактов */
+        /* Винная полупрозрачная кнопка контактов чётко в левом верхнем углу */
         .btn-contact-wine {
+            position: absolute;
+            top: 14px;
+            left: 14px;
             background-color: var(--wine-bg);
             color: #ffffff;
             border: 1px solid var(--wine-border);
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(114, 47, 55, 0.35);
-            transition: background-color 0.2s, transform 0.15s;
+            box-shadow: 0 4px 12px rgba(114, 47, 55, 0.3);
+            opacity: 0.82;
+            transition: opacity 0.2s, background-color 0.2s, transform 0.15s;
+            z-index: 10;
         }
 
         .btn-contact-wine:hover {
+            opacity: 1;
             background-color: var(--wine-hover);
         }
 
@@ -140,7 +140,7 @@
             transform: scale(0.95);
         }
 
-        /* Всплывающее модальное окно контактов */
+        /* Модальное окно контактов */
         .contact-modal-overlay {
             display: none;
             position: fixed;
@@ -148,8 +148,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(10px);
             z-index: 100005;
             align-items: center;
             justify-content: center;
@@ -163,20 +163,21 @@
             width: 90%;
             max-width: 340px;
             text-align: center;
-            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
             position: relative;
         }
 
         .contact-modal-card h3 {
             color: var(--header-color);
             margin-bottom: 8px;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
         }
 
         .contact-modal-card p {
             color: var(--subtext-color);
             font-size: 0.85rem;
             margin-bottom: 16px;
+            line-height: 1.4;
         }
 
         .email-display-box {
@@ -187,16 +188,38 @@
             font-family: monospace;
             font-size: 0.9rem;
             color: var(--accent-green);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             word-break: break-all;
             user-select: all;
         }
 
-        .btn-close-modal {
-            background: var(--wine-bg);
+        .modal-action-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn-copy-email {
+            background: var(--header-color);
             color: #ffffff;
             border: none;
-            padding: 8px 18px;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-copy-email:active {
+            transform: scale(0.97);
+        }
+
+        .btn-close-modal {
+            background: transparent;
+            color: var(--subtext-color);
+            border: 1px solid var(--border-color);
+            padding: 8px;
             border-radius: 10px;
             font-weight: bold;
             font-size: 0.85rem;
@@ -278,7 +301,7 @@
             flex-shrink: 0;
         }
 
-        /* Подсказка сдвинута вниз, чтобы не перекрывать название Баба Яга */
+        /* Подсказка сдвинута ниже */
         .settings-hint {
             position: fixed;
             top: 115px;
@@ -330,7 +353,7 @@
             margin-top: 16px;
             width: 100%;
             max-width: 900px;
-            height: auto;
+            position: relative;
         }
 
         header h1 {
@@ -339,7 +362,6 @@
             margin-bottom: 6px;
         }
 
-        /* Более жирный шрифт для лицея */
         header p {
             color: var(--subtext-color);
             font-size: 0.95rem;
@@ -829,7 +851,8 @@
             .lang-option { width: 52px; height: 26px; font-size: 0.75rem; }
             .theme-toggle-btn { width: 30px; height: 30px; font-size: 0.85rem; }
             .settings-hint { top: 100px; right: 8px; width: 230px; }
-            .top-left-bar { top: 10px; left: 10px; }
+            .btn-contact-wine { top: 10px; left: 10px; padding: 5px 10px; font-size: 0.75rem; }
+            .beta-badge { bottom: 8px; right: 10px; font-size: 0.68rem; }
             
             body.fullscreen-3d-active .fullscreen-top-bar {
                 top: calc(54px + env(safe-area-inset-top, 0px));
@@ -840,19 +863,19 @@
 </head>
 <body data-theme="light">
 
-    <!-- Верхний левый угол с бейджем и кнопкой контактов -->
-    <div class="top-left-bar">
-        <div class="beta-badge">v4.4-beta</div>
-        <button class="btn-contact-wine" onclick="openContactModal()">✉ Контакты</button>
-    </div>
+    <!-- Бейдж версии в правом нижнем углу -->
+    <div class="beta-badge">v4.5-beta</div>
 
     <!-- Модальное окно контактов -->
     <div id="contact-modal" class="contact-modal-overlay">
         <div class="contact-modal-card">
             <h3 id="modal-contact-title">Обращения и связи</h3>
             <p id="modal-contact-desc">По всем вопросам о проекте вы можете написать нам на почту:</p>
-            <div class="email-display-box">moticmarkov@gmail.com</div>
-            <button class="btn-close-modal" onclick="closeContactModal()">Закрыть</button>
+            <div class="email-display-box" id="email-text">moticmarkov@gmail.com</div>
+            <div class="modal-action-btns">
+                <button class="btn-copy-email" onclick="copyContactEmail()" id="btn-copy-lbl">📋 Скопировать почту</button>
+                <button class="btn-close-modal" onclick="closeContactModal()">Закрыть</button>
+            </div>
         </div>
     </div>
 
@@ -882,6 +905,8 @@
     </div>
 
     <header>
+        <!-- Кнопка контактов только на главной странице в левом верхнем углу -->
+        <button class="btn-contact-wine" onclick="openContactModal()">✉ Контакты</button>
         <h1 id="title-team">БАБА ЯГА</h1>
         <p id="title-school">Президентский физико-математический лицей №239, г. Санкт-Петербург</p>
     </header>
@@ -1123,6 +1148,21 @@
         function closeContactModal() {
             triggerHaptic('light');
             document.getElementById('contact-modal').style.display = 'none';
+        }
+
+        function copyContactEmail() {
+            triggerHaptic('heavy');
+            const emailText = document.getElementById('email-text').innerText;
+            navigator.clipboard.writeText(emailText).then(() => {
+                const btn = document.getElementById('btn-copy-lbl');
+                const prev = btn.innerText;
+                btn.innerText = '✓ Скопировано!';
+                btn.style.backgroundColor = 'var(--btn-green)';
+                setTimeout(() => {
+                    btn.innerText = prev;
+                    btn.style.backgroundColor = 'var(--header-color)';
+                }, 2000);
+            });
         }
 
         const modelAssets = {
