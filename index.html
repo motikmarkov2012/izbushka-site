@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v4.9-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v4.9.1-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -21,18 +21,17 @@
             --accent-green: #7ee787;
             --viewer-bg: #010409;
             
-            /* Новые стили для подсказки */
-            --hint-bg: rgba(88, 166, 255, 0.18);
-            --hint-border: rgba(88, 166, 255, 0.4);
-            --hint-text: #f0f6fc;
+            /* Обновленный цвет подсказки без лампочки */
+            --hint-bg: #1f6feb;
+            --hint-text: #ffffff;
 
             /* Эффект Liquid Glass */
             --glass-btn-bg: rgba(22, 27, 34, 0.75);
             --glass-btn-border: rgba(255, 255, 255, 0.22);
             --glass-blur: blur(22px) saturate(190%);
 
-            --ios-glass-bg: rgba(22, 27, 34, 0.85);
-            --ios-glass-border: rgba(255, 255, 255, 0.2);
+            --ios-glass-bg: rgba(22, 27, 34, 0.78);
+            --ios-glass-border: rgba(255, 255, 255, 0.22);
             --ios-pill-bg: rgba(255, 255, 255, 0.16);
             --ios-pill-active: #ffffff;
             --ios-text-active: #0d1117;
@@ -53,15 +52,14 @@
             --accent-green: #1a7f37;
             --viewer-bg: #eaf0f6;
             
-            --hint-bg: rgba(9, 105, 218, 0.12);
-            --hint-border: rgba(9, 105, 218, 0.3);
-            --hint-text: #1f2328;
+            --hint-bg: #0969da;
+            --hint-text: #ffffff;
 
             --glass-btn-bg: rgba(255, 255, 255, 0.78);
             --glass-btn-border: rgba(0, 0, 0, 0.16);
 
-            --ios-glass-bg: rgba(255, 255, 255, 0.85);
-            --ios-glass-border: rgba(0, 0, 0, 0.15);
+            --ios-glass-bg: rgba(255, 255, 255, 0.78);
+            --ios-glass-border: rgba(0, 0, 0, 0.12);
             --ios-pill-bg: rgba(0, 0, 0, 0.08);
             --ios-pill-active: #0969da;
             --ios-text-active: #ffffff;
@@ -108,39 +106,39 @@
             z-index: 999;
         }
 
-        /* Белая кнопка контактов в самом верхнем левом углу с мигающим контуром */
+        /* Белая кнопка контактов в самом верхнем левом углу с мигающим контуром первые 10 секунд */
         .btn-contact-white {
-            position: fixed;
-            top: 12px;
-            left: 12px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
             background-color: #ffffff;
             color: #0d1117;
-            border: 2px solid rgba(88, 166, 255, 0.9);
+            border: 2px solid transparent;
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-            z-index: 100002;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 10;
             transition: transform 0.15s;
         }
 
-        .btn-contact-white.glowing {
-            animation: borderGlow 1.2s infinite ease-in-out;
+        .btn-contact-white.glowing-border {
+            animation: borderPulse 1.5s infinite ease-in-out;
         }
 
-        @keyframes borderGlow {
-            0% { border-color: rgba(88, 166, 255, 0.2); box-shadow: 0 0 4px rgba(88,166,255,0.2); }
-            50% { border-color: rgba(88, 166, 255, 1); box-shadow: 0 0 14px rgba(88,166,255,0.7); }
-            100% { border-color: rgba(88, 166, 255, 0.2); box-shadow: 0 0 4px rgba(88,166,255,0.2); }
+        @keyframes borderPulse {
+            0% { border-color: rgba(88, 166, 255, 0.2); box-shadow: 0 0 0 0 rgba(88, 166, 255, 0.4); }
+            50% { border-color: rgba(88, 166, 255, 1); box-shadow: 0 0 12px 3px rgba(88, 166, 255, 0.6); }
+            100% { border-color: rgba(88, 166, 255, 0.2); box-shadow: 0 0 0 0 rgba(88, 166, 255, 0.4); }
         }
 
         .btn-contact-white:active {
             transform: scale(0.95);
         }
 
-        /* Модальное окно контактов из жидкого стекла */
+        /* Модальное окно контактов из жидкого стекла с поддержкой жестов */
         .contact-modal-overlay {
             display: none;
             position: fixed;
@@ -149,11 +147,11 @@
             width: 100vw;
             height: 100vh;
             background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(8px);
             z-index: 100005;
             align-items: center;
             justify-content: center;
+            touch-action: pan-y;
         }
 
         .contact-modal-card {
@@ -166,11 +164,11 @@
             width: 90%;
             max-width: 330px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
         }
 
         .contact-modal-card h3 {
-            color: var(--header-color);
+            color: var(--title-color);
             margin-bottom: 8px;
             font-size: 1.15rem;
         }
@@ -190,7 +188,7 @@
             font-family: monospace;
             font-size: 0.9rem;
             color: var(--accent-green);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             word-break: break-all;
             user-select: all;
         }
@@ -202,7 +200,7 @@
         }
 
         .btn-copy-email {
-            background: var(--header-color);
+            background: var(--btn-green);
             color: #ffffff;
             border: none;
             padding: 10px;
@@ -214,7 +212,7 @@
 
         .btn-close-modal {
             background: transparent;
-            color: var(--subtext-color);
+            color: var(--text-color);
             border: 1px solid var(--border-color);
             padding: 8px;
             border-radius: 12px;
@@ -298,35 +296,44 @@
             flex-shrink: 0;
         }
 
-        /* Обновленная подсказка (без лампочки, безопасное расположение ниже заголовка) */
+        /* Подсказка вплотную к панели языков/тем со стрелочкой вверх */
         .settings-hint {
             position: fixed;
-            top: 135px;
-            right: 12px;
+            top: 66px;
+            right: 14px;
             background-color: var(--hint-bg);
-            border: 1px solid var(--hint-border);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             color: var(--hint-text);
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-size: 0.85rem;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 0.82rem;
             font-weight: 600;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
             z-index: 1001;
             display: flex;
             align-items: center;
-            gap: 12px;
-            max-width: 280px;
+            gap: 10px;
+            max-width: 260px;
+        }
+
+        .settings-hint::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 36px;
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 6px solid var(--hint-bg);
         }
 
         .hint-close-btn {
-            background: rgba(128,128,128,0.2);
+            background: rgba(255,255,255,0.25);
             border: none;
-            color: var(--hint-text);
+            color: #ffffff;
             border-radius: 50%;
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -338,9 +345,10 @@
         header {
             text-align: center;
             margin-bottom: 16px;
-            margin-top: 12px;
+            margin-top: 16px;
             width: 100%;
             max-width: 900px;
+            position: relative;
         }
 
         header h1 {
@@ -792,8 +800,7 @@
         body.fullscreen-3d-active #main-view,
         body.fullscreen-3d-active #member-container,
         body.fullscreen-3d-active #settings-hint,
-        body.fullscreen-3d-active #model-title,
-        body.fullscreen-3d-active #top-contact-btn {
+        body.fullscreen-3d-active #model-title {
             display: none !important;
         }
 
@@ -838,8 +845,8 @@
             .lang-segmented-control { width: 165px; height: 32px; }
             .lang-option { width: 52px; height: 26px; font-size: 0.75rem; }
             .theme-toggle-btn { width: 30px; height: 30px; font-size: 0.85rem; }
-            .settings-hint { top: 125px; right: 8px; width: 220px; }
-            .btn-contact-white { top: 8px; left: 8px; padding: 5px 10px; font-size: 0.75rem; }
+            .settings-hint { top: 58px; right: 8px; width: 220px; }
+            .btn-contact-white { top: 6px; left: 6px; padding: 5px 10px; font-size: 0.75rem; }
             .beta-badge { bottom: 8px; right: 10px; font-size: 0.68rem; }
             
             body.fullscreen-3d-active .fullscreen-top-bar {
@@ -854,12 +861,9 @@
     <!-- Бейдж версии в правом нижнем углу -->
     <div class="beta-badge">v4.9-beta</div>
 
-    <!-- Белая кнопка контактов в самом верхнем левом углу с мигающим контуром -->
-    <button id="top-contact-btn" class="btn-contact-white glowing" onclick="openContactModal()">✉ Контакты</button>
-
-    <!-- Модальное окно контактов -->
-    <div id="contact-modal" class="contact-modal-overlay">
-        <div class="contact-modal-card">
+    <!-- Модальное окно контактов с поддержкой закрытия жестами -->
+    <div id="contact-modal" class="contact-modal-overlay" onclick="handleModalBackdropClick(event)">
+        <div class="contact-modal-card" id="contact-card">
             <h3 id="modal-contact-title">Обращения и связи</h3>
             <p id="modal-contact-desc">По всем вопросам о проекте вы можете написать нам на почту:</p>
             <div class="email-display-box" id="email-text">moticmarkov@gmail.com</div>
@@ -889,13 +893,15 @@
         <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Смена темы">🌙</button>
     </div>
 
-    <!-- Всплывающая подсказка (безопасное расположение ниже заголовка) -->
+    <!-- Всплывающая подсказка вплотную к языкам и темам -->
     <div id="settings-hint" class="settings-hint">
         <span id="hint-text-popup">Переключение языка и темы здесь!</span>
         <button class="hint-close-btn" onclick="closeSettingsHint()" aria-label="Закрыть">✕</button>
     </div>
 
     <header>
+        <!-- Белая кнопка контактов в самом верхнем левом углу с мигающим контуром 10 секунд -->
+        <button class="btn-contact-white glowing-border" id="contact-btn" onclick="openContactModal()">Контакты</button>
         <h1 id="title-team">БАБА ЯГА</h1>
         <p id="title-school">Президентский физико-математический лицей №239, г. Санкт-Петербург</p>
     </header>
@@ -1114,7 +1120,7 @@
         let isFullscreen3D = false;
         let savedScrollPosition = 0;
         let tutorialStep = 0;
-        let isContactModalOpen = false;
+        let touchStartX = 0;
 
         function triggerHaptic(intensity = 'medium') {
             if ("vibrate" in navigator) {
@@ -1132,20 +1138,32 @@
 
         function openContactModal() {
             triggerHaptic('light');
-            isContactModalOpen = true;
-            history.pushState({ modal: 'contact' }, '');
             document.getElementById('contact-modal').style.display = 'flex';
         }
 
         function closeContactModal() {
             triggerHaptic('light');
-            if (isContactModalOpen) {
-                isContactModalOpen = false;
-                history.back();
-            } else {
-                document.getElementById('contact-modal').style.display = 'none';
+            document.getElementById('contact-modal').style.display = 'none';
+        }
+
+        function handleModalBackdropClick(e) {
+            if (e.target.id === 'contact-modal') {
+                closeContactModal();
             }
         }
+
+        // Поддержка жестов свайпа для закрытия модального окна контактов
+        const contactCard = document.getElementById('contact-card');
+        contactCard.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        contactCard.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX - touchStartX > 70) {
+                closeContactModal();
+            }
+        }, {passive: true});
 
         function copyContactEmail() {
             triggerHaptic('heavy');
@@ -1157,10 +1175,22 @@
                 btn.style.backgroundColor = 'var(--btn-green)';
                 setTimeout(() => {
                     btn.innerText = prev;
-                    btn.style.backgroundColor = 'var(--header-color)';
+                    btn.style.backgroundColor = '';
                 }, 2000);
             });
         }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Отключение мигающего контура через 10 секунд
+            setTimeout(() => {
+                const btn = document.getElementById('contact-btn');
+                if (btn) btn.classList.remove('glowing-border');
+            }, 10000);
+
+            setTimeout(() => {
+                closeSettingsHint();
+            }, 20000);
+        });
 
         const modelAssets = {
             izbushka: { gltf: 'izbushka.glb' },
@@ -1182,6 +1212,12 @@
                 btnView: "Открыть 3D",
                 btnMoreText: "Подробнее →",
                 cardSub: "Интерактивный просмотр",
+                contactBtn: "Контакты",
+                modalTitle: "Обращения и связи",
+                modalDesc: "По всем вопросам о проекте вы можете написать нам на почту:",
+                btnCopy: "📋 Скопировать почту",
+                btnClose: "Закрыть",
+                copied: "✓ Скопировано!",
                 
                 tutorialSteps: [
                     {
@@ -1282,6 +1318,12 @@
                 btnView: "Open 3D",
                 btnMoreText: "Details →",
                 cardSub: "Interactive View",
+                contactBtn: "Contacts",
+                modalTitle: "Contact Us",
+                modalDesc: "For any questions regarding the project, feel free to email us:",
+                btnCopy: "📋 Copy Email",
+                btnClose: "Close",
+                copied: "✓ Copied!",
 
                 tutorialSteps: [
                     {
@@ -1381,6 +1423,12 @@
                 btnView: "打开 3D",
                 btnMoreText: "详细信息 →",
                 cardSub: "交互式查看",
+                contactBtn: "联系方式",
+                modalTitle: "与我们联系",
+                modalDesc: "如有关于项目的问题，请随时发送电子邮件至：",
+                btnCopy: "📋 复制邮箱",
+                btnClose: "关闭",
+                copied: "✓ 已复制！",
 
                 tutorialSteps: [
                     {
@@ -1424,7 +1472,7 @@
 
                 alisaName: "Alisa Markova",
                 alisaRole: "小屋腿部结构设计师",
-                alisaFullDesc: `• 小屋腿部结构设计师（与 Lida Tokareva 共同制作）。
+                alisaFullDesc: `• 小屋腿部结构设计师（与 Lidia Tokareva 共同制作）。
 • 设计了仿生鸟类腿部结构。
 • 创新开发了连接旋转主体与行走腿部的关键支撑机械节点。
 • 手工缝制了装配在机器人骨架上的羊毛“鸡脚”服装。
@@ -1475,14 +1523,6 @@
             setTimeout(() => {
                 closeSettingsHint();
             }, 20000);
-
-            // Через 10 секунд убираем мигание контура у кнопки контактов
-            setTimeout(() => {
-                const contactBtn = document.getElementById('top-contact-btn');
-                if (contactBtn) {
-                    contactBtn.classList.remove('glowing');
-                }
-            }, 10000);
         });
 
         function closeSettingsHint() {
@@ -1550,11 +1590,6 @@
 
         window.addEventListener('popstate', function(event) {
             triggerHaptic('medium');
-            if (isContactModalOpen) {
-                isContactModalOpen = false;
-                document.getElementById('contact-modal').style.display = 'none';
-                return;
-            }
             if (currentView !== 'main') {
                 showMainViewUI();
             }
@@ -1710,6 +1745,10 @@
             document.getElementById('sec-team').innerText = t.secTeam;
             document.getElementById('sec-about').innerText = t.secAbout;
             document.getElementById('sec-models').innerText = t.secModels;
+            document.getElementById('contact-btn').innerText = t.contactBtn;
+            document.getElementById('modal-contact-title').innerText = t.modalTitle;
+            document.getElementById('modal-contact-desc').innerText = t.modalDesc;
+            document.getElementById('btn-copy-lbl').innerText = t.btnCopy;
 
             document.querySelectorAll('.back-text').forEach(el => el.innerText = t.backText);
             document.querySelectorAll('.btn-more-text').forEach(el => el.innerText = t.btnMoreText);
