@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v4.2-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v4.2.1-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -23,17 +23,17 @@
             --hint-bg: #8957e5;
             --hint-text: #ffffff;
 
-            /* Увеличен эффект Liquid Glass на 10% (было blur(16px), стало blur(17.6px)) */
-            --glass-btn-bg: rgba(22, 27, 34, 0.935);
-            --glass-btn-border: rgba(255, 255, 255, 0.198);
-            --glass-blur: blur(17.6px) saturate(176%);
+            /* Усиленный эффект Liquid Glass (+20% глубина размытия и стекла) */
+            --glass-btn-bg: rgba(22, 27, 34, 0.72);
+            --glass-btn-border: rgba(255, 255, 255, 0.24);
+            --glass-blur: blur(22px) saturate(190%);
 
-            --ios-glass-bg: rgba(22, 27, 34, 0.935);
-            --ios-glass-border: rgba(255, 255, 255, 0.165);
-            --ios-pill-bg: rgba(255, 255, 255, 0.132);
+            --ios-glass-bg: rgba(22, 27, 34, 0.72);
+            --ios-glass-border: rgba(255, 255, 255, 0.22);
+            --ios-pill-bg: rgba(255, 255, 255, 0.16);
             --ios-pill-active: #ffffff;
             --ios-text-active: #0d1117;
-            --ios-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            --ios-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
         }
 
         [data-theme="light"] {
@@ -52,15 +52,15 @@
             --hint-bg: #8250df;
             --hint-text: #ffffff;
 
-            --glass-btn-bg: rgba(255, 255, 255, 0.935);
-            --glass-btn-border: rgba(0, 0, 0, 0.132);
+            --glass-btn-bg: rgba(255, 255, 255, 0.72);
+            --glass-btn-border: rgba(0, 0, 0, 0.16);
 
-            --ios-glass-bg: rgba(255, 255, 255, 0.935);
-            --ios-glass-border: rgba(0, 0, 0, 0.088);
-            --ios-pill-bg: rgba(0, 0, 0, 0.055);
+            --ios-glass-bg: rgba(255, 255, 255, 0.72);
+            --ios-glass-border: rgba(0, 0, 0, 0.12);
+            --ios-pill-bg: rgba(0, 0, 0, 0.08);
             --ios-pill-active: #0969da;
             --ios-text-active: #ffffff;
-            --ios-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --ios-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
         }
 
         * {
@@ -439,7 +439,6 @@
             display: block;
         }
 
-        /* Адаптивная кнопка «Назад» с защитой от наползания на широких экранах */
         .btn-back {
             background: var(--glass-btn-bg);
             backdrop-filter: var(--glass-blur);
@@ -478,7 +477,6 @@
             touch-action: none;
         }
 
-        /* Центрированное пошаговое обучение 3D */
         .toast-3d-hint {
             position: absolute;
             top: 50%;
@@ -728,7 +726,7 @@
 <body data-theme="light">
 
     <!-- Бейдж версии -->
-    <div class="beta-badge">v4.2-beta</div>
+    <div class="beta-badge">v4.2.1-beta</div>
 
     <!-- Зафиксированная верхняя панель переключения языка и темы -->
     <div class="controls-bar" id="global-controls">
@@ -883,8 +881,8 @@
                 </div>
             </div>
 
+            <!-- Исправленная карточка Кошки -->
             <div class="card-project-horiz" id="card-cat" onclick="openModel('cat')">
-                <openModel id="cat">
                 <img src="cat_card.jpg" alt="Кошка" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Кошка'">
                 <div class="robot-card-info">
                     <h3 id="card-cat-title">Кошка</h3>
@@ -974,9 +972,8 @@
         let currentModelId = null;
         let isFullscreen3D = false;
         let savedScrollPosition = 0;
-        let tutorialStep = 0; // 0, 1, 2
+        let tutorialStep = 0;
 
-        /* Менее заметный виброотклик (уменьшена сила вибрации) */
         function triggerHaptic(intensity = 'medium') {
             if ("vibrate" in navigator) {
                 try {
@@ -1314,7 +1311,6 @@
             }
         }
 
-        /* Логика пошагового обучения 3D (3 шага) */
         function nextTutorialStep() {
             triggerHaptic('light');
             tutorialStep++;
@@ -1339,7 +1335,6 @@
             if (subEl) subEl.innerText = data.sub;
             if (btnEl) btnEl.innerText = data.btn;
 
-            // Обновляем иконки/курсоры в зависимости от шага обучения
             if (stageEl) {
                 if (tutorialStep === 0) {
                     stageEl.innerHTML = `<svg class="svg-cursor cursor-left" viewBox="0 0 24 24"><path d="M13.64 21.97C13.14 22 12.54 21.81 12.12 21.41L7.7 17.2L5.89 19.01C5.5 19.4 4.83 19.4 4.44 19.01L3.03 17.6C2.64 17.21 2.64 16.54 3.03 16.15L7.95 11.23L1 8.28L21 1L13.72 21L13.64 21.97Z"/></svg>`;
@@ -1353,7 +1348,6 @@
                 }
             }
 
-            // Обновляем индикаторы точек (dots)
             for (let i = 0; i < 3; i++) {
                 const dot = document.getElementById('dot-' + i);
                 if (dot) {
@@ -1452,7 +1446,6 @@
             pushStateIfNeeded('model');
             currentModelId = id;
             
-            // Сбрасываем обучение на первый шаг при открытии любой 3D модели
             tutorialStep = 0;
             updateTutorialUI();
 
