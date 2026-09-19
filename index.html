@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v4.5.1-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v4.6-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -24,7 +24,7 @@
             --hint-text: #ffffff;
 
             /* Эффект Liquid Glass */
-            --glass-btn-bg: rgba(22, 27, 34, 0.75);
+            --glass-btn-bg: rgba(22, 27, 34, 0.68);
             --glass-btn-border: rgba(255, 255, 255, 0.22);
             --glass-blur: blur(22px) saturate(190%);
 
@@ -34,11 +34,6 @@
             --ios-pill-active: #ffffff;
             --ios-text-active: #0d1117;
             --ios-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-
-            /* Жидкое стекло с винным оттенком для контактов */
-            --wine-glass-bg: rgba(114, 47, 55, 0.55);
-            --wine-glass-border: rgba(230, 110, 125, 0.35);
-            --wine-modal-border: #a34853;
         }
 
         [data-theme="light"] {
@@ -57,7 +52,7 @@
             --hint-bg: #8250df;
             --hint-text: #ffffff;
 
-            --glass-btn-bg: rgba(255, 255, 255, 0.78);
+            --glass-btn-bg: rgba(255, 255, 255, 0.68);
             --glass-btn-border: rgba(0, 0, 0, 0.16);
 
             --ios-glass-bg: rgba(255, 255, 255, 0.78);
@@ -66,10 +61,6 @@
             --ios-pill-active: #0969da;
             --ios-text-active: #ffffff;
             --ios-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-
-            --wine-glass-bg: rgba(128, 0, 32, 0.65);
-            --wine-glass-border: rgba(179, 0, 45, 0.35);
-            --wine-modal-border: #b3002d;
         }
 
         * {
@@ -112,41 +103,42 @@
             z-index: 999;
         }
 
-        /* Кнопка контактов Liquid Glass на одном уровне с панелью языков */
+        /* Кнопка контактов в верхнем левом углу на одном уровне с языками, из жидкого стекла с мерцанием */
         .btn-contact-wine {
-            position: absolute;
+            position: fixed;
             top: calc(12px + env(safe-area-inset-top, 0px));
             left: calc(12px + env(safe-area-inset-left, 0px));
-            height: 46px;
-            background: var(--wine-glass-bg);
+            background: var(--glass-btn-bg);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
-            color: #ffffff;
-            border: 1px solid var(--wine-glass-border);
-            padding: 0 16px;
-            border-radius: 30px;
+            color: var(--text-color);
+            border: 1px solid var(--glass-btn-border);
+            padding: 9px 16px;
+            border-radius: 22px;
             font-size: 0.82rem;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: var(--ios-shadow);
-            display: inline-flex;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            opacity: 0.82;
+            transition: opacity 0.2s, background-color 0.2s, transform 0.15s, border-color 0.2s;
+            z-index: 100001;
+            height: 46px;
+            display: flex;
             align-items: center;
-            justify-content: center;
-            z-index: 10;
-            animation: pulseGlow 2.5s infinite ease-in-out;
-            transition: opacity 0.3s, transform 0.15s;
+            gap: 6px;
+            animation: pulseAttention 2.2s ease-in-out infinite;
         }
 
-        /* Анимация пульсации прозрачности при старте для привлечения внимания */
-        @keyframes pulseGlow {
-            0% { opacity: 0.4; }
-            50% { opacity: 0.95; }
-            100% { opacity: 0.4; }
+        @keyframes pulseAttention {
+            0% { opacity: 0.45; transform: scale(0.96); }
+            50% { opacity: 1; transform: scale(1.02); border-color: var(--header-color); }
+            100% { opacity: 0.45; transform: scale(0.96); }
         }
 
         .btn-contact-wine:hover {
-            animation: none;
             opacity: 1;
+            animation: none;
+            border-color: var(--header-color);
         }
 
         .btn-contact-wine:active {
@@ -170,7 +162,7 @@
 
         .contact-modal-card {
             background: var(--card-bg);
-            border: 1px solid var(--wine-modal-border);
+            border: 1px solid var(--border-color);
             border-radius: 20px;
             padding: 24px;
             width: 90%;
@@ -314,11 +306,11 @@
             flex-shrink: 0;
         }
 
-        /* Подсказка позиционируется строго под плашкой языков, не перекрывая Баба Яга */
+        /* Подсказка чётко под панелью языков, не перекрывает заголовок */
         .settings-hint {
             position: fixed;
-            top: calc(66px + env(safe-area-inset-top, 0px));
-            right: calc(12px + env(safe-area-inset-right, 0px));
+            top: 68px;
+            right: 12px;
             background-color: var(--hint-bg);
             color: var(--hint-text);
             padding: 8px 12px 8px 14px;
@@ -326,7 +318,7 @@
             font-size: 0.85rem;
             font-weight: 600;
             box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-            z-index: 100002;
+            z-index: 1001;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -363,10 +355,9 @@
         header {
             text-align: center;
             margin-bottom: 16px;
-            margin-top: 18px;
+            margin-top: 10px;
             width: 100%;
             max-width: 900px;
-            position: relative;
         }
 
         header h1 {
@@ -818,7 +809,8 @@
         body.fullscreen-3d-active #main-view,
         body.fullscreen-3d-active #member-container,
         body.fullscreen-3d-active #settings-hint,
-        body.fullscreen-3d-active #model-title {
+        body.fullscreen-3d-active #model-title,
+        body.fullscreen-3d-active .btn-contact-wine {
             display: none !important;
         }
 
@@ -863,8 +855,8 @@
             .lang-segmented-control { width: 165px; height: 32px; }
             .lang-option { width: 52px; height: 26px; font-size: 0.75rem; }
             .theme-toggle-btn { width: 30px; height: 30px; font-size: 0.85rem; }
-            .settings-hint { top: calc(54px + env(safe-area-inset-top, 0px)); right: 8px; width: 230px; }
-            .btn-contact-wine { top: 8px; left: 8px; height: 42px; padding: 0 12px; font-size: 0.78rem; }
+            .settings-hint { top: 58px; right: 8px; width: 230px; }
+            .btn-contact-wine { top: 8px; left: 8px; height: 42px; padding: 6px 12px; font-size: 0.78rem; }
             .beta-badge { bottom: 8px; right: 10px; font-size: 0.68rem; }
             
             body.fullscreen-3d-active .fullscreen-top-bar {
@@ -877,7 +869,10 @@
 <body data-theme="light">
 
     <!-- Бейдж версии в правом нижнем углу -->
-    <div class="beta-badge">v4.5.1-beta</div>
+    <div class="beta-badge">v4.6-beta</div>
+
+    <!-- Кнопка контактов из жидкого стекла в левом верхнем углу на уровне с переключателем -->
+    <button class="btn-contact-wine" onclick="openContactModal()">✉ <span id="contact-btn-txt">Контакты</span></button>
 
     <!-- Модальное окно контактов -->
     <div id="contact-modal" class="contact-modal-overlay">
@@ -887,12 +882,12 @@
             <div class="email-display-box" id="email-text">moticmarkov@gmail.com</div>
             <div class="modal-action-btns">
                 <button class="btn-copy-email" onclick="copyContactEmail()" id="btn-copy-lbl">📋 Скопировать почту</button>
-                <button class="btn-close-modal" onclick="closeContactModal()">Закрыть</button>
+                <button class="btn-close-modal" onclick="closeContactModal()" id="btn-close-lbl">Закрыть</button>
             </div>
         </div>
     </div>
 
-    <!-- Панель переключения языка и темы (всегда доступна) -->
+    <!-- Панель переключения языка и темы -->
     <div class="controls-bar" id="global-controls">
         <div class="lang-segmented-control">
             <button class="lang-option active" id="lang-ru" onclick="selectLanguage('ru')">
@@ -911,15 +906,13 @@
         <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Смена темы">🌙</button>
     </div>
 
-    <!-- Всплывающая подсказка ровно под плашкой языков -->
+    <!-- Всплывающая подсказка под панелью языков -->
     <div id="settings-hint" class="settings-hint">
         <span>💡 <span id="hint-text-popup">Переключение языка и темы здесь!</span></span>
         <button class="hint-close-btn" onclick="closeSettingsHint()" aria-label="Закрыть">✕</button>
     </div>
 
     <header>
-        <!-- Кнопка контактов Liquid Glass строго на одном уровне с переключателями -->
-        <button class="btn-contact-wine" onclick="openContactModal()">✉ Контакты</button>
         <h1 id="title-team">БАБА ЯГА</h1>
         <p id="title-school">Президентский физико-математический лицей №239, г. Санкт-Петербург</p>
     </header>
@@ -1169,10 +1162,11 @@
             navigator.clipboard.writeText(emailText).then(() => {
                 const btn = document.getElementById('btn-copy-lbl');
                 const prev = btn.innerText;
-                btn.innerText = '✓ Скопировано!';
+                const t = translations[currentLang];
+                btn.innerText = t.copiedText || '✓ Скопировано!';
                 btn.style.backgroundColor = 'var(--btn-green)';
                 setTimeout(() => {
-                    btn.innerText = prev;
+                    btn.innerText = t.copyBtnText || '📋 Скопировать почту';
                     btn.style.backgroundColor = 'var(--header-color)';
                 }, 2000);
             });
@@ -1189,6 +1183,13 @@
         const translations = {
             ru: {
                 hintPopup: "Переключение языка и темы здесь!",
+                contactBtn: "Контакты",
+                modalTitle: "Обращения и связи",
+                modalDesc: "По всем вопросам о проекте вы можете написать нам на почту:",
+                copyBtnText: "📋 Скопировать почту",
+                copiedText: "✓ Скопировано!",
+                closeBtnText: "Закрыть",
+                
                 titleTeam: "БАБА ЯГА",
                 titleSchool: "Президентский физико-математический лицей №239, г. Санкт-Петербург",
                 secTeam: "НАША КОМАНДА",
@@ -1289,6 +1290,13 @@
             },
             en: {
                 hintPopup: "Switch language and theme here!",
+                contactBtn: "Contact",
+                modalTitle: "Contact Us",
+                modalDesc: "For any questions regarding the project, feel free to email us:",
+                copyBtnText: "📋 Copy Email",
+                copiedText: "✓ Copied!",
+                closeBtnText: "Close",
+
                 titleTeam: "BABA YAGA",
                 titleSchool: "Presidential Physics and Mathematics Lyceum №239, Saint Petersburg",
                 secTeam: "OUR TEAM",
@@ -1341,7 +1349,7 @@
 
                 alisaName: "Alisa Markova",
                 alisaRole: "Hut Legs Mechanical Designer",
-                alisaFullDesc: `• Mechanical Designer of the Hut's legs (co-creator with Lidia Tokareva).
+                alisaFullDesc: `• Mechanical Designer of the Hut's legs (co-creator with Lida Tokareva).
 • Designed the mechanical structure of the Hut's legs resembling bird leg anatomy.
 • Innovated the key mechanical support node physically connecting body rotation with walking legs.
 • Hand-sewed custom fleece costumes for the chicken legs mounted over the robot frame.
@@ -1388,6 +1396,13 @@
             },
             cn: {
                 hintPopup: "在此处切换语言和主题！",
+                contactBtn: "联系我们",
+                modalTitle: "联系方式",
+                modalDesc: "如有任何项目相关问题，欢迎通过以下邮箱联系我们：",
+                copyBtnText: "📋 复制邮箱",
+                copiedText: "✓ 已复制！",
+                closeBtnText: "关闭",
+
                 titleTeam: "«Baba Yaga» 团队",
                 titleSchool: "圣彼得堡第239总统物理数学中学",
                 secTeam: "我们的团队",
@@ -1430,7 +1445,7 @@
 • 进行了颜色识别研究：证明红色在各种灯光下识别最稳定，出错率最低。
 • 在 SolidWorks 中完成了小屋本体 3D 模型设计与电路供电系统搭建。`,
 
-                lidaName: "Lidia Tokareva",
+                lidaName: "Lida Tokareva",
                 lidaRole: "首席软件工程师。编写了“猫”和“狗”机器人的程序",
                 lidaFullDesc: `• 项目首席软件工程师。
 • 在 LEGO Mindstorms EV3 上使用 RobotC 语言编写了“猫”和“狗”机器人的控制程序。
@@ -1440,7 +1455,7 @@
 
                 alisaName: "Alisa Markova",
                 alisaRole: "小屋腿部结构设计师",
-                alisaFullDesc: `• 小屋腿部结构设计师（与 Lidia Tokareva 共同制作）。
+                alisaFullDesc: `• 小屋腿部结构设计师（与 Lida Tokareva 共同制作）。
 • 设计了仿生鸟类腿部结构。
 • 创新开发了连接旋转主体与行走腿部的关键支撑机械节点。
 • 手工缝制了装配在机器人骨架上的羊毛“鸡脚”服装。
@@ -1707,6 +1722,12 @@
 
             const hintPopup = document.getElementById('hint-text-popup');
             if (hintPopup) hintPopup.innerText = t.hintPopup;
+
+            document.getElementById('contact-btn-txt').innerText = t.contactBtn;
+            document.getElementById('modal-contact-title').innerText = t.modalTitle;
+            document.getElementById('modal-contact-desc').innerText = t.modalDesc;
+            document.getElementById('btn-copy-lbl').innerText = t.copyBtnText;
+            document.getElementById('btn-close-lbl').innerText = t.closeBtnText;
 
             document.getElementById('title-team').innerText = t.titleTeam;
             document.getElementById('title-school').innerText = t.titleSchool;
