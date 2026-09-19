@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v3.9-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v4.0-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -24,11 +24,11 @@
             --hint-text: #ffffff;
             --overlay-bg: rgba(13, 17, 23, 0.96);
 
-            --glass-btn-bg: rgba(22, 27, 34, 0.5);
+            --glass-btn-bg: rgba(22, 27, 34, 0.65);
             --glass-btn-border: rgba(255, 255, 255, 0.18);
             --glass-blur: blur(12px) saturate(160%);
 
-            --ios-glass-bg: rgba(22, 27, 34, 0.65);
+            --ios-glass-bg: rgba(22, 27, 34, 0.75);
             --ios-glass-border: rgba(255, 255, 255, 0.15);
             --ios-pill-bg: rgba(255, 255, 255, 0.12);
             --ios-pill-active: #ffffff;
@@ -53,10 +53,10 @@
             --hint-text: #ffffff;
             --overlay-bg: rgba(246, 248, 250, 0.97);
 
-            --glass-btn-bg: rgba(255, 255, 255, 0.5);
+            --glass-btn-bg: rgba(255, 255, 255, 0.65);
             --glass-btn-border: rgba(0, 0, 0, 0.12);
 
-            --ios-glass-bg: rgba(255, 255, 255, 0.65);
+            --ios-glass-bg: rgba(255, 255, 255, 0.75);
             --ios-glass-border: rgba(0, 0, 0, 0.08);
             --ios-pill-bg: rgba(0, 0, 0, 0.05);
             --ios-pill-active: #0969da;
@@ -69,8 +69,12 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            transition: background-color 0.25s, color 0.25s, border-color 0.25s;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -99,7 +103,7 @@
             user-select: none;
         }
 
-        /* Стабильная верхняя панель без дёрганий при смене языка */
+        /* Фиксированная плашка управления */
         .controls-bar {
             position: fixed;
             top: 12px;
@@ -115,6 +119,15 @@
             padding: 5px 8px;
             border-radius: 30px;
             box-shadow: var(--ios-shadow);
+            transform-origin: top right;
+            transition: transform 0.25s ease, padding 0.25s ease;
+        }
+
+        /* Уменьшенная панель в полноэкранном 3D режиме чтобы не наезжать на «Назад» */
+        body.fullscreen-3d-active .controls-bar {
+            transform: scale(0.85);
+            top: 8px;
+            right: 8px;
         }
 
         .lang-segmented-control {
@@ -132,17 +145,16 @@
             border: none;
             color: var(--text-color);
             font-weight: 600;
-            font-size: 0.8rem;
-            padding: 6px 12px;
+            font-size: 0.82rem;
+            padding: 6px 10px;
             border-radius: 18px;
             cursor: pointer;
-            transition: background-color 0.25s, color 0.25s;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             user-select: none;
             z-index: 2;
-            min-width: 68px; /* Фиксированная ширина исключает дёргание */
+            min-width: 64px;
             justify-content: center;
         }
 
@@ -152,15 +164,9 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.18);
         }
 
-        /* Яркие чёткие SVG флаги с белым ободком — неизменны на любой теме */
-        .flag-icon {
-            width: 20px;
-            height: 15px;
-            border-radius: 3px;
-            object-fit: cover;
-            box-shadow: 0 0 0 1.5px #ffffff, 0 1px 4px rgba(0,0,0,0.4);
-            flex-shrink: 0;
-            background: #ffffff;
+        .flag-emoji {
+            font-size: 1.05rem;
+            line-height: 1;
         }
 
         .theme-toggle-btn {
@@ -175,11 +181,6 @@
             justify-content: center;
             cursor: pointer;
             font-size: 1rem;
-            transition: transform 0.2s;
-        }
-
-        .theme-toggle-btn:hover {
-            transform: scale(1.05);
         }
 
         .settings-hint {
@@ -227,11 +228,6 @@
             font-size: 0.75rem;
             cursor: pointer;
             line-height: 1;
-            transition: transform 0.15s ease;
-        }
-
-        .hint-close-btn:hover {
-            transform: scale(1.1);
         }
 
         @keyframes fadeIn {
@@ -290,17 +286,15 @@
             padding: 16px;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            min-height: 220px; /* Предотвращает дёргание при смене текста */
+            min-height: 220px;
         }
 
         .card-team:hover, .card-team:active {
-            transform: translateY(-2px);
             border-color: var(--header-color);
             background-color: var(--card-hover-bg);
         }
@@ -385,7 +379,6 @@
             padding: 14px;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
             display: flex;
             align-items: center;
             gap: 14px;
@@ -393,7 +386,6 @@
         }
 
         .card-project-horiz:hover, .card-project-horiz:active {
-            transform: translateY(-2px);
             border-color: var(--accent-green);
             background-color: var(--card-hover-bg);
         }
@@ -469,12 +461,6 @@
             cursor: pointer;
             margin-bottom: 10px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-            transition: transform 0.15s ease, border-color 0.2s ease;
-        }
-
-        .btn-back:hover, .btn-back:active {
-            transform: translateY(-1px);
-            border-color: var(--header-color);
         }
 
         .model-wrapper {
@@ -495,7 +481,7 @@
             touch-action: none;
         }
 
-        /* Наглядный оверлей навигации 3D с анимированным пальцем */
+        /* Оверлей интерактивного гида */
         .gesture-tutorial {
             position: absolute;
             top: 0;
@@ -516,7 +502,7 @@
         }
 
         .tutorial-header {
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .tutorial-title {
@@ -528,71 +514,128 @@
             margin-bottom: 2px;
         }
 
-        .tutorial-subtitle {
-            color: var(--subtext-color);
-            font-size: 0.8rem;
-        }
-
-        /* Анимация движения пальца влево-вправо */
-        .hand-anim-box {
-            font-size: 2.8rem;
+        /* Анимационный трек с 2 курсорами */
+        .demo-stage-box {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+            height: 110px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
             margin: 6px 0;
-            animation: moveHand 1.8s infinite ease-in-out;
-            user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
         }
 
-        @keyframes moveHand {
-            0% { transform: translateX(-28px) rotate(-10deg); }
-            50% { transform: translateX(28px) rotate(10deg); }
-            100% { transform: translateX(-28px) rotate(-10deg); }
+        .cursor {
+            position: absolute;
+            font-size: 2.2rem;
+            user-select: none;
+            pointer-events: none;
+            transition: all 0.1s linear;
+        }
+
+        #cursor1 {
+            animation: animCursor1 6s infinite ease-in-out;
+        }
+
+        #cursor2 {
+            animation: animCursor2 6s infinite ease-in-out;
+        }
+
+        .demo-label {
+            position: absolute;
+            bottom: 10px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--header-color);
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        /* 3 Этапа анимации курсаторов */
+        @keyframes animCursor1 {
+            /* Этап 1: Вращение (Один курсор едет влево-вправо) 0% - 33% */
+            0%   { top: 25px; left: 30%; opacity: 1; transform: scale(1); }
+            16%  { top: 25px; left: 70%; opacity: 1; transform: scale(1); }
+            33%  { top: 25px; left: 30%; opacity: 1; transform: scale(1); }
+
+            /* Этап 2: Приближение (Разъезжаются по диагонали) 34% - 66% */
+            34%  { top: 35px; left: 42%; opacity: 1; transform: scale(0.9); }
+            50%  { top: 10px; left: 20%; opacity: 1; transform: scale(1.1); }
+            66%  { top: 35px; left: 42%; opacity: 1; transform: scale(0.9); }
+
+            /* Этап 3: Панорамирование (Два курсора синхронно едут) 67% - 100% */
+            67%  { top: 25px; left: 35%; opacity: 1; transform: scale(1); }
+            83%  { top: 25px; left: 55%; opacity: 1; transform: scale(1); }
+            100% { top: 25px; left: 35%; opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes animCursor2 {
+            /* Этап 1: Второй курсор скрыт */
+            0%, 33% { top: 25px; left: 50%; opacity: 0; transform: scale(0); }
+
+            /* Этап 2: Приближение (Едет в противоположный угол) */
+            34%  { top: 35px; left: 58%; opacity: 1; transform: scale(0.9); }
+            50%  { top: 60px; left: 80%; opacity: 1; transform: scale(1.1); }
+            66%  { top: 35px; left: 58%; opacity: 1; transform: scale(0.9); }
+
+            /* Этап 3: Панорамирование (Синхронно рядом с первым) */
+            67%  { top: 25px; left: 48%; opacity: 1; transform: scale(1); }
+            83%  { top: 25px; left: 68%; opacity: 1; transform: scale(1); }
+            100% { top: 25px; left: 48%; opacity: 1; transform: scale(1); }
         }
 
         .gesture-grid {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             width: 100%;
             max-width: 440px;
-            margin: 6px 0;
+            margin: 4px 0;
         }
 
         .gesture-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            padding: 10px 14px;
+            padding: 8px 12px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             text-align: left;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
 
         .gesture-icon-badge {
-            width: 38px;
-            height: 38px;
-            min-width: 38px;
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
             border-radius: 50%;
             background: var(--ios-pill-bg);
             border: 1px solid var(--ios-glass-border);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--header-color);
         }
 
         .gesture-card h4 {
             color: var(--title-color);
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 600;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .gesture-card p {
             color: var(--subtext-color);
-            font-size: 0.75rem;
-            line-height: 1.25;
+            font-size: 0.72rem;
+            line-height: 1.2;
             margin: 0;
         }
 
@@ -608,11 +651,6 @@
             box-shadow: 0 4px 14px rgba(0,0,0,0.3);
             margin-top: 6px;
             flex-shrink: 0;
-            transition: transform 0.15s ease, background-color 0.2s ease;
-        }
-
-        .btn-start-3d:active {
-            transform: scale(0.97);
         }
 
         .btn-start-3d:hover {
@@ -730,9 +768,9 @@
 
         body.fullscreen-3d-active .fullscreen-top-bar {
             position: absolute;
-            top: 16px;
-            left: 16px;
-            right: 16px;
+            top: 12px;
+            left: 12px;
+            right: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -744,33 +782,33 @@
             header h1 { font-size: 1.5rem; }
             .section-title { font-size: 1.1rem; }
             .controls-bar { top: 8px; right: 8px; padding: 4px 6px; }
-            .lang-option { padding: 5px 8px; font-size: 0.75rem; min-width: 60px; }
+            .lang-option { padding: 5px 6px; font-size: 0.75rem; min-width: 54px; }
             .theme-toggle-btn { width: 30px; height: 30px; font-size: 0.9rem; }
             .settings-hint { top: 64px; right: 8px; font-size: 0.8rem; }
             .beta-badge { top: 12px; left: 10px; font-size: 0.7rem; }
-            .gesture-card { padding: 8px 10px; }
-            .gesture-icon-badge { width: 32px; height: 32px; min-width: 32px; font-size: 1rem; }
+            .demo-stage-box { height: 95px; }
+            .cursor { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body data-theme="light">
 
-    <!-- Бейдж версии -->
-    <div class="beta-badge">v3.9-beta</div>
+    <!-- Бейдж бета-версии -->
+    <div class="beta-badge">v4.0-beta</div>
 
-    <!-- Фиксированная верхняя панель переключения языка и темы -->
+    <!-- Верхняя iOS-панель со стандартными эмодзи-флагами -->
     <div class="controls-bar" id="global-controls">
         <div class="lang-segmented-control">
             <button class="lang-option active" id="lang-ru" onclick="selectLanguage('ru')">
-                <svg class="flag-icon" viewBox="0 0 640 480"><path fill="#fff" d="0 0h640v160H0z"/><path fill="#0039a6" d="0 160h640v160H0z"/><path fill="#d52b1e" d="0 320h640v160H0z"/></svg>
+                <span class="flag-emoji">🇷🇺</span>
                 <span>RU</span>
             </button>
             <button class="lang-option" id="lang-en" onclick="selectLanguage('en')">
-                <svg class="flag-icon" viewBox="0 0 640 480"><path fill="#012169" d="0 0h640v480H0z"/><path fill="#FFF" d="m75 0 245 180L565 0h75v55L400 240l240 185v55h-75L320 300 75 480H0v-55l240-185L0 55V0h75z"/><path fill="#C8102E" d="m420 280 220 165v35h-50L350 310l70-30zM220 200 0 35V0h50l240 170-70 30zM220 280 0 445v35h50l240-170-70-30zm200-80L640 35V0h-50L350 170l70 30z"/><path fill="#FFF" d="M240 0h160v480H240zM0 160h640v160H0z"/><path fill="#C8102E" d="M267 0h106v480H267zM0 187h640v106H0z"/></svg>
+                <span class="flag-emoji">🇬🇧</span>
                 <span>EN</span>
             </button>
             <button class="lang-option" id="lang-cn" onclick="selectLanguage('cn')">
-                <svg class="flag-icon" viewBox="0 0 640 480"><path fill="#ee1c25" d="0 0h640v480H0z"/><path fill="#ffde00" d="M120 96l25 76h80l-65 47 25 76-65-47-65 47 25-76-65-47h80zm120-48l12 37h39l-31 23 12 37-32-23-31 23 12-37-32-23h39zm48 48l22 32 37-12-23 31 23 32-38-11-22 32-6-39-38-11 32-23zm0 80l32 23-6 39-22-32-38 11 23-32-23-31 37 12zM240 224l31 23-12 37 32-23 31 23-12-37 31-23h-39l-12-37-12 37z"/></svg>
+                <span class="flag-emoji">🇨🇳</span>
                 <span>CN</span>
             </button>
         </div>
@@ -955,36 +993,39 @@
         <h2 id="model-title" style="color: var(--header-color); margin-bottom: 10px;">Модель</h2>
         
         <div class="model-wrapper" id="model-wrapper-box">
-            <!-- Оверлей навигации с анимированным пальцем и быстрыми жестами -->
+            <!-- Оверлей навигации с 3-этапной анимацией 2 курсоров -->
             <div id="gesture-tutorial" class="gesture-tutorial">
                 <div class="tutorial-header">
                     <div class="tutorial-title" id="tut-title">Управление 3D-моделью</div>
-                    <div class="tutorial-subtitle" id="tut-subtitle">Наглядная гид-анимация движений</div>
                 </div>
 
-                <!-- Анимированный палец 👉 -->
-                <div class="hand-anim-box">👉</div>
+                <!-- Интерактивное поле демонстрации жестов с двумя курсорами -->
+                <div class="demo-stage-box">
+                    <div class="cursor" id="cursor1">👆</div>
+                    <div class="cursor" id="cursor2">👆</div>
+                    <div class="demo-label" id="demo-label-text">Вот так крутить модель</div>
+                </div>
 
                 <div class="gesture-grid">
                     <div class="gesture-card">
                         <div class="gesture-icon-badge">🔄</div>
                         <div>
-                            <h4 id="tut-rot-title">👉 Двигай 1 пальцем (или ЛКМ)</h4>
-                            <p id="tut-rot-desc">Поворачивай модель под любым углом</p>
+                            <h4 id="tut-rot-title">1 палец — Вращение</h4>
+                            <p id="tut-rot-desc">Двигай влево-вправо для поворота</p>
                         </div>
                     </div>
                     <div class="gesture-card">
                         <div class="gesture-icon-badge">🤏</div>
                         <div>
-                            <h4 id="tut-zoom-title">🤏 Сжимай 2 пальцами (или колесико)</h4>
-                            <p id="tut-zoom-desc">Приближай и отдаляй мелкие детали</p>
+                            <h4 id="tut-zoom-title">2 пальца — Зумирование</h4>
+                            <p id="tut-zoom-desc">Разводи по диагонали для приближения</p>
                         </div>
                     </div>
                     <div class="gesture-card">
                         <div class="gesture-icon-badge">✋</div>
                         <div>
-                            <h4 id="tut-pan-title">✋ Двигай 2 пальцами (или ПКМ)</h4>
-                            <p id="tut-pan-desc">Сдвигай позицию модели в сторону</p>
+                            <h4 id="tut-pan-title">2 пальца — Сдвиг</h4>
+                            <p id="tut-pan-desc">Двигай синхронно для смещения</p>
                         </div>
                     </div>
                 </div>
@@ -1008,7 +1049,7 @@
                 max-camera-orbit="auto 180deg auto"
                 min-camera-orbit="auto 0deg auto"
                 auto-rotate 
-                rotation-per-second="60deg" 
+                rotation-per-second="70deg" 
                 shadow-intensity="1.5"
                 shadow-softness="0.8">
             </model-viewer>
@@ -1021,6 +1062,7 @@
         let currentMemberId = null;
         let currentModelId = null;
         let isFullscreen3D = false;
+        let demoLabelInterval = null;
 
         function triggerHaptic(intensity = 'medium') {
             if ("vibrate" in navigator) {
@@ -1070,13 +1112,15 @@
                 cardSub: "Интерактивный просмотр",
                 
                 tutTitle: "Управление 3D-моделью",
-                tutSubtitle: "Наглядная гид-анимация движений",
-                tutRotTitle: "👉 Двигай 1 пальцем (или ЛКМ)",
-                tutRotDesc: "Поворачивай модель под любым углом",
-                tutZoomTitle: "🤏 Сжимай 2 пальцами (или колесико)",
-                tutZoomDesc: "Приближай и отдаляй мелкие детали",
-                tutPanTitle: "✋ Двигай 2 пальцами (или ПКМ)",
-                tutPanDesc: "Сдвигай позицию модели в сторону",
+                labelRotate: "Вот так крутить модель",
+                labelZoom: "Вот так приближать и отдалять",
+                labelPan: "Вот так сдвигать по горизонтали",
+                tutRotTitle: "1 палец — Вращение",
+                tutRotDesc: "Двигай влево-вправо для поворота",
+                tutZoomTitle: "2 пальца — Зумирование",
+                tutZoomDesc: "Разводи по диагонали для приближения",
+                tutPanTitle: "2 пальца — Сдвиг",
+                tutPanDesc: "Двигай синхронно для смещения",
                 tutBtn: "Перейти к просмотру",
 
                 devBadge: "В разработке",
@@ -1162,13 +1206,15 @@
                 cardSub: "Interactive View",
 
                 tutTitle: "3D View Control",
-                tutSubtitle: "Visual Motion Guide",
-                tutRotTitle: "👉 Drag with 1 Finger (or LMB)",
-                tutRotDesc: "Rotate the model freely in 360°",
-                tutZoomTitle: "🤏 Pinch with 2 Fingers (or Scroll)",
-                tutZoomDesc: "Zoom in and out on details",
-                tutPanTitle: "✋ Drag with 2 Fingers (or RMB)",
-                tutPanDesc: "Shift model position sideways",
+                labelRotate: "Rotate model like this",
+                labelZoom: "Zoom in/out like this",
+                labelPan: "Pan position like this",
+                tutRotTitle: "1 Finger — Rotation",
+                tutRotDesc: "Drag left/right to rotate 360°",
+                tutZoomTitle: "2 Fingers — Zooming",
+                tutZoomDesc: "Spread diagonally to zoom in/out",
+                tutPanTitle: "2 Fingers — Panning",
+                tutPanDesc: "Drag synchronously to shift view",
                 tutBtn: "Proceed to view",
 
                 devBadge: "Under Development",
@@ -1253,13 +1299,15 @@
                 cardSub: "交互式查看",
 
                 tutTitle: "3D 模型控制",
-                tutSubtitle: "动作示意指南",
-                tutRotTitle: "👉 单指滑动 (或左键)",
-                tutRotDesc: "360° 旋转模型",
-                tutZoomTitle: "🤏 双指捏合 (或滚轮)",
-                tutZoomDesc: "放大或缩小细节",
-                tutPanTitle: "✋ 双指拖动 (或右键)",
-                tutPanDesc: "平移模型位置",
+                labelRotate: "像这样旋转模型",
+                labelZoom: "像这样放大或缩小",
+                labelPan: "像这样平移位置",
+                tutRotTitle: "单指 — 旋转",
+                tutRotDesc: "左右滑动 360° 旋转",
+                tutZoomTitle: "双指 — 缩放",
+                tutZoomDesc: "对角拉伸放大细节",
+                tutPanTitle: "双指 — 平移",
+                tutPanDesc: "同步拖动平移位置",
                 tutBtn: "开始查看",
 
                 devBadge: "开发中",
@@ -1337,7 +1385,35 @@
             setTimeout(() => {
                 closeSettingsHint();
             }, 20000);
+            startDemoTextLoop();
         });
+
+        /* Зацикленная смена надписи под 3-этапную анимацию курсоров */
+        function startDemoTextLoop() {
+            if (demoLabelInterval) clearInterval(demoLabelInterval);
+            
+            const updateText = () => {
+                const t = translations[currentLang];
+                const labelEl = document.getElementById('demo-label-text');
+                if (!labelEl) return;
+
+                // Этап 1: 0-2 сек (Вращение)
+                labelEl.innerText = t.labelRotate;
+
+                // Этап 2: 2-4 сек (Приближение)
+                setTimeout(() => {
+                    if (labelEl) labelEl.innerText = t.labelZoom;
+                }, 2000);
+
+                // Этап 3: 4-6 сек (Сдвиг)
+                setTimeout(() => {
+                    if (labelEl) labelEl.innerText = t.labelPan;
+                }, 4000);
+            };
+
+            updateText();
+            demoLabelInterval = setInterval(updateText, 6000);
+        }
 
         function closeSettingsHint() {
             triggerHaptic('light');
@@ -1350,7 +1426,6 @@
             }
         }
 
-        // Запуск 3D режима
         function start3DView() {
             triggerHaptic('heavy');
             isFullscreen3D = true;
@@ -1366,10 +1441,9 @@
             const tut = document.getElementById('gesture-tutorial');
             if (tut) tut.style.display = 'none';
 
-            // После завершения обучения снижаем скорость вращения до плавного уровня
             const viewer = document.getElementById('model-display');
             if (viewer) {
-                viewer.setAttribute('rotation-per-second', '20deg');
+                viewer.setAttribute('rotation-per-second', '25deg');
             }
         }
 
@@ -1405,8 +1479,8 @@
             }
         }
 
+        /* Полная плавность переходов БЕЗ scrollTo/дёрганий */
         function showMainViewUI() {
-            const savedModelId = currentModelId;
             exit3DFullscreen();
 
             currentView = 'main';
@@ -1420,17 +1494,6 @@
             const viewer = document.getElementById('model-display');
             if (viewer) {
                 viewer.removeAttribute('src');
-            }
-
-            if (savedModelId) {
-                const cardEl = document.getElementById('card-' + savedModelId);
-                if (cardEl) {
-                    setTimeout(() => {
-                        cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 50);
-                }
-            } else {
-                window.scrollTo(0, 0);
             }
         }
 
@@ -1460,7 +1523,6 @@
 
             document.getElementById('main-view').style.display = 'none';
             document.getElementById('member-container').classList.add('active');
-            window.scrollTo(0, 0);
         }
 
         function openModel(id) {
@@ -1497,22 +1559,15 @@
 
                 if (modelAssets[id] && modelAssets[id].gltf) {
                     viewer.setAttribute('src', modelAssets[id].gltf);
-                    viewer.setAttribute('rotation-per-second', '60deg'); // Первые секунды модель интенсивно вращается
+                    viewer.setAttribute('rotation-per-second', '70deg');
                 }
             }
 
             document.getElementById('main-view').style.display = 'none';
             container.classList.add('active');
-
-            setTimeout(() => {
-                if (id === 'birch') {
-                    window.scrollTo({ top: 180, behavior: 'smooth' });
-                } else {
-                    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            }, 80);
         }
 
+        /* Раскрытие аккордеона плавно без скачков страницы */
         function toggleAccordion(id) {
             triggerHaptic('light');
             const content = document.getElementById(id);
@@ -1580,7 +1635,6 @@
             document.getElementById('card-dog-title').innerText = t.dogTitle;
 
             document.getElementById('tut-title').innerText = t.tutTitle;
-            document.getElementById('tut-subtitle').innerText = t.tutSubtitle;
             document.getElementById('tut-rot-title').innerText = t.tutRotTitle;
             document.getElementById('tut-rot-desc').innerText = t.tutRotDesc;
             document.getElementById('tut-zoom-title').innerText = t.tutZoomTitle;
