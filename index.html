@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v3.5-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v3.6-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -168,7 +168,7 @@
             transform: scale(1.05);
         }
 
-        /* Обновлённая подсказка с кнопкой закрытия и пульсацией прозрачности */
+        /* Подсказка с пульсацией прозрачности */
         .settings-hint {
             position: fixed;
             top: 72px;
@@ -680,9 +680,9 @@
 <body data-theme="light">
 
     <!-- Прозрачный индикатор бета-версии в левом верхнем углу -->
-    <div class="beta-badge">v3.5-beta</div>
+    <div class="beta-badge">v3.6-beta</div>
 
-    <!-- Обновленная iOS-панель переключения языка и темы (Liquid Glass Control) -->
+    <!-- iOS-панель переключения языка и темы -->
     <div class="controls-bar" id="global-controls">
         <div class="lang-segmented-control">
             <button class="lang-option active" id="lang-ru" onclick="selectLanguage('ru')">🇷🇺 RU</button>
@@ -692,7 +692,7 @@
         <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Смена темы">🌙</button>
     </div>
 
-    <!-- Всплывающая подсказка с пульсацией и кнопкой закрытия -->
+    <!-- Всплывающая подсказка -->
     <div id="settings-hint" class="settings-hint">
         <span>💡 <span id="hint-text-popup">Переключение языка и темы здесь!</span></span>
         <button class="hint-close-btn" onclick="closeSettingsHint()" aria-label="Закрыть">✕</button>
@@ -925,6 +925,17 @@
         let currentMemberId = null;
         let currentModelId = null;
         let isFullscreen3D = false;
+
+        /* Функция короткого виброотклика (Haptic Feedback) */
+        function triggerHaptic(duration = 10) {
+            if ("vibrate" in navigator) {
+                try {
+                    navigator.vibrate(duration);
+                } catch (e) {
+                    // Игнорируем в случае ограничений браузера
+                }
+            }
+        }
 
         const modelAssets = {
             izbushka: { gltf: 'izbushka.glb' },
@@ -1215,6 +1226,7 @@
         });
 
         function closeSettingsHint() {
+            triggerHaptic(8);
             const hint = document.getElementById('settings-hint');
             if (hint) {
                 hint.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
@@ -1226,6 +1238,7 @@
 
         // Запуск полноэкранного 3D-режима
         function start3DView() {
+            triggerHaptic(12);
             isFullscreen3D = true;
             document.body.classList.add('fullscreen-3d-active');
 
@@ -1253,6 +1266,7 @@
 
         // Обработка кнопки "Назад" и жестов свайпа
         window.addEventListener('popstate', function(event) {
+            triggerHaptic(10);
             if (currentView !== 'main') {
                 showMainViewUI();
             }
@@ -1266,6 +1280,7 @@
         }
 
         function goBack() {
+            triggerHaptic(10);
             if (currentView !== 'main') {
                 history.back();
             }
@@ -1301,6 +1316,7 @@
         }
 
         function openMember(id) {
+            triggerHaptic(10);
             pushStateIfNeeded('member');
             currentMemberId = id;
             const t = translations[currentLang];
@@ -1329,6 +1345,7 @@
         }
 
         function openModel(id) {
+            triggerHaptic(10);
             pushStateIfNeeded('model');
             currentModelId = id;
             const t = translations[currentLang];
@@ -1382,11 +1399,13 @@
         }
 
         function toggleAccordion(id) {
+            triggerHaptic(8);
             const content = document.getElementById(id);
             content.style.display = (content.style.display === 'block') ? 'none' : 'block';
         }
 
         function toggleTheme() {
+            triggerHaptic(12); // Виброотклик при переключении темы
             const body = document.body;
             const themeBtn = document.getElementById('theme-toggle');
             if (body.getAttribute('data-theme') === 'light') {
@@ -1399,6 +1418,7 @@
         }
 
         function selectLanguage(langKey) {
+            triggerHaptic(10); // Виброотклик при переключении языка
             currentLang = langKey;
 
             // Обновляем визуальное активное состояние сегментов
