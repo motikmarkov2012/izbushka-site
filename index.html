@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v4.1-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v4.2-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -23,13 +23,14 @@
             --hint-bg: #8957e5;
             --hint-text: #ffffff;
 
-            --glass-btn-bg: rgba(22, 27, 34, 0.85);
-            --glass-btn-border: rgba(255, 255, 255, 0.18);
-            --glass-blur: blur(16px) saturate(160%);
+            /* Увеличен эффект Liquid Glass на 10% (было blur(16px), стало blur(17.6px)) */
+            --glass-btn-bg: rgba(22, 27, 34, 0.935);
+            --glass-btn-border: rgba(255, 255, 255, 0.198);
+            --glass-blur: blur(17.6px) saturate(176%);
 
-            --ios-glass-bg: rgba(22, 27, 34, 0.85);
-            --ios-glass-border: rgba(255, 255, 255, 0.15);
-            --ios-pill-bg: rgba(255, 255, 255, 0.12);
+            --ios-glass-bg: rgba(22, 27, 34, 0.935);
+            --ios-glass-border: rgba(255, 255, 255, 0.165);
+            --ios-pill-bg: rgba(255, 255, 255, 0.132);
             --ios-pill-active: #ffffff;
             --ios-text-active: #0d1117;
             --ios-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
@@ -51,12 +52,12 @@
             --hint-bg: #8250df;
             --hint-text: #ffffff;
 
-            --glass-btn-bg: rgba(255, 255, 255, 0.85);
-            --glass-btn-border: rgba(0, 0, 0, 0.12);
+            --glass-btn-bg: rgba(255, 255, 255, 0.935);
+            --glass-btn-border: rgba(0, 0, 0, 0.132);
 
-            --ios-glass-bg: rgba(255, 255, 255, 0.85);
-            --ios-glass-border: rgba(0, 0, 0, 0.08);
-            --ios-pill-bg: rgba(0, 0, 0, 0.05);
+            --ios-glass-bg: rgba(255, 255, 255, 0.935);
+            --ios-glass-border: rgba(0, 0, 0, 0.088);
+            --ios-pill-bg: rgba(0, 0, 0, 0.055);
             --ios-pill-active: #0969da;
             --ios-text-active: #ffffff;
             --ios-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
@@ -73,7 +74,7 @@
         html, body {
             width: 100%;
             overflow-x: hidden;
-            scroll-behavior: auto !important; /* Убираем резкие скачки скролла */
+            scroll-behavior: auto !important;
         }
 
         body {
@@ -101,7 +102,6 @@
             user-select: none;
         }
 
-        /* Зафиксированная верхняя панель (строгие размеры, 0 сдвигов) */
         .controls-bar {
             position: fixed;
             top: 12px;
@@ -439,6 +439,7 @@
             display: block;
         }
 
+        /* Адаптивная кнопка «Назад» с защитой от наползания на широких экранах */
         .btn-back {
             background: var(--glass-btn-bg);
             backdrop-filter: var(--glass-blur);
@@ -452,6 +453,11 @@
             cursor: pointer;
             margin-bottom: 10px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            max-width: 220px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-shrink: 0;
         }
 
         .model-wrapper {
@@ -472,7 +478,7 @@
             touch-action: none;
         }
 
-        /* Центрированное всплывающее уведомление ровно по центру экрана */
+        /* Центрированное пошаговое обучение 3D */
         .toast-3d-hint {
             position: absolute;
             top: 50%;
@@ -496,7 +502,6 @@
             text-align: center;
         }
 
-        /* Настоящие векторные SVG-курсоры */
         .real-cursors-stage {
             position: relative;
             width: 120px;
@@ -544,6 +549,27 @@
             color: var(--subtext-color);
             font-size: 0.78rem;
             line-height: 1.3;
+        }
+
+        .toast-steps-indicator {
+            display: flex;
+            gap: 6px;
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+
+        .step-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            transition: background-color 0.3s;
+        }
+
+        .step-dot.active {
+            background-color: var(--header-color);
+            width: 16px;
+            border-radius: 3px;
         }
 
         .btn-confirm-3d {
@@ -672,13 +698,18 @@
 
         body.fullscreen-3d-active .fullscreen-top-bar {
             position: absolute;
-            top: 12px;
-            left: 12px;
-            right: 12px;
+            top: calc(12px + env(safe-area-inset-top, 0px));
+            left: calc(12px + env(safe-area-inset-left, 0px));
+            right: calc(12px + env(safe-area-inset-right, 0px));
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 100000;
+            pointer-events: none;
+        }
+
+        body.fullscreen-3d-active .fullscreen-top-bar .btn-back {
+            pointer-events: auto;
         }
 
         @media (max-width: 600px) {
@@ -697,7 +728,7 @@
 <body data-theme="light">
 
     <!-- Бейдж версии -->
-    <div class="beta-badge">v4.1-beta</div>
+    <div class="beta-badge">v4.2-beta</div>
 
     <!-- Зафиксированная верхняя панель переключения языка и темы -->
     <div class="controls-bar" id="global-controls">
@@ -853,6 +884,7 @@
             </div>
 
             <div class="card-project-horiz" id="card-cat" onclick="openModel('cat')">
+                <openModel id="cat">
                 <img src="cat_card.jpg" alt="Кошка" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Кошка'">
                 <div class="robot-card-info">
                     <h3 id="card-cat-title">Кошка</h3>
@@ -897,15 +929,19 @@
         
         <div class="model-wrapper" id="model-wrapper-box">
             
-            <!-- Центрированное подсказка-уведомление строго посередине экрана -->
+            <!-- Интерактивное пошаговое обучение 3D -->
             <div id="toast-3d-hint" class="toast-3d-hint">
-                <div class="real-cursors-stage">
+                <div class="real-cursors-stage" id="tutorial-icon-stage">
                     <svg class="svg-cursor cursor-left" viewBox="0 0 24 24"><path d="M13.64 21.97C13.14 22 12.54 21.81 12.12 21.41L7.7 17.2L5.89 19.01C5.5 19.4 4.83 19.4 4.44 19.01L3.03 17.6C2.64 17.21 2.64 16.54 3.03 16.15L7.95 11.23L1 8.28L21 1L13.72 21L13.64 21.97Z"/></svg>
-                    <svg class="svg-cursor cursor-right" viewBox="0 0 24 24"><path d="M13.64 21.97C13.14 22 12.54 21.81 12.12 21.41L7.7 17.2L5.89 19.01C5.5 19.4 4.83 19.4 4.44 19.01L3.03 17.6C2.64 17.21 2.64 16.54 3.03 16.15L7.95 11.23L1 8.28L21 1L13.72 21L13.64 21.97Z"/></svg>
                 </div>
-                <div class="toast-title" id="toast-title-text">Вращайте и приближайте 3D-модель</div>
-                <div class="toast-sub" id="toast-sub-text">1 курсор — вращение под любым углом<br>2 курсора — масштаб и сдвиг</div>
-                <button class="btn-confirm-3d" onclick="dismiss3DHint()" id="toast-btn-text">Понятно</button>
+                <div class="toast-title" id="tutorial-title">Вращайте модель</div>
+                <div class="toast-sub" id="tutorial-sub">Используйте 1 палец или курсор для свободного вращения со всех сторон</div>
+                <div class="toast-steps-indicator">
+                    <div class="step-dot active" id="dot-0"></div>
+                    <div class="step-dot" id="dot-1"></div>
+                    <div class="step-dot" id="dot-2"></div>
+                </div>
+                <button class="btn-confirm-3d" onclick="nextTutorialStep()" id="tutorial-btn">Далее (1/3)</button>
             </div>
 
             <!-- Блок разработки -->
@@ -938,16 +974,18 @@
         let currentModelId = null;
         let isFullscreen3D = false;
         let savedScrollPosition = 0;
+        let tutorialStep = 0; // 0, 1, 2
 
+        /* Менее заметный виброотклик (уменьшена сила вибрации) */
         function triggerHaptic(intensity = 'medium') {
             if ("vibrate" in navigator) {
                 try {
                     if (intensity === 'heavy') {
-                        navigator.vibrate([25, 40, 25]);
+                        navigator.vibrate(15);
                     } else if (intensity === 'light') {
-                        navigator.vibrate(12);
+                        navigator.vibrate(6);
                     } else {
-                        navigator.vibrate([15, 30, 15]);
+                        navigator.vibrate(10);
                     }
                 } catch (e) {}
             }
@@ -974,9 +1012,23 @@
                 btnMoreText: "Подробнее →",
                 cardSub: "Интерактивный просмотр",
                 
-                toastTitle: "Вращайте и приближайте 3D-модель",
-                toastSub: "1 курсор — вращение под любым углом\n2 курсора — масштаб и сдвиг",
-                toastBtn: "Понятно",
+                tutorialSteps: [
+                    {
+                        title: "Вращайте модель",
+                        sub: "Используйте 1 палец или курсор для свободного вращения со всех сторон",
+                        btn: "Далее (1/3)"
+                    },
+                    {
+                        title: "Приближайте и отдаляйте",
+                        sub: "Сведите или разведите два пальца (или используйте колёсико мыши), чтобы изменить масштаб",
+                        btn: "Далее (2/3)"
+                    },
+                    {
+                        title: "Всё готово к работе!",
+                        sub: "Модель можно исследовать в деталях. Наслаждайтесь просмотром!",
+                        btn: "Понятно"
+                    }
+                ],
 
                 devBadge: "В разработке",
                 devTitle: "Модель готовится к публикации",
@@ -1060,9 +1112,23 @@
                 btnMoreText: "Details →",
                 cardSub: "Interactive View",
 
-                toastTitle: "Rotate & Zoom 3D Model",
-                toastSub: "1 cursor to rotate freely\n2 cursors to zoom and pan",
-                toastBtn: "Got it",
+                tutorialSteps: [
+                    {
+                        title: "Rotate Model",
+                        sub: "Use 1 finger or cursor to freely rotate from all angles",
+                        btn: "Next (1/3)"
+                    },
+                    {
+                        title: "Zoom In & Out",
+                        sub: "Pinch with two fingers or use mouse scroll to adjust scale",
+                        btn: "Next (2/3)"
+                    },
+                    {
+                        title: "All set!",
+                        sub: "Explore the model in detail. Enjoy viewing!",
+                        btn: "Got it"
+                    }
+                ],
 
                 devBadge: "Under Development",
                 devTitle: "Model coming soon",
@@ -1145,9 +1211,23 @@
                 btnMoreText: "详细信息 →",
                 cardSub: "交互式查看",
 
-                toastTitle: "旋转与缩放 3D 模型",
-                toastSub: "1 个光标自由旋转\n2 个光标缩放和平移",
-                toastBtn: "知道了",
+                tutorialSteps: [
+                    {
+                        title: "旋转模型",
+                        sub: "使用单指或光标在各个角度自由旋转",
+                        btn: "下一步 (1/3)"
+                    },
+                    {
+                        title: "缩放大小",
+                        sub: "双指捏合或使用鼠标滚轮来调整缩放比例",
+                        btn: "下一步 (2/3)"
+                    },
+                    {
+                        title: "准备就绪！",
+                        sub: "您可以详细检查模型了。祝您浏览愉快！",
+                        btn: "知道了"
+                    }
+                ],
 
                 devBadge: "开发中",
                 devTitle: "模型即将发布",
@@ -1234,11 +1314,55 @@
             }
         }
 
-        function dismiss3DHint() {
+        /* Логика пошагового обучения 3D (3 шага) */
+        function nextTutorialStep() {
             triggerHaptic('light');
-            const toast = document.getElementById('toast-3d-hint');
-            if (toast) {
-                toast.style.display = 'none';
+            tutorialStep++;
+            if (tutorialStep > 2) {
+                const toast = document.getElementById('toast-3d-hint');
+                if (toast) toast.style.display = 'none';
+                return;
+            }
+            updateTutorialUI();
+        }
+
+        function updateTutorialUI() {
+            const t = translations[currentLang];
+            const data = t.tutorialSteps[tutorialStep];
+            
+            const titleEl = document.getElementById('tutorial-title');
+            const subEl = document.getElementById('tutorial-sub');
+            const btnEl = document.getElementById('tutorial-btn');
+            const stageEl = document.getElementById('tutorial-icon-stage');
+
+            if (titleEl) titleEl.innerText = data.title;
+            if (subEl) subEl.innerText = data.sub;
+            if (btnEl) btnEl.innerText = data.btn;
+
+            // Обновляем иконки/курсоры в зависимости от шага обучения
+            if (stageEl) {
+                if (tutorialStep === 0) {
+                    stageEl.innerHTML = `<svg class="svg-cursor cursor-left" viewBox="0 0 24 24"><path d="M13.64 21.97C13.14 22 12.54 21.81 12.12 21.41L7.7 17.2L5.89 19.01C5.5 19.4 4.83 19.4 4.44 19.01L3.03 17.6C2.64 17.21 2.64 16.54 3.03 16.15L7.95 11.23L1 8.28L21 1L13.72 21L13.64 21.97Z"/></svg>`;
+                } else if (tutorialStep === 1) {
+                    stageEl.innerHTML = `
+                        <svg class="svg-cursor cursor-left" style="width:24px; height:24px;" viewBox="0 0 24 24"><path d="M13.64 21.97C13.14 22 12.54 21.81 12.12 21.41L7.7 17.2L5.89 19.01C5.5 19.4 4.83 19.4 4.44 19.01L3.03 17.6C2.64 17.21 2.64 16.54 3.03 16.15L7.95 11.23L1 8.28L21 1L13.72 21L13.64 21.97Z"/></svg>
+                        <svg class="svg-cursor cursor-right" style="width:24px; height:24px;" viewBox="0 0 24 24"><path d="M13.64 21.97C13.14 22 12.54 21.81 12.12 21.41L7.7 17.2L5.89 19.01C5.5 19.4 4.83 19.4 4.44 19.01L3.03 17.6C2.64 17.21 2.64 16.54 3.03 16.15L7.95 11.23L1 8.28L21 1L13.72 21L13.64 21.97Z"/></svg>
+                    `;
+                } else {
+                    stageEl.innerHTML = `<span style="font-size: 2rem;">✨</span>`;
+                }
+            }
+
+            // Обновляем индикаторы точек (dots)
+            for (let i = 0; i < 3; i++) {
+                const dot = document.getElementById('dot-' + i);
+                if (dot) {
+                    if (i === tutorialStep) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                }
             }
         }
 
@@ -1275,7 +1399,6 @@
             }
         }
 
-        /* Возвращает в меню на ту же позицию без скачков и движений экрана */
         function showMainViewUI() {
             exit3DFullscreen();
 
@@ -1328,6 +1451,11 @@
             triggerHaptic('medium');
             pushStateIfNeeded('model');
             currentModelId = id;
+            
+            // Сбрасываем обучение на первый шаг при открытии любой 3D модели
+            tutorialStep = 0;
+            updateTutorialUI();
+
             const t = translations[currentLang];
             const viewer = document.getElementById('model-display');
             const title = document.getElementById('model-title');
@@ -1440,9 +1568,7 @@
             document.getElementById('card-cat-title').innerText = t.catTitle;
             document.getElementById('card-dog-title').innerText = t.dogTitle;
 
-            document.getElementById('toast-title-text').innerText = t.toastTitle;
-            document.getElementById('toast-sub-text').innerHTML = t.toastSub.replace('\n', '<br>');
-            document.getElementById('toast-btn-text').innerText = t.toastBtn;
+            updateTutorialUI();
 
             document.getElementById('dev-badge').innerText = t.devBadge;
             document.getElementById('dev-title').innerText = t.devTitle;
