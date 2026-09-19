@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v4.5-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v4.5.1-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -35,10 +35,10 @@
             --ios-text-active: #0d1117;
             --ios-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 
-            /* Винный цвет для кнопки контактов */
-            --wine-bg: #722f37;
-            --wine-hover: #8b3a44;
-            --wine-border: #a34853;
+            /* Жидкое стекло с винным оттенком для контактов */
+            --wine-glass-bg: rgba(114, 47, 55, 0.55);
+            --wine-glass-border: rgba(230, 110, 125, 0.35);
+            --wine-modal-border: #a34853;
         }
 
         [data-theme="light"] {
@@ -67,9 +67,9 @@
             --ios-text-active: #ffffff;
             --ios-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 
-            --wine-bg: #800020;
-            --wine-hover: #990026;
-            --wine-border: #b3002d;
+            --wine-glass-bg: rgba(128, 0, 32, 0.65);
+            --wine-glass-border: rgba(179, 0, 45, 0.35);
+            --wine-modal-border: #b3002d;
         }
 
         * {
@@ -98,7 +98,7 @@
             position: relative;
         }
 
-        /* Бейдж версии в правом нижнем углу экрана */
+        /* Бейдж версии в правом нижнем углу */
         .beta-badge {
             position: fixed;
             bottom: 12px;
@@ -112,28 +112,41 @@
             z-index: 999;
         }
 
-        /* Винная полупрозрачная кнопка контактов чётко в левом верхнем углу */
+        /* Кнопка контактов Liquid Glass на одном уровне с панелью языков */
         .btn-contact-wine {
             position: absolute;
-            top: 14px;
-            left: 14px;
-            background-color: var(--wine-bg);
+            top: calc(12px + env(safe-area-inset-top, 0px));
+            left: calc(12px + env(safe-area-inset-left, 0px));
+            height: 46px;
+            background: var(--wine-glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
             color: #ffffff;
-            border: 1px solid var(--wine-border);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
+            border: 1px solid var(--wine-glass-border);
+            padding: 0 16px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(114, 47, 55, 0.3);
-            opacity: 0.82;
-            transition: opacity 0.2s, background-color 0.2s, transform 0.15s;
+            box-shadow: var(--ios-shadow);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             z-index: 10;
+            animation: pulseGlow 2.5s infinite ease-in-out;
+            transition: opacity 0.3s, transform 0.15s;
+        }
+
+        /* Анимация пульсации прозрачности при старте для привлечения внимания */
+        @keyframes pulseGlow {
+            0% { opacity: 0.4; }
+            50% { opacity: 0.95; }
+            100% { opacity: 0.4; }
         }
 
         .btn-contact-wine:hover {
+            animation: none;
             opacity: 1;
-            background-color: var(--wine-hover);
         }
 
         .btn-contact-wine:active {
@@ -157,7 +170,7 @@
 
         .contact-modal-card {
             background: var(--card-bg);
-            border: 1px solid var(--wine-border);
+            border: 1px solid var(--wine-modal-border);
             border-radius: 20px;
             padding: 24px;
             width: 90%;
@@ -301,11 +314,11 @@
             flex-shrink: 0;
         }
 
-        /* Подсказка сдвинута ниже */
+        /* Подсказка позиционируется строго под плашкой языков, не перекрывая Баба Яга */
         .settings-hint {
             position: fixed;
-            top: 115px;
-            right: 12px;
+            top: calc(66px + env(safe-area-inset-top, 0px));
+            right: calc(12px + env(safe-area-inset-right, 0px));
             background-color: var(--hint-bg);
             color: var(--hint-text);
             padding: 8px 12px 8px 14px;
@@ -313,7 +326,7 @@
             font-size: 0.85rem;
             font-weight: 600;
             box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-            z-index: 1001;
+            z-index: 100002;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -350,7 +363,7 @@
         header {
             text-align: center;
             margin-bottom: 16px;
-            margin-top: 16px;
+            margin-top: 18px;
             width: 100%;
             max-width: 900px;
             position: relative;
@@ -850,8 +863,8 @@
             .lang-segmented-control { width: 165px; height: 32px; }
             .lang-option { width: 52px; height: 26px; font-size: 0.75rem; }
             .theme-toggle-btn { width: 30px; height: 30px; font-size: 0.85rem; }
-            .settings-hint { top: 100px; right: 8px; width: 230px; }
-            .btn-contact-wine { top: 10px; left: 10px; padding: 5px 10px; font-size: 0.75rem; }
+            .settings-hint { top: calc(54px + env(safe-area-inset-top, 0px)); right: 8px; width: 230px; }
+            .btn-contact-wine { top: 8px; left: 8px; height: 42px; padding: 0 12px; font-size: 0.78rem; }
             .beta-badge { bottom: 8px; right: 10px; font-size: 0.68rem; }
             
             body.fullscreen-3d-active .fullscreen-top-bar {
@@ -864,7 +877,7 @@
 <body data-theme="light">
 
     <!-- Бейдж версии в правом нижнем углу -->
-    <div class="beta-badge">v4.5-beta</div>
+    <div class="beta-badge">v4.5.1-beta</div>
 
     <!-- Модальное окно контактов -->
     <div id="contact-modal" class="contact-modal-overlay">
@@ -898,14 +911,14 @@
         <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Смена темы">🌙</button>
     </div>
 
-    <!-- Всплывающая подсказка ниже заголовка -->
+    <!-- Всплывающая подсказка ровно под плашкой языков -->
     <div id="settings-hint" class="settings-hint">
         <span>💡 <span id="hint-text-popup">Переключение языка и темы здесь!</span></span>
         <button class="hint-close-btn" onclick="closeSettingsHint()" aria-label="Закрыть">✕</button>
     </div>
 
     <header>
-        <!-- Кнопка контактов только на главной странице в левом верхнем углу -->
+        <!-- Кнопка контактов Liquid Glass строго на одном уровне с переключателями -->
         <button class="btn-contact-wine" onclick="openContactModal()">✉ Контакты</button>
         <h1 id="title-team">БАБА ЯГА</h1>
         <p id="title-school">Президентский физико-математический лицей №239, г. Санкт-Петербург</p>
