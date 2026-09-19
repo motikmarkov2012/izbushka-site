@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v3.6-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v3.7-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -82,7 +82,7 @@
             overflow-x: hidden;
         }
 
-        /* Почти прозрачный бета-бейдж в противоположном верхнем левом углу */
+        /* Прозрачный бета-бейдж */
         .beta-badge {
             position: fixed;
             top: 18px;
@@ -96,7 +96,7 @@
             user-select: none;
         }
 
-        /* Увеличенная iOS-панель управления (Liquid Glass Floating Bar) */
+        /* iOS-панель управления */
         .controls-bar {
             position: fixed;
             top: 12px;
@@ -114,7 +114,7 @@
             box-shadow: var(--ios-shadow);
         }
 
-        /* iOS Segmented Switcher для языков с 3 позициями */
+        /* iOS Segmented Switcher для языков */
         .lang-segmented-control {
             display: flex;
             align-items: center;
@@ -131,13 +131,13 @@
             color: var(--text-color);
             font-weight: 600;
             font-size: 0.8rem;
-            padding: 6px 12px;
+            padding: 6px 10px;
             border-radius: 18px;
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             user-select: none;
             z-index: 2;
         }
@@ -148,7 +148,17 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.18);
         }
 
-        /* Кнопка смены темы в стиле капсулы iOS */
+        /* SVG иконки флагов для надежного отображения на ПК */
+        .flag-icon {
+            width: 18px;
+            height: 13px;
+            border-radius: 2px;
+            object-fit: cover;
+            box-shadow: 0 0 2px rgba(0,0,0,0.3);
+            flex-shrink: 0;
+        }
+
+        /* Кнопка смены темы */
         .theme-toggle-btn {
             background: var(--ios-pill-bg);
             border: none;
@@ -168,7 +178,7 @@
             transform: scale(1.05);
         }
 
-        /* Подсказка с пульсацией прозрачности */
+        /* Подсказка */
         .settings-hint {
             position: fixed;
             top: 72px;
@@ -469,6 +479,7 @@
             touch-action: none;
         }
 
+        /* Переработанная и наглядная инструкция к 3D-режиму */
         .gesture-tutorial {
             position: absolute;
             top: 0;
@@ -482,63 +493,97 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: 16px;
+            padding: 18px 14px;
             text-align: center;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
             overflow-y: auto;
+        }
+
+        .tutorial-header {
+            margin-bottom: 8px;
         }
 
         .tutorial-title {
             color: var(--header-color);
-            font-size: 1.05rem;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-        }
-
-        .gesture-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            width: 100%;
-            max-width: 360px;
-            margin-bottom: 12px;
-        }
-
-        .gesture-item {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 8px 12px;
-            border-radius: 8px;
-            text-align: left;
-        }
-
-        .gesture-info h4 {
-            color: var(--title-color);
-            font-size: 0.85rem;
-            font-weight: 600;
             margin-bottom: 2px;
         }
 
-        .gesture-info p {
+        .tutorial-subtitle {
             color: var(--subtext-color);
-            font-size: 0.75rem;
-            line-height: 1.25;
+            font-size: 0.78rem;
+        }
+
+        .gesture-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            width: 100%;
+            max-width: 480px;
+            margin: 8px 0;
+        }
+
+        .gesture-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .gesture-icon-badge {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--ios-pill-bg);
+            border: 1px solid var(--ios-glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--header-color);
+        }
+
+        .gesture-card h4 {
+            color: var(--title-color);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.1;
+        }
+
+        .gesture-card p {
+            color: var(--subtext-color);
+            font-size: 0.7rem;
+            line-height: 1.2;
+            margin: 0;
         }
 
         .btn-start-3d {
             background-color: var(--btn-green);
             color: white;
             border: none;
-            border-radius: 8px;
-            padding: 12px 28px;
+            border-radius: 10px;
+            padding: 12px 32px;
             font-size: 0.95rem;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-            margin-top: 4px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+            margin-top: 6px;
             flex-shrink: 0;
+            transition: transform 0.15s ease, background-color 0.2s ease;
+        }
+
+        .btn-start-3d:active {
+            transform: scale(0.97);
         }
 
         .btn-start-3d:hover {
@@ -670,24 +715,36 @@
             header h1 { font-size: 1.5rem; }
             .section-title { font-size: 1.1rem; }
             .controls-bar { top: 8px; right: 8px; padding: 4px 6px; }
-            .lang-option { padding: 5px 8px; font-size: 0.75rem; }
+            .lang-option { padding: 5px 7px; font-size: 0.75rem; }
             .theme-toggle-btn { width: 30px; height: 30px; font-size: 0.9rem; }
             .settings-hint { top: 64px; right: 8px; font-size: 0.8rem; }
             .beta-badge { top: 12px; left: 10px; font-size: 0.7rem; }
+            .gesture-grid { grid-template-columns: 1fr; max-width: 280px; gap: 6px; }
+            .gesture-card { flex-direction: row; text-align: left; padding: 8px 10px; }
+            .gesture-icon-badge { width: 34px; height: 34px; min-width: 34px; font-size: 1rem; }
         }
     </style>
 </head>
 <body data-theme="light">
 
-    <!-- Прозрачный индикатор бета-версии в левом верхнем углу -->
-    <div class="beta-badge">v3.6-beta</div>
+    <!-- Бейдж бета-версии -->
+    <div class="beta-badge">v3.7-beta</div>
 
     <!-- iOS-панель переключения языка и темы -->
     <div class="controls-bar" id="global-controls">
         <div class="lang-segmented-control">
-            <button class="lang-option active" id="lang-ru" onclick="selectLanguage('ru')">🇷🇺 RU</button>
-            <button class="lang-option" id="lang-en" onclick="selectLanguage('en')">🇬🇧 EN</button>
-            <button class="lang-option" id="lang-cn" onclick="selectLanguage('cn')">🇨🇳 CN</button>
+            <button class="lang-option active" id="lang-ru" onclick="selectLanguage('ru')">
+                <svg class="flag-icon" viewBox="0 0 640 480"><path fill="#fff" d="0 0h640v160H0z"/><path fill="#0039a6" d="0 160h640v160H0z"/><path fill="#d52b1e" d="0 320h640v160H0z"/></svg>
+                <span>RU</span>
+            </button>
+            <button class="lang-option" id="lang-en" onclick="selectLanguage('en')">
+                <svg class="flag-icon" viewBox="0 0 640 480"><path fill="#012169" d="0 0h640v480H0z"/><path fill="#FFF" d="m75 0 245 180L565 0h75v55L400 240l240 185v55h-75L320 300 75 480H0v-55l240-185L0 55V0h75z"/><path fill="#C8102E" d="m420 280 220 165v35h-50L350 310l70-30zM220 200 0 35V0h50l240 170-70 30zM220 280 0 445v35h50l240-170-70-30zm200-80L640 35V0h-50L350 170l70 30z"/><path fill="#FFF" d="M240 0h160v480H240zM0 160h640v160H0z"/><path fill="#C8102E" d="M267 0h106v480H267zM0 187h640v106H0z"/></svg>
+                <span>EN</span>
+            </button>
+            <button class="lang-option" id="lang-cn" onclick="selectLanguage('cn')">
+                <svg class="flag-icon" viewBox="0 0 640 480"><path fill="#ee1c25" d="0 0h640v480H0z"/><path fill="#ffde00" d="M120 96l25 76h80l-65 47 25 76-65-47-65 47 25-76-65-47h80zm120-48l12 37h39l-31 23 12 37-32-23-31 23 12-37-32-23h39zm48 48l22 32 37-12-23 31 23 32-38-11-22 32-6-39-38-11 32-23zm0 80l32 23-6 39-22-32-38 11 23-32-23-31 37 12zM240 224l31 23-12 37 32-23 31 23-12-37 31-23h-39l-12-37-12 37z"/></svg>
+                <span>CN</span>
+            </button>
         </div>
         <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Смена темы">🌙</button>
     </div>
@@ -871,29 +928,37 @@
         <h2 id="model-title" style="color: var(--header-color); margin-bottom: 10px;">Модель</h2>
         
         <div class="model-wrapper" id="model-wrapper-box">
-            <!-- Оверлей обучения -->
+            <!-- Переработанный интуитивный оверлей навигации 3D -->
             <div id="gesture-tutorial" class="gesture-tutorial">
-                <div class="tutorial-title" id="tut-title">Инструкция по навигации 3D</div>
-                <div class="gesture-list">
-                    <div class="gesture-item">
-                        <div class="gesture-info">
-                            <h4 id="tut-rot-title">Вращение на 360°</h4>
-                            <p id="tut-rot-desc">Перетаскивание одним пальцем или удерживая ЛКМ</p>
+                <div class="tutorial-header">
+                    <div class="tutorial-title" id="tut-title">Управление 3D-моделью</div>
+                    <div class="tutorial-subtitle">Интерактивный просмотр объекта</div>
+                </div>
+
+                <div class="gesture-grid">
+                    <div class="gesture-card">
+                        <div class="gesture-icon-badge">🔄</div>
+                        <div>
+                            <h4 id="tut-rot-title">Вращение</h4>
+                            <p id="tut-rot-desc">1 палец или ЛКМ</p>
                         </div>
                     </div>
-                    <div class="gesture-item">
-                        <div class="gesture-info">
-                            <h4 id="tut-zoom-title">Масштабирование (Зум)</h4>
-                            <p id="tut-zoom-desc">Сведение двух пальцев или прокрутка колесиком мыши</p>
+                    <div class="gesture-card">
+                        <div class="gesture-icon-badge">🔍</div>
+                        <div>
+                            <h4 id="tut-zoom-title">Масштаб</h4>
+                            <p id="tut-zoom-desc">2 пальца или колесико</p>
                         </div>
                     </div>
-                    <div class="gesture-item">
-                        <div class="gesture-info">
-                            <h4 id="tut-pan-title">Панорамирование (Параллельный сдвиг)</h4>
-                            <p id="tut-pan-desc">Сдвиг двумя пальцами или удерживая ПКМ</p>
+                    <div class="gesture-card">
+                        <div class="gesture-icon-badge">✋</div>
+                        <div>
+                            <h4 id="tut-pan-title">Сдвиг</h4>
+                            <p id="tut-pan-desc">2 пальца или ПКМ</p>
                         </div>
                     </div>
                 </div>
+
                 <button class="btn-start-3d" onclick="start3DView()" id="tut-btn">Перейти к просмотру</button>
             </div>
 
@@ -926,15 +991,33 @@
         let currentModelId = null;
         let isFullscreen3D = false;
 
-        /* Функция короткого виброотклика (Haptic Feedback) */
-        function triggerHaptic(duration = 10) {
+        /* Усиленный виброотклик для Android и iOS Safari (Haptic Feedback v3.7) */
+        function triggerHaptic(intensity = 'medium') {
+            // Android Navigator Vibrate API
             if ("vibrate" in navigator) {
                 try {
-                    navigator.vibrate(duration);
-                } catch (e) {
-                    // Игнорируем в случае ограничений браузера
-                }
+                    if (intensity === 'heavy') {
+                        navigator.vibrate([25, 40, 25]);
+                    } else if (intensity === 'light') {
+                        navigator.vibrate(12);
+                    } else {
+                        navigator.vibrate([15, 30, 15]);
+                    }
+                } catch (e) {}
             }
+
+            // Тактильный импульс для устройств iOS (Safari WebHaptics fallback)
+            try {
+                const dummyInput = document.createElement('input');
+                dummyInput.setAttribute('type', 'text');
+                dummyInput.style.position = 'absolute';
+                dummyInput.style.opacity = '0';
+                dummyInput.style.height = '0';
+                document.body.appendChild(dummyInput);
+                dummyInput.focus();
+                dummyInput.setSelectionRange(0, 0);
+                document.body.removeChild(dummyInput);
+            } catch (e) {}
         }
 
         const modelAssets = {
@@ -958,13 +1041,13 @@
                 btnMoreText: "Подробнее →",
                 cardSub: "Интерактивный просмотр",
                 
-                tutTitle: "Инструкция по навигации 3D",
-                tutRotTitle: "Вращение на 360°",
-                tutRotDesc: "Перетаскивание одним пальцем или удерживая ЛКМ",
-                tutZoomTitle: "Масштабирование (Зум)",
-                tutZoomDesc: "Сведение двух пальцев или прокрутка колесиком мыши",
-                tutPanTitle: "Панорамирование (Параллельный сдвиг)",
-                tutPanDesc: "Сдвиг двумя пальцами или удерживая ПКМ",
+                tutTitle: "Управление 3D-моделью",
+                tutRotTitle: "Вращение",
+                tutRotDesc: "1 палец или ЛКМ",
+                tutZoomTitle: "Масштаб",
+                tutZoomDesc: "2 пальца или колесико",
+                tutPanTitle: "Сдвиг",
+                tutPanDesc: "2 пальца или ПКМ",
                 tutBtn: "Перейти к просмотру",
 
                 devBadge: "В разработке",
@@ -1049,13 +1132,13 @@
                 btnMoreText: "Details →",
                 cardSub: "Interactive View",
 
-                tutTitle: "3D Navigation Guide",
-                tutRotTitle: "360° Object Rotation",
-                tutRotDesc: "Drag with 1 finger or Left Mouse Button",
-                tutZoomTitle: "Zooming",
-                tutZoomDesc: "Pinch with two fingers or Mouse Wheel",
-                tutPanTitle: "Panning (Parallel Shift)",
-                tutPanDesc: "Drag with two fingers or Right Mouse Button",
+                tutTitle: "3D View Control",
+                tutRotTitle: "Rotate",
+                tutRotDesc: "1 finger or LMB",
+                tutZoomTitle: "Zoom",
+                tutZoomDesc: "Pinch or Scroll",
+                tutPanTitle: "Pan",
+                tutPanDesc: "2 fingers or RMB",
                 tutBtn: "Proceed to view",
 
                 devBadge: "Under Development",
@@ -1139,13 +1222,13 @@
                 btnMoreText: "详细信息 →",
                 cardSub: "交互式查看",
 
-                tutTitle: "3D 导航说明",
-                tutRotTitle: "360° 全景旋转",
-                tutRotDesc: "单指拖动或按住鼠标左键",
+                tutTitle: "3D 模型控制",
+                tutRotTitle: "旋转",
+                tutRotDesc: "单指或左键",
                 tutZoomTitle: "缩放",
-                tutZoomDesc: "双指捏合或鼠标滚轮",
+                tutZoomDesc: "双指或滚轮",
                 tutPanTitle: "平移",
-                tutPanDesc: "双指拖动或按住鼠标右键",
+                tutPanDesc: "双指或右键",
                 tutBtn: "开始查看",
 
                 devBadge: "开发中",
@@ -1226,7 +1309,7 @@
         });
 
         function closeSettingsHint() {
-            triggerHaptic(8);
+            triggerHaptic('light');
             const hint = document.getElementById('settings-hint');
             if (hint) {
                 hint.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
@@ -1238,7 +1321,7 @@
 
         // Запуск полноэкранного 3D-режима
         function start3DView() {
-            triggerHaptic(12);
+            triggerHaptic('heavy');
             isFullscreen3D = true;
             document.body.classList.add('fullscreen-3d-active');
 
@@ -1266,7 +1349,7 @@
 
         // Обработка кнопки "Назад" и жестов свайпа
         window.addEventListener('popstate', function(event) {
-            triggerHaptic(10);
+            triggerHaptic('medium');
             if (currentView !== 'main') {
                 showMainViewUI();
             }
@@ -1280,7 +1363,7 @@
         }
 
         function goBack() {
-            triggerHaptic(10);
+            triggerHaptic('medium');
             if (currentView !== 'main') {
                 history.back();
             }
@@ -1316,7 +1399,7 @@
         }
 
         function openMember(id) {
-            triggerHaptic(10);
+            triggerHaptic('medium');
             pushStateIfNeeded('member');
             currentMemberId = id;
             const t = translations[currentLang];
@@ -1345,7 +1428,7 @@
         }
 
         function openModel(id) {
-            triggerHaptic(10);
+            triggerHaptic('medium');
             pushStateIfNeeded('model');
             currentModelId = id;
             const t = translations[currentLang];
@@ -1384,28 +1467,24 @@
             document.getElementById('main-view').style.display = 'none';
             container.classList.add('active');
 
-            if (id !== 'birch') {
-                setTimeout(() => {
-                    const tutBtn = document.getElementById('tut-btn');
-                    if (tutBtn && tutBtn.offsetParent !== null) {
-                        tutBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    } else {
-                        container.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
-                }, 100);
-            } else {
-                window.scrollTo(0, 0);
-            }
+            // Подскролл при переходе к просмотру модели (для «Берёзы» подскролливаем ниже)
+            setTimeout(() => {
+                if (id === 'birch') {
+                    window.scrollTo({ top: 180, behavior: 'smooth' });
+                } else {
+                    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 80);
         }
 
         function toggleAccordion(id) {
-            triggerHaptic(8);
+            triggerHaptic('light');
             const content = document.getElementById(id);
             content.style.display = (content.style.display === 'block') ? 'none' : 'block';
         }
 
         function toggleTheme() {
-            triggerHaptic(12); // Виброотклик при переключении темы
+            triggerHaptic('medium');
             const body = document.body;
             const themeBtn = document.getElementById('theme-toggle');
             if (body.getAttribute('data-theme') === 'light') {
@@ -1418,10 +1497,9 @@
         }
 
         function selectLanguage(langKey) {
-            triggerHaptic(10); // Виброотклик при переключении языка
+            triggerHaptic('medium');
             currentLang = langKey;
 
-            // Обновляем визуальное активное состояние сегментов
             document.querySelectorAll('.lang-option').forEach(btn => btn.classList.remove('active'));
             const activeBtn = document.getElementById('lang-' + langKey);
             if (activeBtn) activeBtn.classList.add('active');
