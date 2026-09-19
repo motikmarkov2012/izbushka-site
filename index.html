@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v4.3-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v4.4-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -34,6 +34,11 @@
             --ios-pill-active: #ffffff;
             --ios-text-active: #0d1117;
             --ios-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+
+            /* Винный цвет для кнопки контактов */
+            --wine-bg: #722f37;
+            --wine-hover: #8b3a44;
+            --wine-border: #a34853;
         }
 
         [data-theme="light"] {
@@ -61,6 +66,10 @@
             --ios-pill-active: #0969da;
             --ios-text-active: #ffffff;
             --ios-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+
+            --wine-bg: #800020;
+            --wine-hover: #990026;
+            --wine-border: #b3002d;
         }
 
         * {
@@ -89,20 +98,112 @@
             position: relative;
         }
 
-        .beta-badge {
+        /* Верхняя левая зона с версией и кнопкой контактов */
+        .top-left-bar {
             position: fixed;
-            top: 18px;
-            left: 18px;
+            top: calc(12px + env(safe-area-inset-top, 0px));
+            left: calc(12px + env(safe-area-inset-left, 0px));
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 100001;
+        }
+
+        .beta-badge {
             font-size: 0.75rem;
             color: var(--subtext-color);
-            opacity: 0.35;
-            z-index: 999;
+            opacity: 0.5;
             font-family: monospace;
             pointer-events: none;
             user-select: none;
         }
 
-        /* Верхняя панель всегда переключаема во всех режимах (z-index: 100001) */
+        /* Винная кнопка контактов */
+        .btn-contact-wine {
+            background-color: var(--wine-bg);
+            color: #ffffff;
+            border: 1px solid var(--wine-border);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(114, 47, 55, 0.35);
+            transition: background-color 0.2s, transform 0.15s;
+        }
+
+        .btn-contact-wine:hover {
+            background-color: var(--wine-hover);
+        }
+
+        .btn-contact-wine:active {
+            transform: scale(0.95);
+        }
+
+        /* Всплывающее модальное окно контактов */
+        .contact-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 100005;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-modal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--wine-border);
+            border-radius: 20px;
+            padding: 24px;
+            width: 90%;
+            max-width: 340px;
+            text-align: center;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .contact-modal-card h3 {
+            color: var(--header-color);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .contact-modal-card p {
+            color: var(--subtext-color);
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+        }
+
+        .email-display-box {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--accent-green);
+            margin-bottom: 16px;
+            word-break: break-all;
+            user-select: all;
+        }
+
+        .btn-close-modal {
+            background: var(--wine-bg);
+            color: #ffffff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        /* Верхняя панель переключения языка и темы */
         .controls-bar {
             position: fixed;
             top: calc(12px + env(safe-area-inset-top, 0px));
@@ -177,9 +278,10 @@
             flex-shrink: 0;
         }
 
+        /* Подсказка сдвинута вниз, чтобы не перекрывать название Баба Яга */
         .settings-hint {
             position: fixed;
-            top: 68px;
+            top: 115px;
             right: 12px;
             background-color: var(--hint-bg);
             color: var(--hint-text);
@@ -225,24 +327,24 @@
         header {
             text-align: center;
             margin-bottom: 16px;
-            margin-top: 6px;
+            margin-top: 16px;
             width: 100%;
             max-width: 900px;
-            height: 70px;
+            height: auto;
         }
 
         header h1 {
             color: var(--header-color);
             font-size: 1.8rem;
-            margin-bottom: 4px;
-            height: 32px;
+            margin-bottom: 6px;
         }
 
+        /* Более жирный шрифт для лицея */
         header p {
             color: var(--subtext-color);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             line-height: 1.4;
-            height: 28px;
+            font-weight: 600;
         }
 
         .section-title {
@@ -440,7 +542,6 @@
             display: block;
         }
 
-        /* Уменьшенная компактная кнопка «Назад к меню» */
         .btn-back {
             background: var(--glass-btn-bg);
             backdrop-filter: var(--glass-blur);
@@ -482,7 +583,6 @@
             touch-action: none;
         }
 
-        /* Переработанная и улучшенная карточка туториала 3D */
         .toast-3d-hint {
             position: absolute;
             top: 52%;
@@ -706,7 +806,6 @@
             border-radius: 0 !important;
         }
 
-        /* Позиционирование кнопки Назад в режиме 3D просмотрщика без наложений */
         body.fullscreen-3d-active .fullscreen-top-bar {
             position: absolute;
             top: calc(58px + env(safe-area-inset-top, 0px));
@@ -729,8 +828,8 @@
             .lang-segmented-control { width: 165px; height: 32px; }
             .lang-option { width: 52px; height: 26px; font-size: 0.75rem; }
             .theme-toggle-btn { width: 30px; height: 30px; font-size: 0.85rem; }
-            .settings-hint { top: 60px; right: 8px; width: 230px; }
-            .beta-badge { top: 10px; left: 10px; font-size: 0.7rem; }
+            .settings-hint { top: 100px; right: 8px; width: 230px; }
+            .top-left-bar { top: 10px; left: 10px; }
             
             body.fullscreen-3d-active .fullscreen-top-bar {
                 top: calc(54px + env(safe-area-inset-top, 0px));
@@ -741,10 +840,23 @@
 </head>
 <body data-theme="light">
 
-    <!-- Бейдж версии -->
-    <div class="beta-badge">v4.3-beta</div>
+    <!-- Верхний левый угол с бейджем и кнопкой контактов -->
+    <div class="top-left-bar">
+        <div class="beta-badge">v4.4-beta</div>
+        <button class="btn-contact-wine" onclick="openContactModal()">✉ Контакты</button>
+    </div>
 
-    <!-- Зафиксированная верхняя панель переключения языка и темы (всегда поверх всех экранов) -->
+    <!-- Модальное окно контактов -->
+    <div id="contact-modal" class="contact-modal-overlay">
+        <div class="contact-modal-card">
+            <h3 id="modal-contact-title">Обращения и связи</h3>
+            <p id="modal-contact-desc">По всем вопросам о проекте вы можете написать нам на почту:</p>
+            <div class="email-display-box">moticmarkov@gmail.com</div>
+            <button class="btn-close-modal" onclick="closeContactModal()">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- Панель переключения языка и темы (всегда доступна) -->
     <div class="controls-bar" id="global-controls">
         <div class="lang-segmented-control">
             <button class="lang-option active" id="lang-ru" onclick="selectLanguage('ru')">
@@ -763,7 +875,7 @@
         <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Смена темы">🌙</button>
     </div>
 
-    <!-- Всплывающая подсказка -->
+    <!-- Всплывающая подсказка ниже заголовка -->
     <div id="settings-hint" class="settings-hint">
         <span>💡 <span id="hint-text-popup">Переключение языка и темы здесь!</span></span>
         <button class="hint-close-btn" onclick="closeSettingsHint()" aria-label="Закрыть">✕</button>
@@ -781,23 +893,23 @@
         <div class="grid-container">
             <div class="card-team" onclick="openMember('matvey')">
                 <div>
-                    <img src="matvey.jpg" alt="Марков Матвей" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ММ'">
-                    <h3 id="matvey-name">Марков Матвей</h3>
+                    <img src="matvey.jpg" alt="Матвей Марков" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ММ'">
+                    <h3 id="matvey-name">Матвей Марков</h3>
                     <p class="role" id="matvey-role">Капитан команды, главный конструктор и электрик проекта. Создатель Избушки на курьих ножках</p>
                 </div>
                 <span class="btn-more btn-more-text">Подробнее →</span>
             </div>
             <div class="card-team" onclick="openMember('lida')">
                 <div>
-                    <img src="lida.jpg" alt="Токарева Лидия" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ТЛ'">
-                    <h3 id="lida-name">Лида Токарева</h3>
+                    <img src="lida.jpg" alt="Лидия Токарева" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=ТЛ'">
+                    <h3 id="lida-name">Лидия Токарева</h3>
                     <p class="role" id="lida-role">Главный программист проекта. Запрограммировала роботов Кошка и Собака</p>
                 </div>
                 <span class="btn-more btn-more-text">Подробнее →</span>
             </div>
             <div class="card-team" onclick="openMember('alisa')">
                 <div>
-                    <img src="alisa.jpg" alt="Маркова Алиса" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=МА'">
+                    <img src="alisa.jpg" alt="Алиса Маркова" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=МА'">
                     <h3 id="alisa-name">Алиса Маркова</h3>
                     <p class="role" id="alisa-role">Конструктор ног Избушки</p>
                 </div>
@@ -942,7 +1054,7 @@
         
         <div class="model-wrapper" id="model-wrapper-box">
             
-            <!-- Обновлённое интерактивное обучение 3D -->
+            <!-- Обучение 3D -->
             <div id="toast-3d-hint" class="toast-3d-hint">
                 <div class="real-cursors-stage" id="tutorial-icon-stage">
                     <svg class="svg-cursor cursor-left" viewBox="0 0 24 24"><path d="M13.64 21.97C13.14 22 12.54 21.81 12.12 21.41L7.7 17.2L5.89 19.01C5.5 19.4 4.83 19.4 4.44 19.01L3.03 17.6C2.64 17.21 2.64 16.54 3.03 16.15L7.95 11.23L1 8.28L21 1L13.72 21L13.64 21.97Z"/></svg>
@@ -1003,6 +1115,16 @@
             }
         }
 
+        function openContactModal() {
+            triggerHaptic('light');
+            document.getElementById('contact-modal').style.display = 'flex';
+        }
+
+        function closeContactModal() {
+            triggerHaptic('light');
+            document.getElementById('contact-modal').style.display = 'none';
+        }
+
         const modelAssets = {
             izbushka: { gltf: 'izbushka.glb' },
             legs: { dev: true },
@@ -1046,7 +1168,7 @@
                 devTitle: "Модель готовится к публикации",
                 devText: "Интерактивная 3D-модель ног Избушки находится на стадии финальной калибровки и будет доступна в ближайшем обновлении.",
 
-                matveyName: "Марков Матвей",
+                matveyName: "Матвей Марков",
                 matveyRole: "Капитан команды, главный конструктор и электрик проекта. Создатель Избушки на курьих ножках",
                 matveyFullDesc: `• Капитан команды, главный конструктор и электрик проекта.
 • Создатель Избушки на курьих ножках.
@@ -1056,7 +1178,7 @@
 • Провел исследование распознавания цвета: доказано, что красный цвет распознается камерой наиболее стабильно и вызывает наименьшее количество ошибок.
 • Спроектировал трёхмерную модель корпуса Избушки в САПР SolidWorks и настроил схему питания.`,
                 
-                lidaName: "Лида Токарева",
+                lidaName: "Лидия Токарева",
                 lidaRole: "Главный программист проекта. Запрограммировала роботов Кошка и Собака",
                 lidaFullDesc: `• Главный программист проекта.
 • Запрограммировала роботов Кошка и Собака.
@@ -1067,7 +1189,7 @@
 
                 alisaName: "Алиса Маркова",
                 alisaRole: "Конструктор ног Избушки",
-                alisaFullDesc: `• Конструктор ног Избушки (вместе с Лидой Токаревой — создатели ног Избушки).
+                alisaFullDesc: `• Конструктор ног Избушки (вместе с Лидией Токаревой — создатели ног Избушки).
 • Спроектировала конструкцию робота Ноги Избушки, напоминающую строение ног птиц.
 • Создала главный инновационный элемент: опорно-механический узел, который физически соединяет вращение корпуса с шагающими ногами.
 • Самостоятельно сшила оригинальный костюм курьих ножек, который надевается на скелет робота.
@@ -1146,7 +1268,7 @@
                 devTitle: "Model coming soon",
                 devText: "The interactive 3D model of the Hut's legs is currently undergoing final calibration and will be available in the next update.",
 
-                matveyName: "Markov Matvey",
+                matveyName: "Matvey Markov",
                 matveyRole: "Team Captain, Lead Designer & Electrician. Creator of the Hut on Chicken Legs",
                 matveyFullDesc: `• Team Captain, Lead Designer and Electrician.
 • Creator of the Hut on Chicken Legs.
@@ -1156,7 +1278,7 @@
 • Conducted color recognition research: proved red color is recognized most reliably by the camera with minimal detection errors.
 • Designed the complete 3D model of the Hut's body in SolidWorks CAD and configured the electrical power system.`,
 
-                lidaName: "Lida Tokareva",
+                lidaName: "Lidia Tokareva",
                 lidaRole: "Lead Software Engineer. Programmed Cat and Dog robots",
                 lidaFullDesc: `• Lead Software Engineer of the project.
 • Programmed Cat and Dog robots in RobotC for LEGO Mindstorms EV3 controllers.
@@ -1166,7 +1288,7 @@
 
                 alisaName: "Alisa Markova",
                 alisaRole: "Hut Legs Mechanical Designer",
-                alisaFullDesc: `• Mechanical Designer of the Hut's legs (co-creator with Lida Tokareva).
+                alisaFullDesc: `• Mechanical Designer of the Hut's legs (co-creator with Lidia Tokareva).
 • Designed the mechanical structure of the Hut's legs resembling bird leg anatomy.
 • Innovated the key mechanical support node physically connecting body rotation with walking legs.
 • Hand-sewed custom fleece costumes for the chicken legs mounted over the robot frame.
@@ -1245,7 +1367,7 @@
                 devTitle: "模型即将发布",
                 devText: "小屋腿部的交互式 3D 模型正在进行最终校准，将在下次更新中提供。",
 
-                matveyName: "Markov Matvey",
+                matveyName: "Matvey Markov",
                 matveyRole: "队长、首席设计师及电气工程师。“鸡脚小屋”制作者",
                 matveyFullDesc: `• 团队队长、首席设计师及电气工程师。
 • “鸡脚小屋”的创造者。
@@ -1255,7 +1377,7 @@
 • 进行了颜色识别研究：证明红色在各种灯光下识别最稳定，出错率最低。
 • 在 SolidWorks 中完成了小屋本体 3D 模型设计与电路供电系统搭建。`,
 
-                lidaName: "Lida Tokareva",
+                lidaName: "Lidia Tokareva",
                 lidaRole: "首席软件工程师。编写了“猫”和“狗”机器人的程序",
                 lidaFullDesc: `• 项目首席软件工程师。
 • 在 LEGO Mindstorms EV3 上使用 RobotC 语言编写了“猫”和“狗”机器人的控制程序。
@@ -1265,7 +1387,7 @@
 
                 alisaName: "Alisa Markova",
                 alisaRole: "小屋腿部结构设计师",
-                alisaFullDesc: `• 小屋腿部结构设计师（与 Lida Tokareva 共同制作）。
+                alisaFullDesc: `• 小屋腿部结构设计师（与 Lidia Tokareva 共同制作）。
 • 设计了仿生鸟类腿部结构。
 • 创新开发了连接旋转主体与行走腿部的关键支撑机械节点。
 • 手工缝制了装配在机器人骨架上的羊毛“鸡脚”服装。
