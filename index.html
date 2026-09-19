@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v5.2-beta)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v5.4-beta)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -32,6 +32,16 @@
             --ios-pill-active: #ffffff;
             --ios-text-active: #0d1117;
             --ios-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+
+            /* Прозрачное матовое стекло без цвета для подсказки (в одну строчку) */
+            --hint-glass-bg: rgba(255, 255, 255, 0.08);
+            --hint-glass-border: rgba(255, 255, 255, 0.2);
+            --hint-text: #ffffff;
+
+            /* Кнопка Обратная связь (адаптируется под тему) */
+            --feedback-bg: rgba(22, 27, 34, 0.8);
+            --feedback-border: rgba(88, 166, 255, 0.4);
+            --feedback-text: #58a6ff;
         }
 
         [data-theme="light"] {
@@ -57,6 +67,14 @@
             --ios-pill-active: #0969da;
             --ios-text-active: #ffffff;
             --ios-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+
+            --hint-glass-bg: rgba(0, 0, 0, 0.08);
+            --hint-glass-border: rgba(0, 0, 0, 0.15);
+            --hint-text: #24292f;
+
+            --feedback-bg: rgba(255, 255, 255, 0.85);
+            --feedback-border: rgba(9, 105, 218, 0.4);
+            --feedback-text: #0969da;
         }
 
         * {
@@ -85,12 +103,12 @@
             position: relative;
         }
 
-        /* Правый нижний угол для версии */
-        .beta-badge {
+        /* Номер версии в правом нижнем углу */
+        .version-badge-bottom {
             position: fixed;
-            bottom: 12px;
+            bottom: 10px;
             right: 12px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--subtext-color);
             opacity: 0.5;
             font-family: monospace;
@@ -99,7 +117,7 @@
             user-select: none;
         }
 
-        /* Верхняя левая зона: Кнопка «Обратная связь» (в две строчки, полностью белая, жидкое стекло, с мигающей синей окантовкой) */
+        /* Кнопка «Обратная связь» в самом верхнем левом углу с мигающей синей окантовкой при входе */
         .top-left-bar {
             position: fixed;
             top: calc(12px + env(safe-area-inset-top, 0px));
@@ -108,87 +126,91 @@
         }
 
         .btn-feedback {
-            background: rgba(255, 255, 255, 0.85);
+            background: var(--feedback-bg);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
-            color: #0d1117;
-            border: 2px solid #58a6ff;
-            padding: 6px 14px;
-            border-radius: 14px;
-            font-size: 0.75rem;
+            color: var(--feedback-text);
+            border: 2px solid var(--feedback-border);
+            padding: 8px 16px;
+            border-radius: 24px;
+            font-size: 0.8rem;
             font-weight: 700;
             cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
             text-align: center;
             line-height: 1.2;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 16px rgba(88, 166, 255, 0.4);
-            animation: pulseBlueBorder 2s infinite ease-in-out;
-            transition: transform 0.15s ease;
+            transition: transform 0.15s;
+        }
+
+        .btn-feedback.pulse-blue-border {
+            animation: pulseBlueBorder 1.5s infinite;
+        }
+
+        @keyframes pulseBlueBorder {
+            0% { border-color: rgba(88, 166, 255, 0.2); box-shadow: 0 0 4px rgba(88, 166, 255, 0.2); }
+            50% { border-color: rgba(88, 166, 255, 1); box-shadow: 0 0 16px rgba(88, 166, 255, 0.8); }
+            100% { border-color: rgba(88, 166, 255, 0.2); box-shadow: 0 0 4px rgba(88, 166, 255, 0.2); }
         }
 
         .btn-feedback:active {
             transform: scale(0.95);
         }
 
-        @keyframes pulseBlueBorder {
-            0% { border-color: #58a6ff; box-shadow: 0 0 0 0 rgba(88, 166, 255, 0.7); }
-            50% { border-color: #1f6feb; box-shadow: 0 0 0 6px rgba(88, 166, 255, 0); }
-            100% { border-color: #58a6ff; box-shadow: 0 0 0 0 rgba(88, 166, 255, 0.7); }
-        }
-
-        /* Модальное окно обратной связи (жидкое стекло с зелёным акцентом) */
-        .feedback-modal-overlay {
+        /* Модальное окно обратной связи (зеленый Liquid Glass на весь экран) */
+        .contact-modal-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(25px) saturate(200%);
+            -webkit-backdrop-filter: blur(25px) saturate(200%);
             z-index: 100005;
             align-items: center;
             justify-content: center;
             padding: 16px;
         }
 
-        .feedback-modal-card {
-            background: rgba(22, 27, 34, 0.82);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
+        .contact-modal-card {
+            background: rgba(13, 17, 23, 0.65);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             border: 1px solid rgba(126, 231, 135, 0.4);
-            border-radius: 24px;
-            padding: 24px;
+            border-radius: 28px;
+            padding: 30px 20px;
             width: 100%;
-            max-width: 340px;
+            max-width: 380px;
             text-align: center;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-            animation: fadeInScale 0.25s ease-out;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            animation: fadeInModal 0.3s ease-out;
         }
 
-        [data-theme="light"] .feedback-modal-card {
-            background: rgba(255, 255, 255, 0.85);
+        [data-theme="light"] .contact-modal-card {
+            background: rgba(246, 248, 250, 0.75);
             border: 1px solid rgba(26, 127, 55, 0.3);
         }
 
-        @keyframes fadeInScale {
+        @keyframes fadeInModal {
             0% { opacity: 0; transform: scale(0.95); }
             100% { opacity: 1; transform: scale(1); }
         }
 
-        .feedback-modal-card h3 {
+        .contact-modal-card h3 {
             color: var(--accent-green);
-            margin-bottom: 8px;
-            font-size: 1.15rem;
+            margin-bottom: 12px;
+            font-size: 1.25rem;
         }
 
-        .feedback-modal-card p {
+        .contact-modal-card p {
             color: var(--subtext-color);
-            font-size: 0.85rem;
-            margin-bottom: 16px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
         }
 
         .email-display-box {
@@ -198,8 +220,8 @@
             border-radius: 12px;
             font-family: monospace;
             font-size: 0.95rem;
-            color: var(--title-color);
-            margin-bottom: 16px;
+            color: var(--text-color);
+            margin-bottom: 20px;
             word-break: break-all;
             user-select: all;
         }
@@ -207,11 +229,12 @@
         .modal-actions {
             display: flex;
             gap: 10px;
+            justify-content: center;
         }
 
         .btn-modal-action {
             flex: 1;
-            padding: 10px;
+            padding: 10px 16px;
             border-radius: 12px;
             font-weight: bold;
             font-size: 0.85rem;
@@ -222,15 +245,10 @@
         .btn-copy-email {
             background: var(--btn-green);
             color: #ffffff;
-            box-shadow: 0 4px 12px rgba(35, 134, 54, 0.3);
-        }
-
-        .btn-copy-email:active {
-            transform: scale(0.97);
         }
 
         .btn-close-modal {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.1);
             color: var(--text-color);
             border: 1px solid var(--border-color);
         }
@@ -310,72 +328,53 @@
             flex-shrink: 0;
         }
 
-        /* Уведомление про смену языка: очень близко к кнопкам, переливчатое сине-белое матовое стекло без цвета, висит 10 секунд */
+        /* Уведомление о смене языка: прозрачное матовое стекло без цвета, в одну строчку, очень близко к смене языка */
         .settings-hint {
             position: fixed;
-            top: 64px;
+            top: 62px;
             right: 12px;
-            background: rgba(255, 255, 255, 0.12);
+            background-color: var(--hint-glass-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(88, 166, 255, 0.35);
-            color: var(--title-color);
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            box-shadow: 0 8px 24px rgba(31, 111, 235, 0.25);
+            border: 1px solid var(--hint-glass-border);
+            color: var(--hint-text);
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
             z-index: 1001;
             display: flex;
             align-items: center;
             gap: 8px;
-            max-width: 240px;
-            animation: shimmerHint 3s infinite alternate;
+            white-space: nowrap;
+            animation: fadeInHint 0.4s ease-out;
         }
 
-        [data-theme="light"] .settings-hint {
-            background: rgba(255, 255, 255, 0.75);
-            border: 1px solid rgba(9, 105, 218, 0.3);
-            color: #1f2328;
-        }
-
-        @keyframes shimmerHint {
-            0% { box-shadow: 0 8px 20px rgba(31, 111, 235, 0.2); border-color: rgba(88, 166, 255, 0.3); }
-            100% { box-shadow: 0 8px 26px rgba(255, 255, 255, 0.4); border-color: rgba(255, 255, 255, 0.7); }
-        }
-
-        .settings-hint::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            right: 28px;
-            width: 0;
-            height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-bottom: 5px solid rgba(88, 166, 255, 0.5);
+        @keyframes fadeInHint {
+            0% { opacity: 0; transform: translateY(-5px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         .hint-close-btn {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15);
             border: none;
             color: inherit;
             border-radius: 50%;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             cursor: pointer;
-            flex-shrink: 0;
         }
 
-        /* Заголовок «БАБА ЯГА» опущен на 5 мм ниже (отступ сверху) */
+        /* Название БАБА ЯГА опущено на 5 мм ниже */
         header {
             text-align: center;
             margin-bottom: 16px;
-            margin-top: 24px;
+            margin-top: 28px;
             width: 100%;
             max-width: 900px;
             height: auto;
@@ -875,8 +874,9 @@
             .lang-segmented-control { width: 165px; height: 32px; }
             .lang-option { width: 52px; height: 26px; font-size: 0.75rem; }
             .theme-toggle-btn { width: 30px; height: 30px; font-size: 0.85rem; }
-            .settings-hint { top: 56px; right: 8px; width: 220px; font-size: 0.75rem; }
+            .settings-hint { top: 54px; right: 8px; font-size: 0.72rem; padding: 5px 10px; }
             .top-left-bar { top: 8px; left: 8px; }
+            .version-badge-bottom { bottom: 6px; right: 8px; }
             
             body.fullscreen-3d-active .fullscreen-top-bar {
                 top: calc(54px + env(safe-area-inset-top, 0px));
@@ -887,31 +887,31 @@
 </head>
 <body data-theme="light">
 
-    <!-- Номер версии в правом нижнем углу -->
-    <div class="beta-badge">v5.0-beta</div>
+    <!-- Версия в правом нижнем углу -->
+    <div class="version-badge-bottom">v5.0-beta</div>
 
-    <!-- Верхний левый угол: кнопка «Обратная связь» в две строчки (белая, жидкое стекло, с синей мигающей окантовкой) -->
+    <!-- Кнопка «Обратная связь» в самом верхнем левом углу с пульсирующей синей окантовкой при входе -->
     <div class="top-left-bar">
-        <button class="btn-feedback" onclick="openFeedbackModal()">
-            <span>Обратная</span>
-            <span>связь</span>
+        <button class="btn-feedback pulse-blue-border" id="feedback-btn" onclick="openContactModal()">
+            <span id="fb-line1">Обратная</span>
+            <span id="fb-line2">связь</span>
         </button>
     </div>
 
-    <!-- Модальное окно обратной связи с поддержкой жеста «Назад» (Samsung, iPhone, Xiaomi) -->
-    <div id="feedback-modal" class="feedback-modal-overlay" onclick="closeFeedbackModalViaClick(event)">
-        <div class="feedback-modal-card" id="feedback-card">
-            <h3 id="modal-title">Обратная связь</h3>
-            <p id="modal-desc">По всем вопросам вы можете написать нам на почту:</p>
-            <div class="email-display-box" id="email-text">moticmarkov@gmail.com</div>
+    <!-- Модальное окно обратной связи (зеленый Liquid Glass на весь экран с поддержкой жестов «Назад» iOS / Android) -->
+    <div id="contact-modal" class="contact-modal-overlay">
+        <div class="contact-modal-card">
+            <h3 id="modal-contact-title">Обратная связь</h3>
+            <p id="modal-contact-desc">Напишите нам на почту:</p>
+            <div class="email-display-box">moticmarkov@gmail.com</div>
             <div class="modal-actions">
-                <button class="btn-modal-action btn-copy-email" onclick="copyEmail()" id="btn-copy">Скопировать</button>
-                <button class="btn-modal-action btn-close-modal" onclick="closeFeedbackModal()" id="btn-close">Закрыть</button>
+                <button class="btn-modal-action btn-copy-email" onclick="copyEmailToClipboard()" id="modal-btn-copy">Скопировать</button>
+                <button class="btn-modal-action btn-close-modal" onclick="closeContactModal()" id="modal-btn-close">Закрыть</button>
             </div>
         </div>
     </div>
 
-    <!-- Панель переключения языка и темы -->
+    <!-- Верхняя панель переключения языка и темы -->
     <div class="controls-bar" id="global-controls">
         <div class="lang-segmented-control">
             <button class="lang-option active" id="lang-ru" onclick="selectLanguage('ru')">
@@ -930,9 +930,9 @@
         <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Смена темы">🌙</button>
     </div>
 
-    <!-- Уведомление про смену языка (висит 10 секунд, матовое переливчатое стекло, очень близко к кнопкам) -->
+    <!-- Уведомление о смене языка: прозрачное матовое стекло, в одну строчку, очень близко к смене языка (висит 10 сек) -->
     <div id="settings-hint" class="settings-hint">
-        <span id="hint-text-popup">Переключение языка и темы здесь!</span>
+        <span id="hint-text-popup">Язык можно сменить здесь</span>
         <button class="hint-close-btn" onclick="closeSettingsHint()" aria-label="Закрыть">✕</button>
     </div>
 
@@ -1065,6 +1065,7 @@
             </div>
 
             <div class="card-project-horiz" id="card-cat" onclick="openModel('cat')">
+                <openModel id="cat">
                 <img src="cat_card.jpg" alt="Кошка" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Кошка'">
                 <div class="robot-card-info">
                     <h3 id="card-cat-title">Кошка</h3>
@@ -1152,51 +1153,52 @@
         let currentView = 'main'; 
         let currentMemberId = null;
         let currentModelId = null;
-        let isFeedbackModalOpen = false;
+        let isFullscreen3D = false;
         let savedScrollPosition = 0;
         let tutorialStep = 0;
+        let isContactModalOpen = false;
 
         function triggerHaptic(intensity = 'medium') {
             if ("vibrate" in navigator) {
                 try {
-                    if (intensity === 'heavy') navigator.vibrate(15);
-                    else if (intensity === 'light') navigator.vibrate(6);
-                    else navigator.vibrate(10);
+                    if (intensity === 'heavy') {
+                        navigator.vibrate(15);
+                    } else if (intensity === 'light') {
+                        navigator.vibrate(6);
+                    } else {
+                        navigator.vibrate(10);
+                    }
                 } catch (e) {}
             }
         }
 
-        /* Управление модальным окном обратной связи с историей для поддержки жеста Назад (Android / iOS) */
-        function openFeedbackModal() {
+        /* Управление модальным окном обратной связи с поддержкой истории и жестов "Назад" (iOS, Android) */
+        function openContactModal() {
             triggerHaptic('medium');
-            isFeedbackModalOpen = true;
-            history.pushState({ modal: 'feedback' }, '');
-            document.getElementById('feedback-modal').style.display = 'flex';
+            isContactModalOpen = true;
+            history.pushState({ modal: 'contact' }, '');
+            document.getElementById('contact-modal').style.display = 'flex';
         }
 
-        function closeFeedbackModal() {
-            if (!isFeedbackModalOpen) return;
-            isFeedbackModalOpen = false;
+        function closeContactModal() {
             triggerHaptic('light');
-            document.getElementById('feedback-modal').style.display = 'none';
-        }
-
-        function closeFeedbackModalViaClick(event) {
-            if (event.target.id === 'feedback-modal') {
+            if (isContactModalOpen) {
+                isContactModalOpen = false;
                 history.back();
+            } else {
+                document.getElementById('contact-modal').style.display = 'none';
             }
         }
 
-        function copyEmail() {
+        function copyEmailToClipboard() {
             triggerHaptic('light');
-            const emailText = "moticmarkov@gmail.com";
-            navigator.clipboard.writeText(emailText).then(() => {
-                const btn = document.getElementById('btn-copy');
+            navigator.clipboard.writeText('moticmarkov@gmail.com').then(() => {
+                const btn = document.getElementById('modal-btn-copy');
                 const originalText = btn.innerText;
-                btn.innerText = "Скопировано!";
-                setTimeout(() => { btn.innerText = originalText; }, 2000);
-            }).catch(err => {
-                alert("Не удалось скопировать: " + emailText);
+                btn.innerText = currentLang === 'en' ? 'Copied!' : (currentLang === 'cn' ? '已复制!' : 'Скопировано!');
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                }, 2000);
             });
         }
 
@@ -1210,7 +1212,7 @@
 
         const translations = {
             ru: {
-                hintPopup: "Переключение языка и темы здесь!",
+                hintPopup: "Язык можно сменить здесь",
                 titleTeam: "БАБА ЯГА",
                 titleSchool: "Президентский физико-математический лицей №239, г. Санкт-Петербург",
                 secTeam: "НАША КОМАНДА",
@@ -1220,11 +1222,14 @@
                 btnView: "Открыть 3D",
                 btnMoreText: "Подробнее →",
                 cardSub: "Интерактивный просмотр",
-                modalTitle: "Обратная связь",
-                modalDesc: "По всем вопросам вы можете написать нам на почту:",
-                btnCopy: "Скопировать",
-                btnClose: "Закрыть",
                 
+                fbLine1: "Обратная",
+                fbLine2: "связь",
+                modalTitle: "Обратная связь",
+                modalDesc: "Напишите нам на почту:",
+                modalCopy: "Скопировать",
+                modalClose: "Закрыть",
+
                 tutorialSteps: [
                     {
                         title: "Вращайте модель",
@@ -1314,7 +1319,7 @@
                 dogTitle: "Собака"
             },
             en: {
-                hintPopup: "Switch language and theme here!",
+                hintPopup: "Language can be changed here",
                 titleTeam: "BABA YAGA",
                 titleSchool: "Presidential Physics and Mathematics Lyceum №239, Saint Petersburg",
                 secTeam: "OUR TEAM",
@@ -1324,10 +1329,13 @@
                 btnView: "Open 3D",
                 btnMoreText: "Details →",
                 cardSub: "Interactive View",
+
+                fbLine1: "Feedback",
+                fbLine2: "",
                 modalTitle: "Feedback",
-                modalDesc: "For any questions, you can email us at:",
-                btnCopy: "Copy",
-                btnClose: "Close",
+                modalDesc: "Write to us via email:",
+                modalCopy: "Copy",
+                modalClose: "Close",
 
                 tutorialSteps: [
                     {
@@ -1361,7 +1369,7 @@
 • Conducted color recognition research: proved red color is recognized most reliably by the camera with minimal detection errors.
 • Designed the complete 3D model of the Hut's body in SolidWorks CAD and configured the electrical power system.`,
 
-                lidaName: "Lidia Tokareva",
+                lidaName: "Lida Tokareva",
                 lidaRole: "Lead Software Engineer. Programmed Cat and Dog robots",
                 lidaFullDesc: `• Lead Software Engineer of the project.
 • Programmed Cat and Dog robots in RobotC for LEGO Mindstorms EV3 controllers.
@@ -1417,7 +1425,7 @@
                 dogTitle: "Dog"
             },
             cn: {
-                hintPopup: "在此处切换语言和主题！",
+                hintPopup: "在此处更改语言",
                 titleTeam: "«Baba Yaga» 团队",
                 titleSchool: "圣彼得堡第239总统物理数学中学",
                 secTeam: "我们的团队",
@@ -1427,10 +1435,13 @@
                 btnView: "打开 3D",
                 btnMoreText: "详细信息 →",
                 cardSub: "交互式查看",
+
+                fbLine1: "反馈",
+                fbLine2: "",
                 modalTitle: "反馈",
-                modalDesc: "如有任何问题，您可以给我们发电子邮件：",
-                btnCopy: "复制",
-                btnClose: "关闭",
+                modalDesc: "通过电邮联系我们：",
+                modalCopy: "复制",
+                modalClose: "关闭",
 
                 tutorialSteps: [
                     {
@@ -1454,7 +1465,7 @@
                 devTitle: "模型即将发布",
                 devText: "小屋腿部的交互式 3D 模型正在进行最终校准，将在下次更新中提供。",
 
-                matveyName: "Matvey Markov",
+                matveyName: "Markov Matvey",
                 matveyRole: "队长、首席设计师及电气工程师。“鸡脚小屋”制作者",
                 matveyFullDesc: `• 团队队长、首席设计师及电气工程师。
 • “鸡脚小屋”的创造者。
@@ -1472,7 +1483,7 @@
 • 实现了巡线 PD 调节器、传感器校准、交叉路口识别、转向以及模拟情绪的腿部同步动作。
 • 进行了光照传感器中心间距对巡线平稳度影响的研究，有效降低了偏航角度。`,
 
-                alisaName: "Alisa Markova",
+                alisaName: "Markova Alisa",
                 alisaRole: "小屋腿部结构设计师",
                 alisaFullDesc: `• 小屋腿部结构设计师（与 Lida Tokareva 共同制作）。
 • 设计了仿生鸟类腿部结构。
@@ -1521,26 +1532,38 @@
             }
         };
 
-        /* Уведомление про смену языка висит ровно 10 секунд */
+        /* Уведомление висит 10 секунд, а также автоматически скрывается при любом скролле экрана */
         window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                closeSettingsHint();
-            }, 10000);
+            const hint = document.getElementById('settings-hint');
+            
+            const dismissHint = () => {
+                if (hint && hint.style.display !== 'none') {
+                    hint.style.transition = 'opacity 0.4s ease';
+                    hint.style.opacity = '0';
+                    setTimeout(() => hint.remove(), 400);
+                }
+            };
+
+            const hintTimer = setTimeout(dismissHint, 10000);
+
+            window.addEventListener('scroll', () => {
+                dismissHint();
+                clearTimeout(hintTimer);
+            }, { once: true });
         });
 
         function closeSettingsHint() {
             triggerHaptic('light');
             const hint = document.getElementById('settings-hint');
-            if (hint) {
-                hint.style.display = 'none';
-            }
+            if (hint) hint.remove();
         }
 
-        /* Обработка жеста «Назад» для закрытия модального окна обратной связи */
+        /* Обработка жестов "Назад" (iOS / Android) для закрытия модального окна */
         window.addEventListener('popstate', function(event) {
-            if (isFeedbackModalOpen) {
-                isFeedbackModalOpen = false;
-                document.getElementById('feedback-modal').style.display = 'none';
+            triggerHaptic('medium');
+            if (isContactModalOpen) {
+                isContactModalOpen = false;
+                document.getElementById('contact-modal').style.display = 'none';
                 return;
             }
             if (currentView !== 'main') {
@@ -1588,8 +1611,11 @@
             for (let i = 0; i < 3; i++) {
                 const dot = document.getElementById('dot-' + i);
                 if (dot) {
-                    if (i === tutorialStep) dot.classList.add('active');
-                    else dot.classList.remove('active');
+                    if (i === tutorialStep) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
                 }
             }
         }
@@ -1610,10 +1636,6 @@
 
         function goBack() {
             triggerHaptic('medium');
-            if (isFeedbackModalOpen) {
-                history.back();
-                return;
-            }
             if (currentView !== 'main') {
                 history.back();
             }
@@ -1631,7 +1653,9 @@
             document.getElementById('main-view').style.display = 'block';
 
             const viewer = document.getElementById('model-display');
-            if (viewer) viewer.removeAttribute('src');
+            if (viewer) {
+                viewer.removeAttribute('src');
+            }
 
             window.scrollTo(0, savedScrollPosition);
         }
@@ -1758,11 +1782,6 @@
             document.querySelectorAll('.btn-view-text').forEach(el => el.innerText = t.btnView);
             document.querySelectorAll('.card-sub').forEach(el => el.innerText = t.cardSub);
 
-            document.getElementById('modal-title').innerText = t.modalTitle;
-            document.getElementById('modal-desc').innerText = t.modalDesc;
-            document.getElementById('btn-copy').innerText = t.btnCopy;
-            document.getElementById('btn-close').innerText = t.btnClose;
-
             document.getElementById('matvey-name').innerText = t.matveyName;
             document.getElementById('matvey-role').innerText = t.matveyRole;
             document.getElementById('lida-name').innerText = t.lidaName;
@@ -1784,6 +1803,13 @@
             document.getElementById('card-ber-title').innerText = t.berTitle;
             document.getElementById('card-cat-title').innerText = t.catTitle;
             document.getElementById('card-dog-title').innerText = t.dogTitle;
+
+            document.getElementById('fb-line1').innerText = t.fbLine1;
+            document.getElementById('fb-line2').innerText = t.fbLine2;
+            document.getElementById('modal-contact-title').innerText = t.modalTitle;
+            document.getElementById('modal-contact-desc').innerText = t.modalDesc;
+            document.getElementById('modal-btn-copy').innerText = t.modalCopy;
+            document.getElementById('modal-btn-close').innerText = t.modalClose;
 
             updateTutorialUI();
 
