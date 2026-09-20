@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v5.0)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v5.2)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -94,7 +94,6 @@
             position: relative;
         }
 
-        /* Версия в правом нижнем углу */
         .version-badge-bottom {
             position: fixed;
             bottom: 10px;
@@ -108,7 +107,6 @@
             user-select: none;
         }
 
-        /* Кнопка обратная связь в самом верхнем левом углу с синей мигающей окантовкой */
         .top-left-bar {
             position: fixed;
             top: calc(12px + env(safe-area-inset-top, 0px));
@@ -147,7 +145,6 @@
             100% { border-color: #58a6ff; box-shadow: 0 0 4px rgba(88,166,255,0.4); }
         }
 
-        /* Модальное окно обратная связь (жидкое стекло) */
         .contact-modal-overlay {
             display: none;
             position: fixed;
@@ -228,7 +225,6 @@
             cursor: pointer;
         }
 
-        /* Панель управления языком и темой */
         .controls-bar {
             position: fixed;
             top: calc(12px + env(safe-area-inset-top, 0px));
@@ -303,7 +299,6 @@
             flex-shrink: 0;
         }
 
-        /* Уведомление про смену языка: очень близко к блоку смены языка, в одну строчку, матовое стекло без цвета, с сине-белым переливом */
         .settings-hint {
             position: fixed;
             top: 66px;
@@ -340,7 +335,6 @@
             flex-shrink: 0;
         }
 
-        /* Шапка сайта: название БАБА ЯГА опущено на 5 мм ниже */
         header {
             text-align: center;
             margin-bottom: 20px;
@@ -483,17 +477,11 @@
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 14px;
-            cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             display: flex;
             align-items: center;
             gap: 14px;
-            height: 110px;
-        }
-
-        .card-project-horiz:hover, .card-project-horiz:active {
-            border-color: var(--accent-green);
-            background-color: var(--card-hover-bg);
+            min-height: 110px;
         }
 
         .robot-avatar-side {
@@ -519,7 +507,6 @@
             font-size: 1.05rem;
             margin-bottom: 4px;
             text-align: left;
-            height: 22px;
         }
 
         .robot-card-info p {
@@ -527,8 +514,14 @@
             font-size: 0.8rem;
             margin-bottom: 8px;
             text-align: left;
-            height: 34px;
-            overflow: hidden;
+        }
+
+        /* Контейнер для двух зеленых кнопок рядом */
+        .robot-buttons-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         .btn-view {
@@ -539,6 +532,9 @@
             border-radius: 6px;
             font-weight: bold;
             font-size: 0.8rem;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
         }
 
         .viewer-container {
@@ -853,7 +849,7 @@
 <body data-theme="light">
 
     <!-- Версия в правом нижнем углу -->
-    <div class="version-badge-bottom">v5.0-beta</div>
+    <div class="version-badge-bottom">v5.2-beta</div>
 
     <!-- Верхний левый угол: кнопка Обратная связь -->
     <div class="top-left-bar" id="top-left-bar">
@@ -998,52 +994,67 @@
 
         </div>
 
-        <!-- 3D Модели -->
+        <!-- 3D Модели (с двумя кнопками рядом у каждого робота) -->
         <h2 class="section-title" id="sec-models">Модели и Конструкции</h2>
         <div class="grid-container" style="margin-bottom: 30px;">
             
-            <div class="card-project-horiz" id="card-izbushka" onclick="openModel('izbushka')">
+            <div class="card-project-horiz" id="card-izbushka">
                 <img src="izbushka_card.jpg" alt="Избушка" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Избушка'">
                 <div class="robot-card-info">
                     <h3 id="card-izb-title">Избушка</h3>
                     <p class="card-sub">Подвижный робот с поворотным механизмом и зрителем Pixy 2</p>
-                    <span class="btn-view btn-view-text">Открыть 3D</span>
+                    <div class="robot-buttons-row">
+                        <button class="btn-view btn-view-text" onclick="openModel('izbushka')">Открыть 3D</button>
+                        <button class="btn-view btn-history-text" onclick="openHistory('izbushka')" style="background-color: var(--btn-green);">История проекта</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="card-project-horiz" id="card-legs" onclick="openModel('legs')">
+            <div class="card-project-horiz" id="card-legs">
                 <img src="legs_card.jpg" alt="Ноги избушки" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Ноги'">
                 <div class="robot-card-info">
                     <h3 id="card-legs-title">Ноги избушки</h3>
                     <p class="card-sub">Курьи ножки с опорно-механическим узлом вращения</p>
-                    <span class="btn-view btn-view-text">Открыть 3D</span>
+                    <div class="robot-buttons-row">
+                        <button class="btn-view btn-view-text" onclick="openModel('legs')">Открыть 3D</button>
+                        <button class="btn-view btn-history-text" onclick="openHistory('legs')" style="background-color: var(--btn-green);">История проекта</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="card-project-horiz" id="card-birch" onclick="openModel('birch')">
+            <div class="card-project-horiz" id="card-birch">
                 <img src="birch_card.jpg" alt="Берёза" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Берёза'">
                 <div class="robot-card-info">
                     <h3 id="card-ber-title">Берёза</h3>
                     <p class="card-sub">Фанерная конструкция со светодиодами и веткой</p>
-                    <span class="btn-view btn-view-text">Открыть 3D</span>
+                    <div class="robot-buttons-row">
+                        <button class="btn-view btn-view-text" onclick="openModel('birch')">Открыть 3D</button>
+                        <button class="btn-view btn-history-text" onclick="openHistory('birch')" style="background-color: var(--btn-green);">История проекта</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="card-project-horiz" id="card-cat" onclick="openModel('cat')">
+            <div class="card-project-horiz" id="card-cat">
                 <img src="cat_card.jpg" alt="Кошка" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Кошка'">
                 <div class="robot-card-info">
                     <h3 id="card-cat-title">Кошка</h3>
                     <p class="card-sub">Колесный робот с движущимся скелетом и эмоциями</p>
-                    <span class="btn-view btn-view-text">Открыть 3D</span>
+                    <div class="robot-buttons-row">
+                        <button class="btn-view btn-view-text" onclick="openModel('cat')">Открыть 3D</button>
+                        <button class="btn-view btn-history-text" onclick="openHistory('cat')" style="background-color: var(--btn-green);">История проекта</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="card-project-horiz" id="card-dog" onclick="openModel('dog')">
+            <div class="card-project-horiz" id="card-dog">
                 <img src="dog_card.jpg" alt="Собака" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Собака'">
                 <div class="robot-card-info">
                     <h3 id="card-dog-title">Собака</h3>
                     <p class="card-sub">Мобильный робот на колесах с анимацией лапок</p>
-                    <span class="btn-view btn-view-text">Открыть 3D</span>
+                    <div class="robot-buttons-row">
+                        <button class="btn-view btn-view-text" onclick="openModel('dog')">Открыть 3D</button>
+                        <button class="btn-view btn-history-text" onclick="openHistory('dog')" style="background-color: var(--btn-green);">История проекта</button>
+                    </div>
                 </div>
             </div>
 
@@ -1063,7 +1074,7 @@
         </div>
     </div>
 
-    <!-- Просмотрщик 3D моделей -->
+    <!-- Просмотрщик 3D моделей / Заглушка истории -->
     <div id="viewer-container" class="viewer-container">
         
         <div class="fullscreen-top-bar" id="fs-top-bar">
@@ -1075,7 +1086,7 @@
         <div class="model-wrapper" id="model-wrapper-box">
             
             <!-- Обучение 3D -->
-            <div id="toast-3d-hint" class="toast-3d-hint">
+            <div id="toast-3d-hint" class="toast-3d-hint" style="display: none;">
                 <div class="real-cursors-stage" id="tutorial-icon-stage">
                     <svg class="svg-cursor cursor-left" viewBox="0 0 24 24"><path d="M13.64 21.97C13.14 22 12.54 21.81 12.12 21.41L7.7 17.2L5.89 19.01C5.5 19.4 4.83 19.4 4.44 19.01L3.03 17.6C2.64 17.21 2.64 16.54 3.03 16.15L7.95 11.23L1 8.28L21 1L13.72 21L13.64 21.97Z"/></svg>
                 </div>
@@ -1093,7 +1104,7 @@
             <div id="dev-wrapper" class="dev-container" style="display: none;">
                 <span class="dev-badge" id="dev-badge">В разработке</span>
                 <div class="dev-title" id="dev-title">Модель готовится к публикации</div>
-                <div class="dev-text" id="dev-text">Интерактивная 3D-модель ног Избушки находится на стадии финальной калибровки и будет доступна в ближайшем обновлении.</div>
+                <div class="dev-text" id="dev-text">Интерактивная 3D-модель находится на стадии финальной калибровки и будет доступна в ближайшем обновлении.</div>
             </div>
 
             <model-viewer 
@@ -1183,6 +1194,7 @@
                 secModels: "Модели и Конструкции",
                 backText: "Назад к меню",
                 btnView: "Открыть 3D",
+                btnHistory: "История проекта",
                 btnMoreText: "Подробнее →",
                 cardSub: "Интерактивный просмотр",
                 
@@ -1213,8 +1225,8 @@
                 ],
 
                 devBadge: "В разработке",
-                devTitle: "Модель готовится к публикации",
-                devText: "Интерактивная 3D-модель ног Избушки находится на стадии финальной калибровки и будет доступна в ближайшем обновлении.",
+                devTitle: "Раздел готовится к публикации",
+                devText: "История проекта находится на стадии финальной подготовки и будет доступна в ближайшем обновлении.",
 
                 matveyName: "Матвей Марков",
                 matveyRole: "Капитан команды, главный конструктор и электрик проекта. Создатель Избушки на курьих ножках",
@@ -1291,6 +1303,7 @@
                 secModels: "3D Models & Structures",
                 backText: "Back to Menu",
                 btnView: "Open 3D",
+                btnHistory: "Project History",
                 btnMoreText: "Details →",
                 cardSub: "Interactive View",
 
@@ -1321,8 +1334,8 @@
                 ],
 
                 devBadge: "Under Development",
-                devTitle: "Model coming soon",
-                devText: "The interactive 3D model of the Hut's legs is currently undergoing final calibration and will be available in the next update.",
+                devTitle: "Section coming soon",
+                devText: "Project history is currently undergoing final preparation and will be available in the next update.",
 
                 matveyName: "Matvey Markov",
                 matveyRole: "Team Captain, Lead Designer & Electrician. Creator of the Hut on Chicken Legs",
@@ -1398,6 +1411,7 @@
                 secModels: "3D模型与结构",
                 backText: "返回菜单",
                 btnView: "打开 3D",
+                btnHistory: "项目历史",
                 btnMoreText: "详细信息 →",
                 cardSub: "交互式查看",
 
@@ -1428,8 +1442,8 @@
                 ],
 
                 devBadge: "开发中",
-                devTitle: "模型即将发布",
-                devText: "小屋腿部的交互式 3D 模型正在进行最终校准，将在下次更新中提供。",
+                devTitle: "内容即将发布",
+                devText: "项目历史正在进行最终准备，将在下次更新中提供。",
 
                 matveyName: "Markov Matvey",
                 matveyRole: "队长、首席设计师及电气工程师。“鸡脚小屋”制作者",
@@ -1501,12 +1515,10 @@
         let hintTimer = null;
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Уведомление висит 10 секунд
             hintTimer = setTimeout(() => {
                 closeSettingsHint();
             }, 10000);
 
-            // Скролл по экрану мгновенно скрывает уведомление
             window.addEventListener('scroll', () => {
                 closeSettingsHint();
             }, { once: true });
@@ -1657,6 +1669,36 @@
             window.scrollTo(0, 0);
         }
 
+        function openHistory(id) {
+            triggerHaptic('medium');
+            pushStateIfNeeded('history');
+            currentModelId = id;
+
+            const t = translations[currentLang];
+            const viewer = document.getElementById('model-display');
+            const title = document.getElementById('model-title');
+            const devWrapper = document.getElementById('dev-wrapper');
+            const toast = document.getElementById('toast-3d-hint');
+            const container = document.getElementById('viewer-container');
+
+            if (id === 'izbushka') title.innerText = t.izbFullTitle || t.izbTitle;
+            else if (id === 'legs') title.innerText = t.legsTitle;
+            else if (id === 'birch') title.innerText = t.berTitle;
+            else if (id === 'cat') title.innerText = t.catTitle;
+            else if (id === 'dog') title.innerText = t.dogTitle;
+
+            if (toast) toast.style.display = 'none';
+            viewer.style.display = 'none';
+            devWrapper.style.display = 'flex';
+
+            document.getElementById('main-view').style.display = 'none';
+            container.classList.add('active');
+
+            isFullscreen3D = true;
+            document.body.classList.add('fullscreen-3d-active');
+            window.scrollTo(0, 0);
+        }
+
         function openModel(id) {
             triggerHaptic('medium');
             pushStateIfNeeded('model');
@@ -1755,6 +1797,7 @@
             document.querySelectorAll('.back-text').forEach(el => el.innerText = t.backText);
             document.querySelectorAll('.btn-more-text').forEach(el => el.innerText = t.btnMoreText);
             document.querySelectorAll('.btn-view-text').forEach(el => el.innerText = t.btnView);
+            document.querySelectorAll('.btn-history-text').forEach(el => el.innerText = t.btnHistory);
             document.querySelectorAll('.card-sub').forEach(el => el.innerText = t.cardSub);
 
             document.getElementById('matvey-name').innerText = t.matveyName;
@@ -1798,21 +1841,6 @@
                 } else if (currentMemberId === 'alisa') {
                     name.innerText = t.alisaName;
                     desc.innerText = t.alisaFullDesc;
-                }
-            }
-
-            if (currentModelId) {
-                const title = document.getElementById('model-title');
-                if (currentModelId === 'izbushka') {
-                    title.innerText = t.izbFullTitle || t.izbTitle;
-                } else if (currentModelId === 'legs') {
-                    title.innerText = t.legsTitle;
-                } else if (currentModelId === 'birch') {
-                    title.innerText = t.berTitle;
-                } else if (currentModelId === 'cat') {
-                    title.innerText = t.catTitle;
-                } else if (currentModelId === 'dog') {
-                    title.innerText = t.dogTitle;
                 }
             }
         }
