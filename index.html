@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v5.7)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v5.8)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -599,7 +599,6 @@
             touch-action: none;
         }
 
-        /* Панель настройки прозрачности модели */
         .control-panel-opacity {
             position: absolute;
             top: 16px;
@@ -885,7 +884,7 @@
 <body data-theme="light">
 
     <!-- Версия в правом нижнем углу -->
-    <div class="version-badge-bottom">v5.7-beta</div>
+    <div class="version-badge-bottom">v5.8-beta</div>
 
     <!-- Верхний левый угол: кнопка Обратная связь -->
     <div class="top-left-bar" id="top-left-bar">
@@ -1151,10 +1150,12 @@
                 <div class="dev-text" id="dev-text">История проекта находится на стадии финальной подготовки и будет доступна в ближайшем обновлении.</div>
             </div>
 
+            <!-- Добавлен корректный точный масштаб scale="0.001 0.001 0.001" из твоего исходного кода -->
             <model-viewer 
                 id="model-display"
                 src="" 
                 alt="3D модель" 
+                scale="0.001 0.001 0.001"
                 camera-controls 
                 interaction-prompt="none"
                 ar
@@ -1855,6 +1856,15 @@
                 if (modelAssets[id] && modelAssets[id].gltf) {
                     viewer.setAttribute('src', modelAssets[id].gltf);
                 }
+
+                // Автоматический запуск камеры (AR-режима) сразу при переходе в 3D
+                setTimeout(() => {
+                    if (viewer && typeof viewer.activateAR === 'function') {
+                        viewer.activateAR().catch(() => {
+                            // Если AR недоступен на устройстве, оставляем интерактивный 3D-просмотрщик
+                        });
+                    }
+                }, 120);
             }
 
             document.getElementById('main-view').style.display = 'none';
