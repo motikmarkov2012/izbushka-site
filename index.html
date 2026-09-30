@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v5.8)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v5.8.1)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -521,13 +521,14 @@
             gap: 8px;
             flex-wrap: wrap;
             align-items: center;
+            width: 100%;
         }
 
         .btn-view {
             display: inline-block;
             background-color: var(--btn-green);
             color: white;
-            padding: 5px 12px;
+            padding: 6px 12px;
             border-radius: 6px;
             font-weight: bold;
             font-size: 0.8rem;
@@ -597,6 +598,63 @@
             background-color: var(--viewer-bg);
             border-radius: 12px;
             touch-action: none;
+        }
+
+        /* Блок Истории Проекта (Горизонтальная лента времени) */
+        .history-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            height: 100%;
+            background-color: var(--viewer-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 16px 10px;
+            text-align: center;
+        }
+
+        .history-badge {
+            display: inline-block;
+            background-color: rgba(88, 166, 255, 0.15);
+            color: var(--header-color);
+            border: 1px solid rgba(88, 166, 255, 0.4);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .timeline-scroll-box {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            padding: 10px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
+        }
+
+        .timeline-img {
+            height: 380px;
+            max-height: 52vh;
+            width: auto;
+            display: inline-block;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        }
+
+        .history-hint-text {
+            color: var(--subtext-color);
+            font-size: 0.8rem;
+            margin-top: 10px;
+            font-weight: 500;
         }
 
         .control-panel-opacity {
@@ -878,13 +936,14 @@
             .settings-hint { top: 58px; right: 8px; font-size: 0.73rem; }
             .top-left-bar { top: 8px; left: 8px; }
             .version-badge-bottom { bottom: 6px; right: 8px; font-size: 0.65rem; }
+            .timeline-img { height: 280px; }
         }
     </style>
 </head>
 <body data-theme="light">
 
     <!-- Версия в правом нижнем углу -->
-    <div class="version-badge-bottom">v5.8-beta</div>
+    <div class="version-badge-bottom">v5.8.1-beta</div>
 
     <!-- Верхний левый угол: кнопка Обратная связь -->
     <div class="top-left-bar" id="top-left-bar">
@@ -1045,14 +1104,14 @@
                 </div>
             </div>
 
+            <!-- У Ног избушки убрана кнопка "Открыть 3D", распахнута "История проекта" -->
             <div class="card-project-horiz" id="card-legs">
                 <img src="legs_card.jpg" alt="Ноги избушки" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Ноги'">
                 <div class="robot-card-info">
                     <h3 id="card-legs-title">Ноги избушки</h3>
                     <p class="card-sub">Курьи ножки с опорно-механическим узлом вращения</p>
                     <div class="robot-buttons-row">
-                        <button class="btn-view btn-view-text" onclick="openModel('legs')">Открыть 3D</button>
-                        <button class="btn-view btn-history-text" onclick="openHistory('legs')" style="background-color: var(--btn-green);">История проекта</button>
+                        <button class="btn-view btn-history-text" onclick="openHistory('legs')" style="background-color: var(--btn-green); width: 100%; text-align: center;">История проекта</button>
                     </div>
                 </div>
             </div>
@@ -1109,7 +1168,7 @@
         </div>
     </div>
 
-    <!-- Просмотрщик 3D моделей / Заглушка истории -->
+    <!-- Просмотрщик 3D моделей / История проекта -->
     <div id="viewer-container" class="viewer-container">
         
         <div class="fullscreen-top-bar" id="fs-top-bar">
@@ -1143,19 +1202,26 @@
                 <button class="btn-confirm-3d" onclick="nextTutorialStep()" id="tutorial-btn">Далее (1/3)</button>
             </div>
 
+            <!-- Блок Истории Проекта (Лента времени) -->
+            <div id="history-wrapper" class="history-container" style="display: none;">
+                <span class="history-badge" id="history-badge">Лента времени разработки</span>
+                <div class="timeline-scroll-box">
+                    <img id="history-timeline-img" src="" alt="Лента времени проекта" class="timeline-img" onerror="this.src='https://via.placeholder.com/1200x400/161b22/58a6ff?text=Лента+времени+разработки+проекта'">
+                </div>
+                <p class="history-hint-text" id="history-hint-text">← Прокручивайте вправо и влево для просмотра истории →</p>
+            </div>
+
             <!-- Блок разработки -->
             <div id="dev-wrapper" class="dev-container" style="display: none;">
                 <span class="dev-badge" id="dev-badge">В разработке</span>
                 <div class="dev-title" id="dev-title">Раздел готовится к публикации</div>
-                <div class="dev-text" id="dev-text">История проекта находится на стадии финальной подготовки и будет доступна в ближайшем обновлении.</div>
+                <div class="dev-text" id="dev-text">Раздел находится на стадии финальной подготовки и будет доступен в ближайшем обновлении.</div>
             </div>
 
-            <!-- Добавлен корректный точный масштаб scale="0.001 0.001 0.001" из твоего исходного кода -->
             <model-viewer 
                 id="model-display"
                 src="" 
                 alt="3D модель" 
-                scale="0.001 0.001 0.001"
                 camera-controls 
                 interaction-prompt="none"
                 ar
@@ -1255,6 +1321,9 @@
                 copiedText: "Скопировано!",
                 closeBtn: "Закрыть",
 
+                historyBadge: "Лента времени разработки",
+                historyHint: "← Прокручивайте вправо и влево для просмотра истории →",
+
                 tutorialSteps: [
                     {
                         title: "Вращайте модель",
@@ -1275,7 +1344,7 @@
 
                 devBadge: "В разработке",
                 devTitle: "Раздел готовится к публикации",
-                devText: "История проекта находится на стадии финальной подготовки и будет доступна в ближайшем обновлении.",
+                devText: "Раздел находится на стадии финальной подготовки и будет доступен в ближайшем обновлении.",
 
                 matveyName: "Матвей Марков",
                 matveyRole: "Капитан команды, главный конструктор и электрик проекта. Создатель Избушки на курьих ножках",
@@ -1365,6 +1434,9 @@
                 copiedText: "Copied!",
                 closeBtn: "Close",
 
+                historyBadge: "Development Timeline",
+                historyHint: "← Scroll left and right to view timeline →",
+
                 tutorialSteps: [
                     {
                         title: "Rotate Model",
@@ -1385,7 +1457,7 @@
 
                 devBadge: "Under Development",
                 devTitle: "Section coming soon",
-                devText: "Project history is currently undergoing final preparation and will be available in the next update.",
+                devText: "Section is currently undergoing final preparation and will be available in the next update.",
 
                 matveyName: "Matvey Markov",
                 matveyRole: "Team Captain, Lead Designer & Electrician. Creator of the Hut on Chicken Legs",
@@ -1474,6 +1546,9 @@
                 copiedText: "已复制！",
                 closeBtn: "关闭",
 
+                historyBadge: "开发时间线",
+                historyHint: "← 左右滑动查看历史时间线 →",
+
                 tutorialSteps: [
                     {
                         title: "旋转模型",
@@ -1494,7 +1569,7 @@
 
                 devBadge: "开发中",
                 devTitle: "内容即将发布",
-                devText: "项目历史正在进行最终准备，将在下次更新中提供。",
+                devText: "内容正在进行最终准备，将在下次更新中提供。",
 
                 matveyName: "Markov Matvey",
                 matveyRole: "队长、首席设计师及电气工程师。“鸡脚小屋”制作者",
@@ -1743,6 +1818,8 @@
 
             document.getElementById('member-container').classList.remove('active');
             document.getElementById('viewer-container').classList.remove('active');
+            document.getElementById('history-wrapper').style.display = 'none';
+            document.getElementById('dev-wrapper').style.display = 'none';
             document.getElementById('main-view').style.display = 'block';
 
             const viewer = document.getElementById('model-display');
@@ -1791,6 +1868,8 @@
             const viewer = document.getElementById('model-display');
             const title = document.getElementById('model-title');
             const devWrapper = document.getElementById('dev-wrapper');
+            const historyWrapper = document.getElementById('history-wrapper');
+            const historyImg = document.getElementById('history-timeline-img');
             const toast = document.getElementById('toast-3d-hint');
             const container = document.getElementById('viewer-container');
             const arBtn = document.getElementById('btn-ar-walk');
@@ -1803,8 +1882,23 @@
 
             if (toast) toast.style.display = 'none';
             if (arBtn) arBtn.style.display = 'none';
-            viewer.style.display = 'none';
-            devWrapper.style.display = 'flex';
+            if (viewer) viewer.style.display = 'none';
+            if (devWrapper) devWrapper.style.display = 'none';
+
+            // Названия файлов для горизонтальной ленты времени каждого робота
+            const historyImages = {
+                izbushka: 'izbushka_history.jpg',
+                legs: 'legs_history.jpg',
+                birch: 'birch_history.jpg',
+                cat: 'cat_history.jpg',
+                dog: 'dog_history.jpg'
+            };
+
+            if (historyImg) {
+                historyImg.src = historyImages[id] || (id + '_history.jpg');
+            }
+
+            if (historyWrapper) historyWrapper.style.display = 'flex';
 
             document.getElementById('main-view').style.display = 'none';
             container.classList.add('active');
@@ -1826,9 +1920,12 @@
             const viewer = document.getElementById('model-display');
             const title = document.getElementById('model-title');
             const devWrapper = document.getElementById('dev-wrapper');
+            const historyWrapper = document.getElementById('history-wrapper');
             const toast = document.getElementById('toast-3d-hint');
             const container = document.getElementById('viewer-container');
             const arBtn = document.getElementById('btn-ar-walk');
+
+            if (historyWrapper) historyWrapper.style.display = 'none';
 
             if (id === 'izbushka') {
                 title.innerText = t.izbFullTitle || t.izbTitle;
@@ -1840,6 +1937,16 @@
                 title.innerText = t.catTitle;
             } else if (id === 'dog') {
                 title.innerText = t.dogTitle;
+            }
+
+            // Автоопределение Android для уменьшения масштаба (чтобы не улетал на Android)
+            const isAndroid = /Android/i.test(navigator.userAgent);
+            if (viewer) {
+                if (isAndroid) {
+                    viewer.setAttribute('scale', '0.0003 0.0003 0.0003');
+                } else {
+                    viewer.setAttribute('scale', '0.0008 0.0008 0.0008');
+                }
             }
 
             if (modelAssets[id] && modelAssets[id].dev) {
@@ -1857,12 +1964,10 @@
                     viewer.setAttribute('src', modelAssets[id].gltf);
                 }
 
-                // Автоматический запуск камеры (AR-режима) сразу при переходе в 3D
+                // Автоматический запуск камеры (AR) при переходе
                 setTimeout(() => {
                     if (viewer && typeof viewer.activateAR === 'function') {
-                        viewer.activateAR().catch(() => {
-                            // Если AR недоступен на устройстве, оставляем интерактивный 3D-просмотрщик
-                        });
+                        viewer.activateAR().catch(() => {});
                     }
                 }, 120);
             }
@@ -1920,6 +2025,11 @@
             document.getElementById('modal-contact-desc').innerText = t.modalDesc;
             document.getElementById('modal-copy-btn').innerText = t.copyBtn;
             document.getElementById('modal-close-btn').innerText = t.closeBtn;
+
+            const historyBadge = document.getElementById('history-badge');
+            const historyHint = document.getElementById('history-hint-text');
+            if (historyBadge) historyBadge.innerText = t.historyBadge;
+            if (historyHint) historyHint.innerText = t.historyHint;
 
             const arBtn = document.getElementById('btn-ar-walk');
             if (arBtn) arBtn.innerText = t.btnArWalk;
