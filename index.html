@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v5.2)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v5.7)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -516,7 +516,6 @@
             text-align: left;
         }
 
-        /* Контейнер для двух зеленых кнопок рядом */
         .robot-buttons-row {
             display: flex;
             gap: 8px;
@@ -565,7 +564,7 @@
             font-weight: 600;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            max-width: 150px;
+            max-width: 170px;
             height: 34px;
             white-space: nowrap;
             overflow: hidden;
@@ -574,6 +573,12 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .btn-ar-walk {
+            background: #1f6feb;
+            border-color: #58a6ff;
+            color: #ffffff;
         }
 
         .model-wrapper {
@@ -592,6 +597,36 @@
             background-color: var(--viewer-bg);
             border-radius: 12px;
             touch-action: none;
+        }
+
+        /* Панель настройки прозрачности модели */
+        .control-panel-opacity {
+            position: absolute;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            background: rgba(22, 27, 34, 0.9);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .control-panel-opacity span {
+            font-size: 0.78rem;
+            color: var(--text-color);
+            white-space: nowrap;
+        }
+
+        .control-panel-opacity input[type=range] {
+            accent-color: #58a6ff;
+            cursor: pointer;
+            width: 110px;
         }
 
         .toast-3d-hint {
@@ -824,6 +859,7 @@
             left: calc(12px + env(safe-area-inset-left, 0px));
             display: flex;
             align-items: center;
+            gap: 8px;
             z-index: 100000;
             pointer-events: none;
         }
@@ -849,7 +885,7 @@
 <body data-theme="light">
 
     <!-- Версия в правом нижнем углу -->
-    <div class="version-badge-bottom">v5.2-beta</div>
+    <div class="version-badge-bottom">v5.7-beta</div>
 
     <!-- Верхний левый угол: кнопка Обратная связь -->
     <div class="top-left-bar" id="top-left-bar">
@@ -891,7 +927,7 @@
         <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Смена темы">🌙</button>
     </div>
 
-    <!-- Уведомление про смену языка в одну строчку, матовое стекло без цвета -->
+    <!-- Уведомление про смену языка в одну строчку -->
     <div id="settings-hint" class="settings-hint">
         <span id="hint-text-popup">Язык и тему заменить здесь</span>
         <button class="hint-close-btn" onclick="closeSettingsHint()" aria-label="Закрыть">✕</button>
@@ -994,7 +1030,7 @@
 
         </div>
 
-        <!-- 3D Модели (с двумя кнопками рядом у каждого робота) -->
+        <!-- 3D Модели -->
         <h2 class="section-title" id="sec-models">Модели и Конструкции</h2>
         <div class="grid-container" style="margin-bottom: 30px;">
             
@@ -1079,12 +1115,20 @@
         
         <div class="fullscreen-top-bar" id="fs-top-bar">
             <button class="btn-back" onclick="goBack()">← <span class="back-text">Назад</span></button>
+            <button class="btn-back btn-ar-walk" id="btn-ar-walk" onclick="startARWalk()">🚶 Походить вокруг</button>
         </div>
 
         <h2 id="model-title" style="color: var(--header-color); margin-bottom: 10px;">Модель</h2>
         
         <div class="model-wrapper" id="model-wrapper-box">
             
+            <!-- Панель управления прозрачностью модели -->
+            <div id="control-panel-opacity" class="control-panel-opacity" style="display: none;">
+                <span>Прозрачность: <strong id="opacity-val">100</strong>%</span>
+                <input id="opacity-slider" type="range" min="10" max="100" value="100">
+                <button onclick="closeOpacityPanel()" style="background:none; border:none; color: var(--subtext-color); cursor:pointer; font-size: 0.8rem;">✕</button>
+            </div>
+
             <!-- Обучение 3D -->
             <div id="toast-3d-hint" class="toast-3d-hint" style="display: none;">
                 <div class="real-cursors-stage" id="tutorial-icon-stage">
@@ -1103,8 +1147,8 @@
             <!-- Блок разработки -->
             <div id="dev-wrapper" class="dev-container" style="display: none;">
                 <span class="dev-badge" id="dev-badge">В разработке</span>
-                <div class="dev-title" id="dev-title">Модель готовится к публикации</div>
-                <div class="dev-text" id="dev-text">Интерактивная 3D-модель находится на стадии финальной калибровки и будет доступна в ближайшем обновлении.</div>
+                <div class="dev-title" id="dev-title">Раздел готовится к публикации</div>
+                <div class="dev-text" id="dev-text">История проекта находится на стадии финальной подготовки и будет доступна в ближайшем обновлении.</div>
             </div>
 
             <model-viewer 
@@ -1113,6 +1157,9 @@
                 alt="3D модель" 
                 camera-controls 
                 interaction-prompt="none"
+                ar
+                ar-modes="scene-viewer quick-look webxr"
+                ar-scale="fixed"
                 max-camera-orbit="auto 180deg auto"
                 min-camera-orbit="auto 0deg auto"
                 auto-rotate 
@@ -1195,6 +1242,7 @@
                 backText: "Назад к меню",
                 btnView: "Открыть 3D",
                 btnHistory: "История проекта",
+                btnArWalk: "🚶 Походить вокруг",
                 btnMoreText: "Подробнее →",
                 cardSub: "Интерактивный просмотр",
                 
@@ -1219,7 +1267,7 @@
                     },
                     {
                         title: "Всё готово к работе!",
-                        sub: "Модель можно исследовать в деталях. Наслаждайтесь просмотром!",
+                        sub: "Кликните по модели, чтобы изменить прозрачность. Нажмите «Походить вокруг» для AR!",
                         btn: "Понятно"
                     }
                 ],
@@ -1304,6 +1352,7 @@
                 backText: "Back to Menu",
                 btnView: "Open 3D",
                 btnHistory: "Project History",
+                btnArWalk: "🚶 Walk Around",
                 btnMoreText: "Details →",
                 cardSub: "Interactive View",
 
@@ -1328,7 +1377,7 @@
                     },
                     {
                         title: "All set!",
-                        sub: "Explore the model in detail. Enjoy viewing!",
+                        sub: "Click on the model to adjust transparency. Tap «Walk Around» for AR!",
                         btn: "Got it"
                     }
                 ],
@@ -1412,6 +1461,7 @@
                 backText: "返回菜单",
                 btnView: "打开 3D",
                 btnHistory: "项目历史",
+                btnArWalk: "🚶 绕行查看 (AR)",
                 btnMoreText: "详细信息 →",
                 cardSub: "交互式查看",
 
@@ -1436,7 +1486,7 @@
                     },
                     {
                         title: "准备就绪！",
-                        sub: "您可以详细检查模型了。祝您浏览愉快！",
+                        sub: "点击模型调整透明度，点击“绕行查看”启动AR模式！",
                         btn: "知道了"
                     }
                 ],
@@ -1513,6 +1563,7 @@
         };
 
         let hintTimer = null;
+        let isTransparent = false;
 
         window.addEventListener('DOMContentLoaded', () => {
             hintTimer = setTimeout(() => {
@@ -1522,7 +1573,67 @@
             window.addEventListener('scroll', () => {
                 closeSettingsHint();
             }, { once: true });
+
+            // Клик по 3D-модели управляет прозрачностью
+            const modelDisplay = document.getElementById('model-display');
+            const opacityPanel = document.getElementById('control-panel-opacity');
+            const opacitySlider = document.getElementById('opacity-slider');
+            const opacityVal = document.getElementById('opacity-val');
+
+            if (modelDisplay) {
+                modelDisplay.addEventListener('click', async () => {
+                    if (!isFullscreen3D || modelDisplay.style.display === 'none') return;
+                    isTransparent = !isTransparent;
+                    const alpha = isTransparent ? 0.5 : 1.0;
+                    await setModelOpacity(alpha);
+
+                    if (isTransparent) {
+                        opacitySlider.value = 50;
+                        opacityVal.textContent = "50";
+                        opacityPanel.style.display = 'flex';
+                    } else {
+                        opacityPanel.style.display = 'none';
+                    }
+                });
+            }
+
+            if (opacitySlider) {
+                opacitySlider.addEventListener('input', async (e) => {
+                    const val = e.target.value;
+                    opacityVal.textContent = val;
+                    await setModelOpacity(val / 100);
+                });
+            }
         });
+
+        async function setModelOpacity(alpha) {
+            const viewer = document.getElementById('model-display');
+            if (!viewer) return;
+            await viewer.updateComplete;
+            const materials = viewer.model?.materials;
+            if (materials) {
+                materials.forEach(mat => {
+                    const c = mat.pbrMetallicRoughness.baseColorFactor;
+                    mat.pbrMetallicRoughness.setBaseColorFactor([c[0], c[1], c[2], alpha]);
+                });
+            }
+        }
+
+        function closeOpacityPanel() {
+            document.getElementById('control-panel-opacity').style.display = 'none';
+            setModelOpacity(1.0);
+            isTransparent = false;
+        }
+
+        function startARWalk() {
+            triggerHaptic('heavy');
+            const viewer = document.getElementById('model-display');
+            if (viewer && typeof viewer.activateAR === 'function') {
+                viewer.activateAR().catch(err => {
+                    alert('AR-режим доступен на мобильных устройствах с поддержкой ARCore / ARKit.');
+                });
+            }
+        }
 
         function closeSettingsHint() {
             triggerHaptic('light');
@@ -1588,6 +1699,7 @@
             if (!isFullscreen3D) return;
             isFullscreen3D = false;
             document.body.classList.remove('fullscreen-3d-active');
+            closeOpacityPanel();
         }
 
         window.addEventListener('popstate', function(event) {
@@ -1680,6 +1792,7 @@
             const devWrapper = document.getElementById('dev-wrapper');
             const toast = document.getElementById('toast-3d-hint');
             const container = document.getElementById('viewer-container');
+            const arBtn = document.getElementById('btn-ar-walk');
 
             if (id === 'izbushka') title.innerText = t.izbFullTitle || t.izbTitle;
             else if (id === 'legs') title.innerText = t.legsTitle;
@@ -1688,6 +1801,7 @@
             else if (id === 'dog') title.innerText = t.dogTitle;
 
             if (toast) toast.style.display = 'none';
+            if (arBtn) arBtn.style.display = 'none';
             viewer.style.display = 'none';
             devWrapper.style.display = 'flex';
 
@@ -1713,6 +1827,7 @@
             const devWrapper = document.getElementById('dev-wrapper');
             const toast = document.getElementById('toast-3d-hint');
             const container = document.getElementById('viewer-container');
+            const arBtn = document.getElementById('btn-ar-walk');
 
             if (id === 'izbushka') {
                 title.innerText = t.izbFullTitle || t.izbTitle;
@@ -1728,10 +1843,12 @@
 
             if (modelAssets[id] && modelAssets[id].dev) {
                 if (toast) toast.style.display = 'none';
+                if (arBtn) arBtn.style.display = 'none';
                 viewer.style.display = 'none';
                 devWrapper.style.display = 'flex';
             } else {
                 if (toast) toast.style.display = 'flex';
+                if (arBtn) arBtn.style.display = 'inline-flex';
                 devWrapper.style.display = 'none';
                 viewer.style.display = 'block';
 
@@ -1793,6 +1910,9 @@
             document.getElementById('modal-contact-desc').innerText = t.modalDesc;
             document.getElementById('modal-copy-btn').innerText = t.copyBtn;
             document.getElementById('modal-close-btn').innerText = t.closeBtn;
+
+            const arBtn = document.getElementById('btn-ar-walk');
+            if (arBtn) arBtn.innerText = t.btnArWalk;
 
             document.querySelectorAll('.back-text').forEach(el => el.innerText = t.backText);
             document.querySelectorAll('.btn-more-text').forEach(el => el.innerText = t.btnMoreText);
