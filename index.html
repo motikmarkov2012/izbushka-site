@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v5.9.1)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v5.9.3)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -537,7 +537,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Выделенная кнопка «История проекта» зеленого цвета по умолчанию */
         .btn-history-glow {
             background: linear-gradient(135deg, #238636, #2ea043);
             color: #ffffff;
@@ -546,7 +545,6 @@
             transition: all 0.3s ease;
         }
 
-        /* ЯРКО-ОРАНЖЕВЫЙ НЕОНОВЫЙ ЦВЕТ после уведомления */
         .btn-history-glow.orange-mode {
             background: linear-gradient(135deg, #ff6b00, #ff8c00) !important;
             color: #ffffff !important;
@@ -967,7 +965,7 @@
 <body data-theme="light">
 
     <!-- Версия в правом нижнем углу -->
-    <div class="version-badge-bottom">v5.9.1-beta</div>
+    <div class="version-badge-bottom">v5.9.3-beta</div>
 
     <!-- Верхний левый угол: кнопка Обратная связь -->
     <div class="top-left-bar" id="top-left-bar">
@@ -1072,7 +1070,7 @@
                 <div>
                     <img src="alisa.jpg" alt="Алиса Маркова" class="avatar" onerror="this.src='https://via.placeholder.com/80/161b22/58a6ff?text=МА'">
                     <h3 id="alisa-name">Алиса Маркова</h3>
-                    <p class="role" id="alisa-role">Конструктор ног Избушки</p>
+                    <p class="role" id="alisa-role">Создатель робота Берёза, конструктор ног Избушки</p>
                 </div>
                 <span class="btn-more btn-more-text">Подробнее →</span>
             </div>
@@ -1347,7 +1345,6 @@
             if (modal) {
                 modal.style.display = 'none';
             }
-            // Превращаем ВСЕ кнопки «История проекта» в ярко-оранжевые!
             document.querySelectorAll('.btn-history-glow').forEach(btn => {
                 btn.classList.add('orange-mode');
             });
@@ -1388,6 +1385,7 @@
             }, 2000);
         }
 
+        // Точные названия 3D-файлов из вашего репозитория GitHub
         const modelAssets = {
             izbushka: { gltf: 'izbushka.glb' },
             legs: { dev: true },
@@ -1474,9 +1472,9 @@
 • Провела исследование зависимости характера движения по линии от расстояния между центрами датчиков освещенности для уменьшения угла отклонения.`,
 
                 alisaName: "Алиса Маркова",
-                alisaRole: "Конструктор ног Избушки",
-                alisaFullDesc: `• Конструктор ног Избушки (вместе с Лидией Токаревой — создатели ног Избушки).
-• Спроектировала конструкцию робота Ноги Избушки, напоминающую строение ног птиц.
+                alisaRole: "Создатель робота Берёза, конструктор ног Избушки",
+                alisaFullDesc: `• Создатель робота Берёза.
+• Спроектировала конструкцию робота Ноги Избушки, напоминающую строение ног избушки.
 • Создала главный инновационный элемент: опорно-механический узел, который физически соединяет вращение корпуса с шагающими ногами.
 • Самостоятельно сшила оригинальный костюм курьих ножек, который надевается на скелет робота.
 • Провела исследование по оптимизации межосевого расстояния ног для обеспечения плавного хода, минимизации трения и исключения задевания элементов конструкции.
@@ -1596,9 +1594,9 @@
 • Conducted research on how line-tracking behavior depends on distance between light sensor centers to reduce deviation angle.`,
 
                 alisaName: "Alisa Markova",
-                alisaRole: "Hut Legs Mechanical Designer",
-                alisaFullDesc: `• Mechanical Designer of the Hut's legs (co-creator with Lida Tokareva).
-• Designed the mechanical structure of the Hut's legs resembling bird leg anatomy.
+                alisaRole: "Creator of the Birch Tree robot, Hut Legs Mechanical Designer",
+                alisaFullDesc: `• Creator of the Birch Tree robot.
+• Designed the mechanical structure of the Hut's legs resembling hut legs anatomy.
 • Innovated the key mechanical support node physically connecting body rotation with walking legs.
 • Hand-sewed custom fleece costumes for the chicken legs mounted over the robot frame.
 • Conducted research optimizing inter-axis leg distance for smooth walking, minimal friction, and zero mechanical collision.
@@ -1718,9 +1716,9 @@
 • 进行了光照传感器中心间距对巡线平稳度影响的研究，有效降低了偏航角度。`,
 
                 alisaName: "Markova Alisa",
-                alisaRole: "小屋腿部结构设计师",
-                alisaFullDesc: `• 小屋腿部结构设计师（与 Lida Tokareva 共同制作）。
-• 设计了仿生鸟类腿部结构。
+                alisaRole: "“桦树”机器人制作者，小屋腿部结构设计师",
+                alisaFullDesc: `• “桦树”机器人的制作者。
+• 设计了小屋腿部结构。
 • 创新开发了连接旋转主体与行走腿部的关键支撑机械节点。
 • 手工缝制了装配在机器人骨架上的羊毛“鸡脚”服装。
 • 进行了腿部轴间距优化研究，确保行走平稳、减小摩擦并避免结构干涉。
@@ -1774,7 +1772,6 @@
                 closeSettingsHint();
             }, 10000);
 
-            // Автоматическое вызывание полноэкранного уведомления при прокрутке до секции моделей
             window.addEventListener('scroll', () => {
                 closeSettingsHint();
                 
@@ -1787,7 +1784,6 @@
                 }
             });
 
-            // Клик по 3D-модели управляет прозрачностью
             const modelDisplay = document.getElementById('model-display');
             const opacityPanel = document.getElementById('control-panel-opacity');
             const opacitySlider = document.getElementById('opacity-slider');
@@ -2030,12 +2026,12 @@
             if (viewer) viewer.style.display = 'none';
             if (devWrapper) devWrapper.style.display = 'none';
 
-            // Названия файлов истории
+            // Точные имена файлов хронологии из вашего GitHub
             const historyImages = {
                 izbushka: 'Хронология избушка.jpg',
                 legs: 'ноги избушки-05.jpg',
-                birch: 'Березка хронология-02.jpg',
-                cat: 'Робот кошка-03.jpg',
+                birch: 'Березка хронология-02 (2).jpg',
+                cat: 'Робот кошка-03 (2).jpg',
                 dog: 'Собака хронология-04.jpg'
             };
 
@@ -2072,17 +2068,11 @@
 
             if (historyWrapper) historyWrapper.style.display = 'none';
 
-            if (id === 'izbushka') {
-                title.innerText = t.izbFullTitle || t.izbTitle;
-            } else if (id === 'legs') {
-                title.innerText = t.legsTitle;
-            } else if (id === 'birch') {
-                title.innerText = t.berTitle;
-            } else if (id === 'cat') {
-                title.innerText = t.catTitle;
-            } else if (id === 'dog') {
-                title.innerText = t.dogTitle;
-            }
+            if (id === 'izbushka') title.innerText = t.izbFullTitle || t.izbTitle;
+            else if (id === 'legs') title.innerText = t.legsTitle;
+            else if (id === 'birch') title.innerText = t.berTitle;
+            else if (id === 'cat') title.innerText = t.catTitle;
+            else if (id === 'dog') title.innerText = t.dogTitle;
 
             const isAndroid = /Android/i.test(navigator.userAgent);
             if (viewer) {
