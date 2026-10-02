@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v5.9)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v5.9.1)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -21,7 +21,6 @@
             --accent-green: #7ee787;
             --viewer-bg: #010409;
 
-            /* Жидкое стекло с зеленым акцентом */
             --glass-btn-bg: rgba(22, 27, 34, 0.75);
             --glass-btn-border: rgba(126, 231, 135, 0.3);
             --glass-blur: blur(22px) saturate(190%);
@@ -33,7 +32,6 @@
             --ios-text-active: #0d1117;
             --ios-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 
-            /* Прозрачное матовое стекло без цвета для уведомления */
             --translucent-hint-bg: rgba(255, 255, 255, 0.08);
             --translucent-hint-border: rgba(255, 255, 255, 0.2);
             --translucent-hint-text: #f0f6fc;
@@ -152,8 +150,9 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             z-index: 100005;
             align-items: center;
             justify-content: center;
@@ -167,7 +166,7 @@
             border-radius: 22px;
             padding: 24px;
             width: 88%;
-            max-width: 330px;
+            max-width: 340px;
             text-align: center;
             box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
         }
@@ -175,12 +174,12 @@
         .contact-modal-card h3 {
             color: var(--header-color);
             margin-bottom: 8px;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
         }
 
         .contact-modal-card p {
             color: var(--subtext-color);
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             margin-bottom: 16px;
         }
 
@@ -333,37 +332,6 @@
             font-size: 0.65rem;
             cursor: pointer;
             flex-shrink: 0;
-        }
-
-        /* Плавающее всплывающее уведомление для истории проекта */
-        .history-floating-toast {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--ios-glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 2px solid var(--accent-green);
-            color: var(--title-color);
-            padding: 10px 18px;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            box-shadow: 0 10px 30px rgba(46, 160, 67, 0.4);
-            z-index: 10002;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            animation: floatGlow 2s infinite ease-in-out;
-            pointer-events: auto;
-        }
-
-        @keyframes floatGlow {
-            0% { box-shadow: 0 6px 20px rgba(46, 160, 67, 0.3); }
-            50% { box-shadow: 0 12px 35px rgba(126, 231, 135, 0.7); }
-            100% { box-shadow: 0 6px 20px rgba(46, 160, 67, 0.3); }
         }
 
         header {
@@ -566,21 +534,31 @@
             cursor: pointer;
             border: none;
             text-decoration: none;
+            transition: all 0.3s ease;
         }
 
-        /* Выделенная светящаяся кнопка «История проекта» */
+        /* Выделенная кнопка «История проекта» зеленого цвета по умолчанию */
         .btn-history-glow {
-            background: linear-gradient(135deg, #238636, #2ea043) !important;
-            color: #ffffff !important;
-            border: 2px solid var(--accent-green) !important;
-            box-shadow: 0 0 12px rgba(126, 231, 135, 0.4);
-            animation: buttonGlowPulse 2s infinite ease-in-out;
+            background: linear-gradient(135deg, #238636, #2ea043);
+            color: #ffffff;
+            border: 2px solid var(--accent-green);
+            box-shadow: 0 0 10px rgba(126, 231, 135, 0.4);
+            transition: all 0.3s ease;
         }
 
-        @keyframes buttonGlowPulse {
-            0% { box-shadow: 0 0 6px rgba(126, 231, 135, 0.3); }
-            50% { box-shadow: 0 0 16px rgba(126, 231, 135, 0.8); }
-            100% { box-shadow: 0 0 6px rgba(126, 231, 135, 0.3); }
+        /* ЯРКО-ОРАНЖЕВЫЙ НЕОНОВЫЙ ЦВЕТ после уведомления */
+        .btn-history-glow.orange-mode {
+            background: linear-gradient(135deg, #ff6b00, #ff8c00) !important;
+            color: #ffffff !important;
+            border: 2px solid #ffc107 !important;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.95) !important;
+            animation: orangeGlowPulse 1.5s infinite ease-in-out !important;
+        }
+
+        @keyframes orangeGlowPulse {
+            0% { box-shadow: 0 0 8px rgba(255, 107, 0, 0.6); transform: scale(1); }
+            50% { box-shadow: 0 0 24px rgba(255, 140, 0, 1); transform: scale(1.03); }
+            100% { box-shadow: 0 0 8px rgba(255, 107, 0, 0.6); transform: scale(1); }
         }
 
         .viewer-container {
@@ -663,9 +641,9 @@
 
         .history-badge {
             display: inline-block;
-            background-color: rgba(88, 166, 255, 0.15);
-            color: var(--header-color);
-            border: 1px solid rgba(88, 166, 255, 0.4);
+            background-color: rgba(255, 123, 0, 0.15);
+            color: #ff8c00;
+            border: 1px solid rgba(255, 140, 0, 0.4);
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.85rem;
@@ -932,7 +910,6 @@
         body.fullscreen-3d-active #main-view,
         body.fullscreen-3d-active #member-container,
         body.fullscreen-3d-active #settings-hint,
-        body.fullscreen-3d-active #history-toast,
         body.fullscreen-3d-active #top-left-bar,
         body.fullscreen-3d-active #model-title {
             display: none !important;
@@ -990,7 +967,7 @@
 <body data-theme="light">
 
     <!-- Версия в правом нижнем углу -->
-    <div class="version-badge-bottom">v5.9-beta</div>
+    <div class="version-badge-bottom">v5.9.1-beta</div>
 
     <!-- Верхний левый угол: кнопка Обратная связь -->
     <div class="top-left-bar" id="top-left-bar">
@@ -1010,6 +987,20 @@
                 <button class="btn-copy-email" onclick="copyEmail()" id="modal-copy-btn">Копировать</button>
                 <button class="btn-close-modal" onclick="closeContactModal()" id="modal-close-btn">Закрыть</button>
             </div>
+        </div>
+    </div>
+
+    <!-- ПОЛНОЭКРАННОЕ ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ ДЛЯ ИСТОРИИ ПРОЕКТА -->
+    <div id="history-fullscreen-modal" class="contact-modal-overlay" style="z-index: 100010; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);">
+        <div class="contact-modal-card" style="max-width: 360px; border: 2px solid #ff9500; box-shadow: 0 0 35px rgba(255, 149, 0, 0.7);">
+            <div style="font-size: 2.8rem; margin-bottom: 8px;">📜</div>
+            <h3 id="modal-hist-title" style="color: #ff9500; font-size: 1.25rem;">История проекта</h3>
+            <p id="modal-hist-desc" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-color); margin-bottom: 20px;">
+                Обязательно посмотрите <b>Историю проекта</b> каждого робота! Для этого нажмите на оранжевые кнопки в карточках моделей.
+            </p>
+            <button class="btn-confirm-3d" onclick="closeHistoryFullscreenModal()" id="btn-hist-modal-ok" style="background: linear-gradient(135deg, #ff6b00, #ff8c00); color: #ffffff; font-size: 0.95rem; padding: 12px; box-shadow: 0 4px 18px rgba(255, 107, 0, 0.5);">
+                Понятно / Открыть
+            </button>
         </div>
     </div>
 
@@ -1049,12 +1040,6 @@
     <div id="settings-hint" class="settings-hint">
         <span id="hint-text-popup">Язык и тему заменить здесь</span>
         <button class="hint-close-btn" onclick="closeSettingsHint()" aria-label="Закрыть">✕</button>
-    </div>
-
-    <!-- Всплывающая подсказка про Историю Проекта -->
-    <div id="history-toast" class="history-floating-toast" style="display: none;">
-        <span>💡 Не забудьте посмотреть историю проекта!</span>
-        <button onclick="hideHistoryToast()" style="background:none; border:none; color:inherit; font-size:0.9rem; cursor:pointer;">✕</button>
     </div>
 
     <header>
@@ -1313,7 +1298,7 @@
         let tutorialStep = 0;
         let isContactModalOpen = false;
         let isChoice3DModalOpen = false;
-        let toastShown = false;
+        let isHistoryModalShown = false;
 
         function triggerHaptic(intensity = 'medium') {
             if ("vibrate" in navigator) {
@@ -1344,6 +1329,28 @@
             } else {
                 document.getElementById('contact-modal').style.display = 'none';
             }
+        }
+
+        function showHistoryFullscreenModal() {
+            if (isHistoryModalShown) return;
+            isHistoryModalShown = true;
+            triggerHaptic('heavy');
+            const modal = document.getElementById('history-fullscreen-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+        }
+
+        function closeHistoryFullscreenModal() {
+            triggerHaptic('medium');
+            const modal = document.getElementById('history-fullscreen-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+            // Превращаем ВСЕ кнопки «История проекта» в ярко-оранжевые!
+            document.querySelectorAll('.btn-history-glow').forEach(btn => {
+                btn.classList.add('orange-mode');
+            });
         }
 
         function prompt3DMode(robotId) {
@@ -1418,9 +1425,12 @@
                 btnChoiceAR: "🚶 Походить вокруг (AR)",
                 btnChoiceCancel: "Отмена",
 
+                modalHistTitle: "История проекта",
+                modalHistDesc: "Обязательно посмотрите <b>Историю проекта</b> каждого робота! Для этого нажмите на оранжевые кнопки в карточках моделей.",
+                btnHistOk: "Понятно / Открыть",
+
                 historyBadge: "Лента времени разработки",
                 historyHint: "← Прокручивайте вправо и влево для просмотра истории →",
-                historyToastText: "💡 Не забудьте посмотреть историю проекта!",
 
                 tutorialSteps: [
                     {
@@ -1538,9 +1548,12 @@
                 btnChoiceAR: "🚶 Walk Around (AR)",
                 btnChoiceCancel: "Cancel",
 
+                modalHistTitle: "Project History",
+                modalHistDesc: "Be sure to check the <b>Project History</b> for each robot! Click on the orange buttons on the model cards.",
+                btnHistOk: "Got it / Open",
+
                 historyBadge: "Development Timeline",
                 historyHint: "← Scroll left and right to view timeline →",
-                historyToastText: "💡 Don't forget to check the project history!",
 
                 tutorialSteps: [
                     {
@@ -1657,9 +1670,12 @@
                 btnChoiceAR: "🚶 绕行查看 (AR)",
                 btnChoiceCancel: "取消",
 
+                modalHistTitle: "项目历史",
+                modalHistDesc: "请务必查看每个机器人的<b>项目历史</b>！点击模型卡片上的橙色按钮即可查看。",
+                btnHistOk: "知道了 / 打开",
+
                 historyBadge: "开发时间线",
                 historyHint: "← 左右滑动查看历史时间线 →",
-                historyToastText: "💡 别忘了查看项目历史！",
 
                 tutorialSteps: [
                     {
@@ -1752,29 +1768,23 @@
 
         let hintTimer = null;
         let isTransparent = false;
-        let lastScrollY = window.scrollY;
 
         window.addEventListener('DOMContentLoaded', () => {
             hintTimer = setTimeout(() => {
                 closeSettingsHint();
             }, 10000);
 
-            // Обработка прокрутки и свайпа пальцем для исчезновения уведомления истории
+            // Автоматическое вызывание полноэкранного уведомления при прокрутке до секции моделей
             window.addEventListener('scroll', () => {
                 closeSettingsHint();
                 
                 const modelsSection = document.getElementById('sec-models');
-                if (modelsSection && currentView === 'main' && !toastShown) {
+                if (modelsSection && currentView === 'main' && !isHistoryModalShown) {
                     const rect = modelsSection.getBoundingClientRect();
-                    if (rect.top <= window.innerHeight && rect.bottom >= 0) {
-                        showHistoryToast();
+                    if (rect.top <= window.innerHeight * 0.8 && rect.bottom >= 0) {
+                        showHistoryFullscreenModal();
                     }
                 }
-
-                if (window.scrollY < lastScrollY - 10 || window.scrollY > lastScrollY + 10) {
-                    hideHistoryToast();
-                }
-                lastScrollY = window.scrollY;
             });
 
             // Клик по 3D-модели управляет прозрачностью
@@ -1808,26 +1818,6 @@
                 });
             }
         });
-
-        function showHistoryToast() {
-            if (toastShown) return;
-            toastShown = true;
-            const toast = document.getElementById('history-toast');
-            if (toast) {
-                toast.style.display = 'flex';
-                toast.style.opacity = '1';
-            }
-        }
-
-        function hideHistoryToast() {
-            const toast = document.getElementById('history-toast');
-            if (toast) {
-                toast.style.opacity = '0';
-                setTimeout(() => {
-                    toast.style.display = 'none';
-                }, 300);
-            }
-        }
 
         async function setModelOpacity(alpha) {
             const viewer = document.getElementById('model-display');
@@ -2040,7 +2030,7 @@
             if (viewer) viewer.style.display = 'none';
             if (devWrapper) devWrapper.style.display = 'none';
 
-            // Названия файлов хронологии разработки каждого робота из вашей системы
+            // Названия файлов истории
             const historyImages = {
                 izbushka: 'Хронология избушка.jpg',
                 legs: 'ноги избушки-05.jpg',
@@ -2185,15 +2175,14 @@
             document.getElementById('btn-choice-ar').innerText = t.btnChoiceAR;
             document.getElementById('btn-choice-cancel').innerText = t.btnChoiceCancel;
 
+            document.getElementById('modal-hist-title').innerText = t.modalHistTitle;
+            document.getElementById('modal-hist-desc').innerHTML = t.modalHistDesc;
+            document.getElementById('btn-hist-modal-ok').innerText = t.btnHistOk;
+
             const historyBadge = document.getElementById('history-badge');
             const historyHint = document.getElementById('history-hint-text');
             if (historyBadge) historyBadge.innerText = t.historyBadge;
             if (historyHint) historyHint.innerText = t.historyHint;
-
-            const historyToast = document.getElementById('history-toast');
-            if (historyToast && historyToast.querySelector('span')) {
-                historyToast.querySelector('span').innerText = t.historyToastText;
-            }
 
             const arBtn = document.getElementById('btn-ar-walk');
             if (arBtn) arBtn.innerText = t.btnArWalk;
