@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Команда «Баба Яга» — RoboCup OnStage (v5.8.1)</title>
+    <title>Команда «Баба Яга» — RoboCup OnStage (v5.9)</title>
     <!-- Подключение библиотеки Google Model-Viewer -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
@@ -335,6 +335,37 @@
             flex-shrink: 0;
         }
 
+        /* Плавающее всплывающее уведомление для истории проекта */
+        .history-floating-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--ios-glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 2px solid var(--accent-green);
+            color: var(--title-color);
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(46, 160, 67, 0.4);
+            z-index: 10002;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            animation: floatGlow 2s infinite ease-in-out;
+            pointer-events: auto;
+        }
+
+        @keyframes floatGlow {
+            0% { box-shadow: 0 6px 20px rgba(46, 160, 67, 0.3); }
+            50% { box-shadow: 0 12px 35px rgba(126, 231, 135, 0.7); }
+            100% { box-shadow: 0 6px 20px rgba(46, 160, 67, 0.3); }
+        }
+
         header {
             text-align: center;
             margin-bottom: 20px;
@@ -535,6 +566,21 @@
             cursor: pointer;
             border: none;
             text-decoration: none;
+        }
+
+        /* Выделенная светящаяся кнопка «История проекта» */
+        .btn-history-glow {
+            background: linear-gradient(135deg, #238636, #2ea043) !important;
+            color: #ffffff !important;
+            border: 2px solid var(--accent-green) !important;
+            box-shadow: 0 0 12px rgba(126, 231, 135, 0.4);
+            animation: buttonGlowPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes buttonGlowPulse {
+            0% { box-shadow: 0 0 6px rgba(126, 231, 135, 0.3); }
+            50% { box-shadow: 0 0 16px rgba(126, 231, 135, 0.8); }
+            100% { box-shadow: 0 0 6px rgba(126, 231, 135, 0.3); }
         }
 
         .viewer-container {
@@ -886,6 +932,7 @@
         body.fullscreen-3d-active #main-view,
         body.fullscreen-3d-active #member-container,
         body.fullscreen-3d-active #settings-hint,
+        body.fullscreen-3d-active #history-toast,
         body.fullscreen-3d-active #top-left-bar,
         body.fullscreen-3d-active #model-title {
             display: none !important;
@@ -943,7 +990,7 @@
 <body data-theme="light">
 
     <!-- Версия в правом нижнем углу -->
-    <div class="version-badge-bottom">v5.8.1-beta</div>
+    <div class="version-badge-bottom">v5.9-beta</div>
 
     <!-- Верхний левый угол: кнопка Обратная связь -->
     <div class="top-left-bar" id="top-left-bar">
@@ -962,6 +1009,19 @@
             <div class="modal-actions">
                 <button class="btn-copy-email" onclick="copyEmail()" id="modal-copy-btn">Копировать</button>
                 <button class="btn-close-modal" onclick="closeContactModal()" id="modal-close-btn">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно выбора режима при нажатии «Открыть 3D» -->
+    <div id="choice-3d-modal" class="contact-modal-overlay">
+        <div class="contact-modal-card">
+            <h3 id="modal-3d-title">Выберите режим</h3>
+            <p id="modal-3d-desc">Как вы хотите просмотреть модель?</p>
+            <div class="modal-actions" style="flex-direction: column; gap: 12px; width: 100%;">
+                <button class="btn-copy-email" onclick="confirm3DMode('preview')" style="width: 100%; padding: 12px; font-size: 0.9rem;" id="btn-choice-3d">📐 Посмотреть в 3D</button>
+                <button class="btn-copy-email" onclick="confirm3DMode('ar')" style="background-color: #1f6feb; width: 100%; padding: 12px; font-size: 0.9rem;" id="btn-choice-ar">🚶 Походить вокруг (AR)</button>
+                <button class="btn-close-modal" onclick="close3DChoiceModal()" style="width: 100%; padding: 10px; margin-top: 4px;" id="btn-choice-cancel">Отмена</button>
             </div>
         </div>
     </div>
@@ -985,10 +1045,16 @@
         <button class="theme-toggle-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Смена темы">🌙</button>
     </div>
 
-    <!-- Уведомление про смену языка в одну строчку -->
+    <!-- Уведомление про смену языка -->
     <div id="settings-hint" class="settings-hint">
         <span id="hint-text-popup">Язык и тему заменить здесь</span>
         <button class="hint-close-btn" onclick="closeSettingsHint()" aria-label="Закрыть">✕</button>
+    </div>
+
+    <!-- Всплывающая подсказка про Историю Проекта -->
+    <div id="history-toast" class="history-floating-toast" style="display: none;">
+        <span>💡 Не забудьте посмотреть историю проекта!</span>
+        <button onclick="hideHistoryToast()" style="background:none; border:none; color:inherit; font-size:0.9rem; cursor:pointer;">✕</button>
     </div>
 
     <header>
@@ -1098,20 +1164,19 @@
                     <h3 id="card-izb-title">Избушка</h3>
                     <p class="card-sub">Подвижный робот с поворотным механизмом и зрителем Pixy 2</p>
                     <div class="robot-buttons-row">
-                        <button class="btn-view btn-view-text" onclick="openModel('izbushka')">Открыть 3D</button>
-                        <button class="btn-view btn-history-text" onclick="openHistory('izbushka')" style="background-color: var(--btn-green);">История проекта</button>
+                        <button class="btn-view btn-view-text" onclick="prompt3DMode('izbushka')">Открыть 3D</button>
+                        <button class="btn-view btn-history-text btn-history-glow" onclick="openHistory('izbushka')">История проекта</button>
                     </div>
                 </div>
             </div>
 
-            <!-- У Ног избушки убрана кнопка "Открыть 3D", распахнута "История проекта" -->
             <div class="card-project-horiz" id="card-legs">
                 <img src="legs_card.jpg" alt="Ноги избушки" class="robot-avatar-side" onerror="this.src='https://via.placeholder.com/75/161b22/7ee787?text=Ноги'">
                 <div class="robot-card-info">
                     <h3 id="card-legs-title">Ноги избушки</h3>
                     <p class="card-sub">Курьи ножки с опорно-механическим узлом вращения</p>
                     <div class="robot-buttons-row">
-                        <button class="btn-view btn-history-text" onclick="openHistory('legs')" style="background-color: var(--btn-green); width: 100%; text-align: center;">История проекта</button>
+                        <button class="btn-view btn-history-text btn-history-glow" onclick="openHistory('legs')" style="width: 100%; text-align: center;">История проекта</button>
                     </div>
                 </div>
             </div>
@@ -1122,8 +1187,8 @@
                     <h3 id="card-ber-title">Берёза</h3>
                     <p class="card-sub">Фанерная конструкция со светодиодами и веткой</p>
                     <div class="robot-buttons-row">
-                        <button class="btn-view btn-view-text" onclick="openModel('birch')">Открыть 3D</button>
-                        <button class="btn-view btn-history-text" onclick="openHistory('birch')" style="background-color: var(--btn-green);">История проекта</button>
+                        <button class="btn-view btn-view-text" onclick="prompt3DMode('birch')">Открыть 3D</button>
+                        <button class="btn-view btn-history-text btn-history-glow" onclick="openHistory('birch')">История проекта</button>
                     </div>
                 </div>
             </div>
@@ -1134,8 +1199,8 @@
                     <h3 id="card-cat-title">Кошка</h3>
                     <p class="card-sub">Колесный робот с движущимся скелетом и эмоциями</p>
                     <div class="robot-buttons-row">
-                        <button class="btn-view btn-view-text" onclick="openModel('cat')">Открыть 3D</button>
-                        <button class="btn-view btn-history-text" onclick="openHistory('cat')" style="background-color: var(--btn-green);">История проекта</button>
+                        <button class="btn-view btn-view-text" onclick="prompt3DMode('cat')">Открыть 3D</button>
+                        <button class="btn-view btn-history-text btn-history-glow" onclick="openHistory('cat')">История проекта</button>
                     </div>
                 </div>
             </div>
@@ -1146,8 +1211,8 @@
                     <h3 id="card-dog-title">Собака</h3>
                     <p class="card-sub">Мобильный робот на колесах с анимацией лапок</p>
                     <div class="robot-buttons-row">
-                        <button class="btn-view btn-view-text" onclick="openModel('dog')">Открыть 3D</button>
-                        <button class="btn-view btn-history-text" onclick="openHistory('dog')" style="background-color: var(--btn-green);">История проекта</button>
+                        <button class="btn-view btn-view-text" onclick="prompt3DMode('dog')">Открыть 3D</button>
+                        <button class="btn-view btn-history-text btn-history-glow" onclick="openHistory('dog')">История проекта</button>
                     </div>
                 </div>
             </div>
@@ -1242,10 +1307,13 @@
         let currentView = 'main'; 
         let currentMemberId = null;
         let currentModelId = null;
+        let pendingRobot3DId = null;
         let isFullscreen3D = false;
         let savedScrollPosition = 0;
         let tutorialStep = 0;
         let isContactModalOpen = false;
+        let isChoice3DModalOpen = false;
+        let toastShown = false;
 
         function triggerHaptic(intensity = 'medium') {
             if ("vibrate" in navigator) {
@@ -1275,6 +1343,29 @@
                 history.back();
             } else {
                 document.getElementById('contact-modal').style.display = 'none';
+            }
+        }
+
+        function prompt3DMode(robotId) {
+            triggerHaptic('light');
+            pendingRobot3DId = robotId;
+            isChoice3DModalOpen = true;
+            document.getElementById('choice-3d-modal').style.display = 'flex';
+        }
+
+        function close3DChoiceModal() {
+            triggerHaptic('light');
+            isChoice3DModalOpen = false;
+            pendingRobot3DId = null;
+            document.getElementById('choice-3d-modal').style.display = 'none';
+        }
+
+        function confirm3DMode(mode) {
+            triggerHaptic('medium');
+            const targetId = pendingRobot3DId;
+            close3DChoiceModal();
+            if (targetId) {
+                openModel(targetId, mode);
             }
         }
 
@@ -1321,8 +1412,15 @@
                 copiedText: "Скопировано!",
                 closeBtn: "Закрыть",
 
+                modal3DTitle: "Выберите режим",
+                modal3DDesc: "Как вы хотите просмотреть модель?",
+                btnChoice3D: "📐 Посмотреть в 3D",
+                btnChoiceAR: "🚶 Походить вокруг (AR)",
+                btnChoiceCancel: "Отмена",
+
                 historyBadge: "Лента времени разработки",
                 historyHint: "← Прокручивайте вправо и влево для просмотра истории →",
+                historyToastText: "💡 Не забудьте посмотреть историю проекта!",
 
                 tutorialSteps: [
                     {
@@ -1434,8 +1532,15 @@
                 copiedText: "Copied!",
                 closeBtn: "Close",
 
+                modal3DTitle: "Select Mode",
+                modal3DDesc: "How would you like to view the model?",
+                btnChoice3D: "📐 View in 3D",
+                btnChoiceAR: "🚶 Walk Around (AR)",
+                btnChoiceCancel: "Cancel",
+
                 historyBadge: "Development Timeline",
                 historyHint: "← Scroll left and right to view timeline →",
+                historyToastText: "💡 Don't forget to check the project history!",
 
                 tutorialSteps: [
                     {
@@ -1546,8 +1651,15 @@
                 copiedText: "已复制！",
                 closeBtn: "关闭",
 
+                modal3DTitle: "选择模式",
+                modal3DDesc: "您想如何查看模型？",
+                btnChoice3D: "📐 3D模型查看",
+                btnChoiceAR: "🚶 绕行查看 (AR)",
+                btnChoiceCancel: "取消",
+
                 historyBadge: "开发时间线",
                 historyHint: "← 左右滑动查看历史时间线 →",
+                historyToastText: "💡 别忘了查看项目历史！",
 
                 tutorialSteps: [
                     {
@@ -1640,15 +1752,30 @@
 
         let hintTimer = null;
         let isTransparent = false;
+        let lastScrollY = window.scrollY;
 
         window.addEventListener('DOMContentLoaded', () => {
             hintTimer = setTimeout(() => {
                 closeSettingsHint();
             }, 10000);
 
+            // Обработка прокрутки и свайпа пальцем для исчезновения уведомления истории
             window.addEventListener('scroll', () => {
                 closeSettingsHint();
-            }, { once: true });
+                
+                const modelsSection = document.getElementById('sec-models');
+                if (modelsSection && currentView === 'main' && !toastShown) {
+                    const rect = modelsSection.getBoundingClientRect();
+                    if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                        showHistoryToast();
+                    }
+                }
+
+                if (window.scrollY < lastScrollY - 10 || window.scrollY > lastScrollY + 10) {
+                    hideHistoryToast();
+                }
+                lastScrollY = window.scrollY;
+            });
 
             // Клик по 3D-модели управляет прозрачностью
             const modelDisplay = document.getElementById('model-display');
@@ -1681,6 +1808,26 @@
                 });
             }
         });
+
+        function showHistoryToast() {
+            if (toastShown) return;
+            toastShown = true;
+            const toast = document.getElementById('history-toast');
+            if (toast) {
+                toast.style.display = 'flex';
+                toast.style.opacity = '1';
+            }
+        }
+
+        function hideHistoryToast() {
+            const toast = document.getElementById('history-toast');
+            if (toast) {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 300);
+            }
+        }
 
         async function setModelOpacity(alpha) {
             const viewer = document.getElementById('model-display');
@@ -1785,6 +1932,10 @@
                 document.getElementById('contact-modal').style.display = 'none';
                 return;
             }
+            if (isChoice3DModalOpen) {
+                close3DChoiceModal();
+                return;
+            }
             if (currentView !== 'main') {
                 showMainViewUI();
             }
@@ -1802,6 +1953,10 @@
             triggerHaptic('medium');
             if (isContactModalOpen) {
                 closeContactModal();
+                return;
+            }
+            if (isChoice3DModalOpen) {
+                close3DChoiceModal();
                 return;
             }
             if (currentView !== 'main') {
@@ -1885,13 +2040,13 @@
             if (viewer) viewer.style.display = 'none';
             if (devWrapper) devWrapper.style.display = 'none';
 
-            // Названия файлов для горизонтальной ленты времени каждого робота
+            // Названия файлов хронологии разработки каждого робота из вашей системы
             const historyImages = {
-                izbushka: 'izbushka_history.jpg',
-                legs: 'legs_history.jpg',
-                birch: 'birch_history.jpg',
-                cat: 'cat_history.jpg',
-                dog: 'dog_history.jpg'
+                izbushka: 'Хронология избушка.jpg',
+                legs: 'ноги избушки-05.jpg',
+                birch: 'Березка хронология-02.jpg',
+                cat: 'Робот кошка-03.jpg',
+                dog: 'Собака хронология-04.jpg'
             };
 
             if (historyImg) {
@@ -1908,7 +2063,7 @@
             window.scrollTo(0, 0);
         }
 
-        function openModel(id) {
+        function openModel(id, chosenMode = 'preview') {
             triggerHaptic('medium');
             pushStateIfNeeded('model');
             currentModelId = id;
@@ -1939,7 +2094,6 @@
                 title.innerText = t.dogTitle;
             }
 
-            // Автоопределение Android для уменьшения масштаба (чтобы не улетал на Android)
             const isAndroid = /Android/i.test(navigator.userAgent);
             if (viewer) {
                 if (isAndroid) {
@@ -1964,12 +2118,11 @@
                     viewer.setAttribute('src', modelAssets[id].gltf);
                 }
 
-                // Автоматический запуск камеры (AR) при переходе
-                setTimeout(() => {
-                    if (viewer && typeof viewer.activateAR === 'function') {
-                        viewer.activateAR().catch(() => {});
-                    }
-                }, 120);
+                if (chosenMode === 'ar') {
+                    setTimeout(() => {
+                        startARWalk();
+                    }, 250);
+                }
             }
 
             document.getElementById('main-view').style.display = 'none';
@@ -2026,10 +2179,21 @@
             document.getElementById('modal-copy-btn').innerText = t.copyBtn;
             document.getElementById('modal-close-btn').innerText = t.closeBtn;
 
+            document.getElementById('modal-3d-title').innerText = t.modal3DTitle;
+            document.getElementById('modal-3d-desc').innerText = t.modal3DDesc;
+            document.getElementById('btn-choice-3d').innerText = t.btnChoice3D;
+            document.getElementById('btn-choice-ar').innerText = t.btnChoiceAR;
+            document.getElementById('btn-choice-cancel').innerText = t.btnChoiceCancel;
+
             const historyBadge = document.getElementById('history-badge');
             const historyHint = document.getElementById('history-hint-text');
             if (historyBadge) historyBadge.innerText = t.historyBadge;
             if (historyHint) historyHint.innerText = t.historyHint;
+
+            const historyToast = document.getElementById('history-toast');
+            if (historyToast && historyToast.querySelector('span')) {
+                historyToast.querySelector('span').innerText = t.historyToastText;
+            }
 
             const arBtn = document.getElementById('btn-ar-walk');
             if (arBtn) arBtn.innerText = t.btnArWalk;
